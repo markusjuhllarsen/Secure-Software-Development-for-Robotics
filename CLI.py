@@ -3,7 +3,7 @@ from rclpy.node import Node
 from rclpy.action import ActionClient
 import argparse
 #from some_msgs.action import MoveRobot  # Replace with the actual action definition
-from nav2_msgs.action import Undock  # TurtleBot4 uses nav2_msgs for undocking
+from irobot_create_msgs.action import Undock
 
 class GazeboCommandCLI(Node):
     def __init__(self):
@@ -46,10 +46,10 @@ def main():
     node = GazeboCommandCLI()
 
     try:
-        if args.undock:
-            node.send_undock_action()
-        else:
-            node.send_velocity_action(args.linear_x, args.angular_z)
+        # if args.undock:
+        node.send_undock_action()
+        # else:
+            # node.send_velocity_action(args.linear_x, args.angular_z)
     finally:
         node.destroy_node()
         rclpy.shutdown()

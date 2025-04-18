@@ -8,7 +8,6 @@ from rclpy.callback_groups import ReentrantCallbackGroup
 
 from controller.security import SecurityManager
 from controller.actions import DockingManager
-from utils.config import CMD_VEL_TOPICS
 
 class SecureTurtlebot4Controller(Node):
     """Main controller class for the Turtlebot4 with security features"""
@@ -41,7 +40,7 @@ class SecureTurtlebot4Controller(Node):
         # Command publisher for movement - using multiple topics for reliability
         self.cmd_vel_publisher = self.create_publisher(
             Twist,
-            '/cmd_vel',  # Root cmd_vel topic
+            '/cmd_vel_unstamped',  # Root cmd_vel_unstamped topic
             10 # Queue size
         )
         
@@ -90,16 +89,18 @@ class SecureTurtlebot4Controller(Node):
         twist_msg = Twist()
         twist_msg.linear.x = float(linear_x)
         twist_msg.angular.z = float(angular_z)
-        
-        # Try publishing to ALL cmd_vel topics
-        for topic in CMD_VEL_TOPICS:
-            try:
-                # Create a publisher for this topic
-                temp_pub = self.create_publisher(Twist, topic, 10)
-                temp_pub.publish(twist_msg)
-                self.get_logger().info(f"Published to {topic}: linear={linear_x}, angular={angular_z}")
-            except Exception as e:
-                self.get_logger().error(f'Error sending to {topic}: {str(e)}')
+
+        try:
+            self.cmd_vel_publisher.publish(twist_msg)
+            self.get_logger().info(f"Published to cmd_vel_unstamped: linear={linear_x}, angular={angular_z}")
+        except Exception as e:
+            self.get_logger().error(f'Error sending to cmd_vel_unstamped: {str(e)}')
+
+        try:
+            self.diff_drive_publisher.publish(twist_msg)
+            self.get_logger().info(f"Published to diffdrive_controller/cmd_vel topic: linear={linear_x}, angular={angular_z}")
+        except Exception as e:
+            self.get_logger().error(f'Error sending to diffdrive_controller/cmd_vel: {str(e)}')
         
         # Log the command and update status
         self.get_logger().info(f"Movement command sent to all topics: linear={linear_x}, angular={angular_z}")

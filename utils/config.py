@@ -18,12 +18,6 @@ MAX_ANGULAR_VELOCITY = 1.0  # rad/s
 MAX_COMMANDS_PER_MINUTE = 30
 HMAC_ALGORITHM = "sha256"
 
-# Topics
-CMD_VEL_TOPICS = [
-    '/cmd_vel_unstamped',
-    '/diffdrive_controller/cmd_vel',
-]
-
 # Action servers
 DOCK_ACTION_SERVER = '/dock'
 UNDOCK_ACTION_SERVER = '/undock'

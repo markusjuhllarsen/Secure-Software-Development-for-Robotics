@@ -62,6 +62,7 @@ def main():
     
     # Set the reference to the GUI in the controller for status updates
     controller_node.gui = app
+    controller_node.security.set_gui(app)
     
     # Add initial status message
     app.update_status("Controller initialized. Ready for commands.")

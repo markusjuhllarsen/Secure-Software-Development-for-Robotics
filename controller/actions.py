@@ -38,7 +38,7 @@ class DockingManager:
             bool: True if the action was sent successfully, False otherwise
         """
         # Security validation
-        if not self.node.security.validate_command("dock"):
+        if not self.node.security.rate_limit_and_sanitize_command("dock"):
             return False
             
         self.node.get_logger().info("Sending dock action...")
@@ -83,7 +83,7 @@ class DockingManager:
             bool: True if the action was sent successfully, False otherwise
         """
         # Security validation
-        if not self.node.security.validate_command("undock"):
+        if not self.node.security.rate_limit_and_sanitize_command("undock"):
             return False
             
         self.node.get_logger().info("Sending undock action...")

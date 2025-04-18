@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import subprocess
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from std_msgs.msg import String
@@ -18,20 +17,20 @@ class SecureTurtlebot4Controller(Node):
         # Print node and topic info at startup
         self.get_logger().info("Starting Secure Turtlebot4 Controller - if controls don't work, check topic names")
         
+        # Reference to GUI (will be set in main.py)
+        self.gui = None
+
         # Use reentrant callback group for actions
         self.callback_group = ReentrantCallbackGroup()
         
         # Initialize security manager
-        self.security = SecurityManager()
+        self.security = SecurityManager(self.get_logger())
         
         # Initialize publishers
         self._init_publishers()
         
         # Initialize docking manager
         self.docking = DockingManager(self)
-        
-        # Reference to GUI (will be set in main.py)
-        self.gui = None
         
         self.get_logger().info('Secure Turtlebot4 Controller initialized')
     
@@ -82,7 +81,7 @@ class SecureTurtlebot4Controller(Node):
         Publishing to all cmd_vel topics to ensure it works
         """
         # Security validation
-        if not self.security.validate_command(f"move:{linear_x}:{angular_z}"):
+        if not self.security.rate_limit_and_sanitize_command(linear_x, angular_z):
             return False
             
         # Create Twist message
@@ -116,8 +115,8 @@ class SecureTurtlebot4Controller(Node):
             status = "Turning right"
         elif linear_x == 0 and angular_z == 0:
             status = "Stopped"
-        else:
-            status = f"Moving: linear={linear_x}, angular={angular_z}" #!!!!
+        #else:
+        #    status = f"Moving: linear={linear_x}, angular={angular_z}" #!!!!
             
         self.publish_status(status)
         return True

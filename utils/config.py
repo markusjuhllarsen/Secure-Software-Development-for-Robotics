@@ -17,10 +17,7 @@ MAX_ANGULAR_VELOCITY = 1.0  # rad/s
 # Security parameters
 MAX_COMMANDS_PER_MINUTE = 30
 HMAC_ALGORITHM = "sha256"
-
-# Action servers
-DOCK_ACTION_SERVER = '/dock'
-UNDOCK_ACTION_SERVER = '/undock'
+ENC_ALGORITHM = "aes-256-gcm"
 
 # Status topic
 STATUS_TOPIC = '/turtlebot4/status_msg'

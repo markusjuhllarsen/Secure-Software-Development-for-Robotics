@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import subprocess
-import time
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from std_msgs.msg import String
@@ -32,10 +31,6 @@ class SecureTurtlebot4Controller(Node):
         # Initialize docking manager
         self.docking = DockingManager(self)
         
-        # Topic discovery timer
-        self.topic_check_done = False
-        self.timer = self.create_timer(5.0, self.print_topics)
-        
         # Reference to GUI (will be set in main.py)
         self.gui = None
         
@@ -47,7 +42,7 @@ class SecureTurtlebot4Controller(Node):
         self.cmd_vel_publisher = self.create_publisher(
             Twist,
             '/cmd_vel',  # Root cmd_vel topic
-            10
+            10 # Queue size
         )
         
         # Secondary publisher for the differential drive controller
@@ -64,46 +59,23 @@ class SecureTurtlebot4Controller(Node):
             10
         )
         
-        self.status_subscriber = self.create_subscription(
-            String,
-            '/turtlebot4/status_msg', 
-            self.status_callback,
-            10
-        )
+        #self.status_subscriber = self.create_subscription(
+        #    String,
+        #    '/turtlebot4/status_msg', 
+        #    self.status_callback,
+        #    10
+        #)
     
     def status_callback(self, msg):
         """
         Callback for status messages from the robot
         """
         # Log status messages from the robot
-        self.get_logger().info(f'Robot Status: {msg.data}')
+        self.get_logger().info(msg.data)
         
         # Update GUI with the status message
         if hasattr(self, 'gui') and self.gui:
-            self.gui.update_status(f"Robot: {msg.data}")
-    
-    def print_topics(self):
-        """Print available topics to help with debugging"""
-        try:
-            # Only run once
-            if hasattr(self, 'topic_check_done') and self.topic_check_done:
-                return
-                
-            self.get_logger().info("Checking available topics...")
-            result = subprocess.run(['ros2', 'topic', 'list'], capture_output=True, text=True)
-            topics = result.stdout.strip().split('\n')
-            
-            # Check for cmd_vel related topics specifically
-            cmd_vel_topics = [t for t in topics if 'cmd_vel' in t]
-            self.get_logger().info(f"Available cmd_vel topics: {cmd_vel_topics}")
-            self.get_logger().info("Control ready. Use the GUI buttons to move the robot.")
-            
-            # Mark as done so it doesn't run again
-            if hasattr(self, 'topic_check_done'):
-                self.topic_check_done = True
-                
-        except Exception as e:
-            self.get_logger().error(f"Error checking topics: {e}")
+            self.gui.update_status("msg.data")
     
     def move_robot(self, linear_x, angular_z):
         """
@@ -144,7 +116,7 @@ class SecureTurtlebot4Controller(Node):
         elif linear_x == 0 and angular_z == 0:
             status = "Stopped"
         else:
-            status = f"Moving: linear={linear_x}, angular={angular_z}"
+            status = f"Moving: linear={linear_x}, angular={angular_z}" #!!!!
             
         self.publish_status(status)
         return True
@@ -168,11 +140,3 @@ class SecureTurtlebot4Controller(Node):
         # Update the GUI status window
         if hasattr(self, 'gui') and self.gui:
             self.gui.update_status(status_text)
-    
-    def dock_robot(self):
-        """Proxy method to the docking manager's dock method"""
-        return self.docking.dock_robot()
-    
-    def undock_robot(self):
-        """Proxy method to the docking manager's undock method"""
-        return self.docking.undock_robot()

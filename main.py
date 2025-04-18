@@ -4,7 +4,6 @@ import os
 import sys
 import subprocess
 
-
 def setup_ros2_environment():
     # Source the setup file and restart the script with the updated environment
     ros_setup_file = "/opt/ros/jazzy/setup.bash"

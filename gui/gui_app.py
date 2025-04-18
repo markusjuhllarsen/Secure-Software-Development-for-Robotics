@@ -113,11 +113,11 @@ class ButtonControlGUI:
         
         # Add Dock and Undock buttons with increased size and padding
         btn_dock = ttk.Button(dock_frame, text="Dock Robot", 
-                             command=self.controller.dock_robot)
+                             command=self.controller.docking.dock_robot)
         btn_dock.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         
         btn_undock = ttk.Button(dock_frame, text="Undock Robot", 
-                               command=self.controller.undock_robot)
+                               command=self.controller.docking.undock_robot)
         btn_undock.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
         
         # Configure the grid to expand
@@ -166,8 +166,8 @@ class ButtonControlGUI:
         self.root.bind('<Left>', lambda event: self.controller.move_robot(0.0, DEFAULT_ANGULAR_VELOCITY))
         self.root.bind('<Right>', lambda event: self.controller.move_robot(0.0, -DEFAULT_ANGULAR_VELOCITY))
         self.root.bind('<space>', lambda event: self.controller.move_robot(0.0, 0.0))
-        self.root.bind('d', lambda event: self.controller.dock_robot())
-        self.root.bind('u', lambda event: self.controller.undock_robot())
+        self.root.bind('d', lambda event: self.controller.docking.dock_robot())
+        self.root.bind('u', lambda event: self.controller.docking.undock_robot())
     
     def send_custom_velocity(self):
         """Handle custom velocity input and send to robot"""

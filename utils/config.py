@@ -11,7 +11,7 @@ APP_VERSION = "1.0.0"
 # Robot movement parameters
 DEFAULT_LINEAR_VELOCITY = 0.2  # m/s
 DEFAULT_ANGULAR_VELOCITY = 0.5  # rad/s
-MAX_LINEAR_VELOCITY = 0.5  # m/s
+MAX_LINEAR_VELOCITY = 5  # m/s
 MAX_ANGULAR_VELOCITY = 1.0  # rad/s
 
 # Security parameters
@@ -20,10 +20,8 @@ HMAC_ALGORITHM = "sha256"
 
 # Topics
 CMD_VEL_TOPICS = [
-    '/cmd_vel',
     '/cmd_vel_unstamped',
     '/diffdrive_controller/cmd_vel',
-    '/turtlebot4/cmd_vel'
 ]
 
 # Action servers

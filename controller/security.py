@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 import hashlib
 import hmac
 import secrets
@@ -16,6 +16,7 @@ class SecurityManager:
         self.last_command_time = datetime.now()
         self.command_count = 0
         self.max_commands_per_minute = 30  # Rate limiting
+        self.aesgcm = AESGCM(self.secret_key)
     
     def set_gui(self, gui):
         """Set the GUI reference after initialization."""
@@ -97,17 +98,45 @@ class SecurityManager:
         except TypeError:
             return False
         
-    def generate_hmac(self, command_type):
-        # Generate command signature for integrity
+    def encrypt_and_gmac(self, message):
+        """
+        Encrypt a message and generate GMAC to ensure confidentiality and integrity
+        Args:
+            message (str): The command message to generate the MAC for.
+    
+        Returns:
+            str: The GMAC as a hexadecimal string.
+        """
         current_time = datetime.now()
-        
         timestamp = current_time.isoformat()
-        signature = hmac.new(
-            self.secret_key,
-            f"{command_type}:{timestamp}".encode(),
-            hashlib.sha256
-        ).hexdigest()
-        
-        # Log the secure command
-        print(f'Command: {command_type}, Timestamp: {timestamp}, Signature: {signature[:10]}...')
-        return True
+
+        data = f"{message}:{timestamp}".encode(),
+
+        nonce = secrets.token_bytes(12)
+        encrypted_data = self.aesgcm.encrypt(nonce, data, None)
+
+        self.logger.info(f"Message: {message}, Timestamp: {timestamp}, Encrypted Data: {encrypted_data.hex()[:10]}")
+
+        return {
+            "encrypted_data": encrypted_data,
+            "nonce": nonce,
+        }
+    
+    def decrypt_and_verify(self, encrypted_data, nonce):
+        """
+        Decrypt the message and verify GMAC to ensure confidentiality and integrity
+        Args:
+            encrypted_data (bytes): The encrypted command message.
+            nonce (bytes): The nonce used for encryption.
+    
+        Returns:
+            str: The decrypted message.
+        """
+        try:
+            # Decrypt the data and verify GMAC
+            # The GMAC is verified during decryption, so if it fails, an exception will be raised
+            decrypted_data = self.aesgcm.decrypt(nonce, encrypted_data, None)
+            return decrypted_data.decode()
+        except Exception as e:
+            self.logger.error(f"Decryption failed: {e}")
+            return None

@@ -1,4 +1,8 @@
 import secrets
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+from cryptography.hazmat.primitives.asymmetric import ec
+from cryptography.hazmat.primitives.hashes import SHA256
 
 def encrypt_and_gmac(aesgcm, message, timestamp):
     """
@@ -31,5 +35,31 @@ def decrypt_and_verify(aesgcm, encrypted_data, nonce):
         decrypted_data = aesgcm.decrypt(nonce, encrypted_data, None).decode()
         message, _ = decrypted_data.split(':', 1)  # Split by the last colon
         return message
+    except Exception as e:
+        return None
+    
+def exchange_keys(private_key, peer_public_key_bytes):
+    """
+    Perform ECDH key exchange to derive a shared AES key.
+    Args:
+        private_key (PrivateKey): The private key of the local node.
+        peer_public_key_bytes (bytes): The public key of the peer in PEM format.
+    """
+    try:
+        # Deserialize the peer's public key
+        peer_public_key = serialization.load_pem_public_key(peer_public_key_bytes)
+
+        # Compute the shared secret
+        shared_secret = private_key.exchange(ec.ECDH(), peer_public_key)
+
+        # Derive the AES key using HKDF
+        aes_key = HKDF(
+            algorithm=SHA256(),
+            length=32,  # AES-256 key length
+            salt=None,
+            info=b"handshake data"
+        ).derive(shared_secret)
+
+        return aes_key
     except Exception as e:
         return None

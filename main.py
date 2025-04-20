@@ -8,6 +8,7 @@ import rclpy
 import threading
 from rclpy.executors import MultiThreadedExecutor
 
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from controller.robot_controller import SecureTurtlebot4Controller
 from gui.gui_app import ButtonControlGUI
 from utils.config import APP_NAME, APP_VERSION
@@ -21,7 +22,14 @@ def main():
     
     # Create the controller node
     controller_node = SecureTurtlebot4Controller(encrypt=True)
-    
+    if controller_node.encrypt:
+    # Wait for key exchange to complete
+        print("Waiting for key exchange to complete...")
+        while controller_node.security.aes_key is None:
+            rclpy.spin_once(controller_node, timeout_sec=0.1)
+        print("Key exchange completed. AES key derived.")
+        controller_node.security.aesgcm = AESGCM(controller_node.security.aes_key)
+
     # Set up executor for handling actions properly
     executor = MultiThreadedExecutor()
     executor.add_node(controller_node)

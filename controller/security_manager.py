@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-import secrets
+from cryptography.hazmat.primitives.asymmetric import ec
+from cryptography.hazmat.primitives import serialization
 from datetime import datetime, timedelta
 from utils.config import MAX_ANGULAR_VELOCITY, MAX_LINEAR_VELOCITY
 
@@ -9,13 +9,22 @@ class SecurityManager:
     
     def __init__(self, logger):
         self.logger = logger
-        # Security parameters
-        self.secret_key = secrets.token_bytes(32)  # Generate a new key each time for this session
-        self.secret_key = b'#\x9a$\x80\xb0Z\x82\x17\xe0/\x16\xa5V\xfa\xd7\xa38\x1b\xab\xe4I\xb4\x1bnPW\xb7A\xc9DQ\xa6'
+        
+        self.private_key = ec.generate_private_key(ec.SECP256R1())
+        self.public_key = self.private_key.public_key()
+        
+        # Serialize the public key for sharing
+        self.public_key_bytes = self.public_key.public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo
+        )
+        
+        self.aes_key = None
+        self.peer_ack_received = False
+
         self.last_command_time = datetime.now()
         self.command_count = 0
         self.max_commands_per_minute = 30  # Rate limiting
-        self.aesgcm = AESGCM(self.secret_key)
     
     def set_gui(self, gui):
         """Set the GUI reference after initialization."""

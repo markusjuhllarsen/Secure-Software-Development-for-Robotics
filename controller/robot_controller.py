@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 
+from datetime import datetime
+import base64
+
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from std_msgs.msg import String
 from rclpy.callback_groups import ReentrantCallbackGroup
 
-from controller.security import SecurityManager
+from controller.security_manager import SecurityManager
 from controller.actions import DockingManager
+from utils.security import encrypt_and_gmac
 
 class SecureTurtlebot4Controller(Node):
     """Main controller class for the Turtlebot4 with security features"""
     
-    def __init__(self):
+    def __init__(self, encrypt=False):
         super().__init__('secure_turtlebot4_controller')
         
         # Print node and topic info at startup
@@ -26,9 +30,11 @@ class SecureTurtlebot4Controller(Node):
         # Initialize security manager
         self.security = SecurityManager(self.get_logger())
         
+        self.encrypt = encrypt
         # Initialize publishers
+        self.publisher_list = []
         self._init_publishers()
-        
+
         # Initialize docking manager
         self.docking = DockingManager(self)
         
@@ -36,26 +42,34 @@ class SecureTurtlebot4Controller(Node):
     
     def _init_publishers(self):
         """Initialize all publishers"""
-        # Command publisher for movement - using multiple topics for reliability
-        self.cmd_vel_publisher = self.create_publisher(
-            Twist,
-            '/cmd_vel_unstamped',  # Root cmd_vel_unstamped topic
-            10 # Queue size
-        )
-        
-        # Secondary publisher for the differential drive controller
-        self.diff_drive_publisher = self.create_publisher(
-            Twist,
-            '/diffdrive_controller/cmd_vel',
-            10
-        )
-        
-        # Status publisher/subscriber for monitoring
-        self.status_publisher = self.create_publisher(
-            String,
-            '/turtlebot4/status_msg',  # Status topic
-            10
-        )
+        if self.encrypt:
+            self.get_logger().info("Encryption enabled for cmd_vel messages")
+            self.publisher_list.append(self.create_publisher(
+                String,
+                'encrypted_topic',  # Encrypted topic for cmd_vel
+                10
+            ))
+        else:
+            # Command publisher for movement - using multiple topics for reliability
+            self.publisher_list.append(self.create_publisher(
+                Twist,
+                '/cmd_vel_unstamped',  # cmd_vel_unstamped topic
+                10 # Queue size
+            ))
+            
+            # Secondary publisher for the differential drive controller
+            self.publisher_list.append(self.create_publisher(
+                Twist,
+                '/diffdrive_controller/cmd_vel',
+                10
+            ))
+            
+            # Status publisher/subscriber for monitoring
+            self.status_publisher = self.create_publisher(
+                String,
+                '/turtlebot4/status_msg',  # Status topic
+                10
+            )
         
         #self.status_subscriber = self.create_subscription(
         #    String,
@@ -83,23 +97,31 @@ class SecureTurtlebot4Controller(Node):
         # Security validation
         if not self.security.rate_limit_and_sanitize_command(linear_x, angular_z):
             return False
-            
-        # Create Twist message
-        twist_msg = Twist()
-        twist_msg.linear.x = float(linear_x)
-        twist_msg.angular.z = float(angular_z)
+        
+        linear_x = float(linear_x)
+        angular_z = float(angular_z)
 
-        try:
-            self.cmd_vel_publisher.publish(twist_msg)
-            self.get_logger().info(f"Published to cmd_vel_unstamped: linear={linear_x}, angular={angular_z}")
-        except Exception as e:
-            self.get_logger().error(f'Error sending to cmd_vel_unstamped: {str(e)}')
+        if self.encrypt:
+            timestamp = datetime.now().isoformat()
+            message = f"{linear_x},{angular_z}"
+            nonce, encrypted = encrypt_and_gmac(self.security.aesgcm, message, timestamp)
 
-        try:
-            self.diff_drive_publisher.publish(twist_msg)
-            self.get_logger().info(f"Published to diffdrive_controller/cmd_vel topic: linear={linear_x}, angular={angular_z}")
-        except Exception as e:
-            self.get_logger().error(f'Error sending to diffdrive_controller/cmd_vel: {str(e)}')
+            nonce_b64 = base64.b64encode(nonce).decode()
+            encrypted_data_b64 = base64.b64encode(encrypted).decode()
+            encrypted_msg = f"{nonce_b64}|{encrypted_data_b64}"
+            message = String()
+            message.data = encrypted_msg
+        else:
+            # Create Twist message
+            message = Twist()
+            message.linear.x = linear_x
+            message.angular.z = angular_z
+        for publisher in self.publisher_list:
+            try:
+                publisher.publish(message)
+                self.get_logger().info(f"Published to {publisher.topic_name} linear={linear_x}, angular={angular_z}")
+            except Exception as e:
+                self.get_logger().error(f'Error sending to {publisher.topic_name} {str(e)}')
         
         # Log the command and update status
         self.get_logger().info(f"Movement command sent to all topics: linear={linear_x}, angular={angular_z}")

@@ -19,16 +19,34 @@ def main():
     
     # Initialize ROS2
     rclpy.init()
+
+    temp_node = rclpy.create_node('temp_node')
+    rclpy.spin_once(temp_node, timeout_sec=1.0)
+
+    # Check if the /public_key topic exists
+    public_key_topic_exists = False
+    for topic_name, _ in temp_node.get_topic_names_and_types():
+        if topic_name == '/public_key':
+            public_key_topic_exists = True
+            break
+    
+    enable_security = public_key_topic_exists
+
+    enable_security = True  # Force security for testing
+
+    temp_node.get_logger().info(f"Robot-side security node detected: {enable_security}")
+
+    temp_node.destroy_node()
     
     # Create the controller node
-    controller_node = SecureTurtlebot4Controller(encrypt=True)
-    if controller_node.encrypt:
-    # Wait for key exchange to complete
+    controller_node = SecureTurtlebot4Controller(enable_security)
+    if enable_security:
+        # Wait for key exchange to complete
         print("Waiting for key exchange to complete...")
-        while controller_node.security.aes_key is None:
+        while controller_node.aes_key is None:
             rclpy.spin_once(controller_node, timeout_sec=0.1)
         print("Key exchange completed. AES key derived.")
-        controller_node.security.aesgcm = AESGCM(controller_node.security.aes_key)
+        controller_node.aesgcm = AESGCM(controller_node.aes_key)
 
     # Set up executor for handling actions properly
     executor = MultiThreadedExecutor()
@@ -46,7 +64,7 @@ def main():
     
     # Set the reference to the GUI in the controller for status updates
     controller_node.gui = app
-    controller_node.security.set_gui(app)
+    #controller_node.security.set_gui(app)
     
     # Add initial status message
     app.update_status("Controller initialized. Ready for commands.")

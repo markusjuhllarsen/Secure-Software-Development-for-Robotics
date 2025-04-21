@@ -10,7 +10,7 @@ from rclpy.callback_groups import ReentrantCallbackGroup
 
 from controller.security_manager import SecurityManager
 from controller.actions import DockingManager
-from utils.security import encrypt_and_gmac
+from utils.security import encrypt_and_gmac, exchange_keys
 
 class SecureTurtlebot4Controller(Node):
     """Main controller class for the Turtlebot4 with security features"""
@@ -35,6 +35,11 @@ class SecureTurtlebot4Controller(Node):
         self.publisher_list = []
         self._init_publishers()
 
+        if self.encrypt:
+            self.public_key_timer = self.create_timer(1, self.publish_public_key)
+
+        self._init_subscribers()
+
         # Initialize docking manager
         self.docking = DockingManager(self)
         
@@ -49,6 +54,19 @@ class SecureTurtlebot4Controller(Node):
                 'encrypted_topic',  # Encrypted topic for cmd_vel
                 10
             ))
+
+            self.public_key_publisher = self.create_publisher(
+                String,
+                'public_key_controller',  # Topic for sharing public key
+                10
+            )
+
+            self.aes_key_ack_publisher = self.create_publisher(
+                String, 
+                '/aes_key_ack', 
+                10
+            )
+
         else:
             # Command publisher for movement - using multiple topics for reliability
             self.publisher_list.append(self.create_publisher(
@@ -77,6 +95,65 @@ class SecureTurtlebot4Controller(Node):
         #    self.status_callback,
         #    10
         #)
+    
+    def _init_subscribers(self):
+        if self.encrypt:
+            self.public_key_subscription = self.create_subscription(
+                String, 
+                '/public_key_robot', 
+                self.receive_public_key_callback, 
+                10
+            )
+
+            self.create_subscription(
+                String, 
+                '/aes_key_ack', 
+                self.receive_aes_key_ack_callback, 
+                10
+            )
+
+    def send_aes_key_ack(self):
+        msg = String()
+        msg.data = f"{self.security.public_key_bytes}"  # Include the node ID in the ACK
+        self.aes_key_ack_publisher.publish(msg)
+        self.get_logger().info("Sent acknowledgment to peer.")
+    
+    def receive_aes_key_ack_callback(self, msg):
+        try:
+            peer_public_key = msg.data # Split the ACK message into parts
+            if peer_public_key != self.security.public_key_bytes:
+                self.security.peer_ack_received = True
+                self.get_logger().info(f"Received acknowledgment from peer")
+        except Exception as e:
+            self.get_logger().error(f"Failed to process acknowledgment: {e}")
+
+    def publish_public_key(self):
+        if self.security.peer_ack_received:
+            # Stop publishing once the AES key is established
+            self.public_key_timer.cancel()
+            self.get_logger().info("Peer AES key established. Stopped publishing public key.")
+            return
+
+        # Publish the public key
+        msg = String()
+        msg.data = self.security.public_key_bytes.decode('utf-8')  # Convert bytes to string
+        self.public_key_publisher.publish(msg)
+        self.get_logger().info("Published public key.")
+
+    def receive_public_key_callback(self, msg):
+        try:
+            # Deserialize the peer's public key
+            peer_public_key_bytes = msg.data.encode('utf-8')  # Convert string back to bytes
+            self.security.aes_key = exchange_keys(self.security.private_key, peer_public_key_bytes)
+            print(self.security.aes_key)
+            self.send_aes_key_ack()
+            self.get_logger().info("Shared AES key derived successfully.")
+
+            # Stop subscribing to the public key topic
+            self.destroy_subscription(self.public_key_subscription)
+            self.get_logger().info("Unsubscribed from /public_key topic.")
+        except Exception as e:
+            self.get_logger().error(f"Failed to derive AES key: {e}")
     
     def status_callback(self, msg):
         """

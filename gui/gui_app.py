@@ -55,7 +55,7 @@ class ButtonControlGUI:
         self._create_movement_controls(main_frame)
         
         # Create docking controls
-        self._create_docking_controls(main_frame)
+        self._create_action_controls(main_frame)
         
         # Create custom velocity controls
         self._create_velocity_controls(main_frame)
@@ -105,20 +105,28 @@ class ButtonControlGUI:
             control_frame.columnconfigure(i, weight=1)
         for i in range(3):
             control_frame.rowconfigure(i, weight=1)
-    
-    def _create_docking_controls(self, parent):
+
+    def _create_action_controls(self, parent):
         """Create the docking control buttons"""
-        dock_frame = ttk.LabelFrame(parent, text="Docking Controls", padding="15")
+        dock_frame = ttk.LabelFrame(parent, text="Actions", padding="15")
         dock_frame.grid(row=1, column=1, padx=15, pady=15, sticky="nsew")
-        
+
         # Add Dock and Undock buttons with increased size and padding
-        btn_dock = ttk.Button(dock_frame, text="Dock Robot", 
-                             command=self.controller.docking.dock_robot)
-        btn_dock.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
-        
-        btn_undock = ttk.Button(dock_frame, text="Undock Robot", 
-                               command=self.controller.docking.undock_robot)
-        btn_undock.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+        btn_dock = ttk.Button(dock_frame, text="Dock Robot",
+                              command=lambda: self.controller.action_manager.dock_robot())
+        btn_dock.grid(row=0, column=0, padx=10, pady=2, sticky="ew")
+
+        btn_undock = ttk.Button(dock_frame, text="Undock Robot",
+                                command=lambda: self.controller.action_manager.undock_robot())
+        btn_undock.grid(row=1, column=0, padx=10, pady=2, sticky="ew")
+
+        btn_rotate = ttk.Button(dock_frame, text="Rotate",
+                                command=lambda: self.controller.action_manager.rotate_angle(1.57, 0.5))
+        btn_rotate.grid(row=2, column=0, padx=10, pady=2, sticky="ew")
+
+        btn_forward = ttk.Button(dock_frame, text="Drive Forward",
+                                 command=lambda: self.controller.action_manager.drive_distance_unstamped(5.0, 0.3))
+        btn_forward.grid(row=3, column=0, padx=10, pady=2, sticky="ew")
         
         # Configure the grid to expand
         dock_frame.columnconfigure(0, weight=1)

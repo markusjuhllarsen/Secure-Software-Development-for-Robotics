@@ -19,9 +19,12 @@ def main():
     
     # Initialize ROS2
     rclpy.init()
+
+    use_encryption = False # Change to true for encryption
     
     # Create the controller node
-    controller_node = SecureTurtlebot4Controller(encrypt=True)
+    controller_node = SecureTurtlebot4Controller(encrypt=use_encryption)
+
     if controller_node.encrypt:
     # Wait for key exchange to complete
         print("Waiting for key exchange to complete...")
@@ -29,6 +32,8 @@ def main():
             rclpy.spin_once(controller_node, timeout_sec=0.1)
         print("Key exchange completed. AES key derived.")
         controller_node.security.aesgcm = AESGCM(controller_node.security.aes_key)
+    else:
+        print("Running without encryption")
 
     # Set up executor for handling actions properly
     executor = MultiThreadedExecutor()

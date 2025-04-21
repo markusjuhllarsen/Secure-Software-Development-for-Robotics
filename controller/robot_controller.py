@@ -9,7 +9,7 @@ from std_msgs.msg import String
 from rclpy.callback_groups import ReentrantCallbackGroup
 
 from controller.security_manager import SecurityManager
-from controller.actions import DockingManager
+from controller.actions import RobotActionManager
 from utils.security import encrypt_and_gmac, exchange_keys
 
 class SecureTurtlebot4Controller(Node):
@@ -41,7 +41,7 @@ class SecureTurtlebot4Controller(Node):
         self._init_subscribers()
 
         # Initialize docking manager
-        self.docking = DockingManager(self)
+        self.action_manager = RobotActionManager(self, enable_security=self.encrypt)
         
         self.get_logger().info('Secure Turtlebot4 Controller initialized')
     

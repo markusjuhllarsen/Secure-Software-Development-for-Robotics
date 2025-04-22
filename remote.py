@@ -3,10 +3,15 @@ from tkinter import simpledialog, messagebox
 import os
 import subprocess
 
+from utils.setup import setup_ros2_environment
+
 def configure_remote_connection():
     """
     Collect IP addresses for master and host, configure the environment, and display commands for the master PC.
     """
+
+    setup_ros2_environment()
+
     # Create a Tkinter root window (hidden)
     root = tk.Tk()
     root.withdraw()  # Hide the root window
@@ -28,15 +33,11 @@ def configure_remote_connection():
     # Set up the ROS environment variables
     try:
         os.environ["ROS_MASTER_URI"] = f"http://{simulation_ip}:11311"
-        subprocess.run(f"export ROS_MASTER_URI=http://{simulation_ip}:11311", shell=True, check=True)
 
         if not simulation:
             os.environ["ROS_IP"] = controller_ip
-            subprocess.run(f"export ROS_IP={controller_ip}", shell=True, check=True)
         else:
             os.environ["ROS_IP"] = simulation_ip
-            subprocess.run(f"export ROS_IP={simulation_ip}", shell=True, check=True)
-            subprocess.run("roscore", shell=True, check=True)
 
     except Exception as e:
         messagebox.showerror("Error", f"Failed to configure remote connection: {e}")

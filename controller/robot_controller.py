@@ -13,8 +13,8 @@ from security_node import SecurityNode
 class SecureTurtlebot4Controller(SecurityNode):
     """Main controller class for the Turtlebot4 with security features"""
     
-    def __init__(self, enable_security=False):
-        super().__init__('secure_turtlebot4_controller')
+    def __init__(self, enable_security = False):
+        super().__init__('secure_turtlebot4_controller', enable_security)
         
         # Print node and topic info at startup
         self.get_logger().info("Starting Secure Turtlebot4 Controller - if controls don't work, check topic names")

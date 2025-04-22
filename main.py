@@ -32,7 +32,7 @@ def main():
     
     enable_security = public_key_topic_exists
 
-    enable_security = True  # Force security for testing
+    enable_security = False  # Force security for testing
 
     temp_node.get_logger().info(f"Robot-side security node detected: {enable_security}")
 
@@ -40,6 +40,7 @@ def main():
     
     # Create the controller node
     controller_node = SecureTurtlebot4Controller(enable_security)
+
     if enable_security:
         # Wait for key exchange to complete
         print("Waiting for key exchange to complete...")

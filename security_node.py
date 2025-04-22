@@ -10,8 +10,8 @@ import hashlib
 import base64
 
 class SecurityNode(Node):
-    def __init__(self, enable_security = False):
-        super().__init__('robot_security_node')
+    def __init__(self, name, enable_security = False):
+        super().__init__(name)
         self.get_logger().info("Initializing Security Node...")
 
         self.enable_security = enable_security

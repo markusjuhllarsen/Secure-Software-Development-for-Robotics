@@ -13,7 +13,7 @@ from security_node import SecurityNode
 
 class SecurityNode(SecurityNode):
     def __init__(self, enable_security = True):
-        super().__init__('security_node')
+        super().__init__('security_node', enable_security)
         self.get_logger().info("Initializing Security Node...")
 
         self._init_publishers()

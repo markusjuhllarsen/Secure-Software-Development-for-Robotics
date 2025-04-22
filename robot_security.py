@@ -33,7 +33,6 @@ class SecurityNode(SecurityNode):
             '/diffdrive_controller/cmd_vel',
             10
         ))
-
     
     def _init_subscribers(self):
             self.create_subscription(

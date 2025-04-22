@@ -7,7 +7,7 @@ from geometry_msgs.msg import Twist
 from std_msgs.msg import String
 from rclpy.callback_groups import ReentrantCallbackGroup
 
-from controller.actions import DockingManager
+from controller.actions import RobotActionManager
 from security_node import SecurityNode
 
 class SecureTurtlebot4Controller(SecurityNode):
@@ -29,7 +29,7 @@ class SecureTurtlebot4Controller(SecurityNode):
         self._init_publishers()
 
         # Initialize docking manager
-        self.docking = DockingManager(self)
+        self.action_manager = RobotActionManager(self)
         
         self.get_logger().info('Secure Turtlebot4 Controller initialized')
     

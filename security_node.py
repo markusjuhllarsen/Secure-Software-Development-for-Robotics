@@ -36,7 +36,7 @@ class SecurityNode(Node):
             self.aes_key_ack_publisher = self.create_publisher(String, '/aes_key_ack', 10)
 
             # Timer to repeatedly publish the public key
-            self.public_key_timer = self.create_timer(0.5, self.publish_public_key)
+            self.public_key_timer = self.create_timer(1, self.publish_public_key)
 
             # Subscriber for public key and acknowledgment
             self.public_key_subscription = self.create_subscription(String, '/public_key', self.receive_public_key_callback, 10)
@@ -120,7 +120,7 @@ class SecurityNode(Node):
             # Decrypt the data and verify GMAC
             # The GMAC is verified during decryption, so if it fails, an exception will be raised
             decrypted_data = self.aesgcm.decrypt(nonce, encrypted_data, None).decode()
-            message, _ = decrypted_data.split(':', 1)  # Split by the last colon
+            message, _ = decrypted_data.split(':', 1)  # Split by the first colon
             return message
         except Exception as e:
             return None

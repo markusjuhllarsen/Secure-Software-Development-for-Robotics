@@ -1,0 +1,3 @@
+string requester_public_key  # Request: Public key as a string
+---
+string responder_public_key  # Response: Peer public key as a string

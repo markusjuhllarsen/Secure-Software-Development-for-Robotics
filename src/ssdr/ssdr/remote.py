@@ -1,9 +1,8 @@
 import tkinter as tk
 from tkinter import simpledialog, messagebox
 import os
-import subprocess
 
-from utils.setup import setup_ros2_environment
+from ssdr.utils.ros_setup import setup_ros2_environment
 
 def configure_remote_connection():
     """

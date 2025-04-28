@@ -1,14 +1,11 @@
-from ssdr.utils.ros_setup import setup_ros2_environment
-
-setup_ros2_environment()
 import rclpy
-from ssdr.robot_security import SecurityNode
+from ssdr.robot_security import RobotSecurityNode
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 def main(args=None):
     rclpy.init(args=args)
-    security_node = SecurityNode()
+    security_node = RobotSecurityNode()
 
     try:
         # Wait for key exchange to complete

@@ -1,19 +1,13 @@
 
-from utils.ros_setup import setup_ros2_environment
-setup_ros2_environment()
-
-import std_srvs.srv as srv
-print(srv.__all__)
-quit()
 from std_msgs.msg import String
 from geometry_msgs.msg import Twist
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 import base64
 
-from security_node import SecurityNode
+from ssdr.security_node import SecurityNode
 
-class SecurityNode(SecurityNode):
+class RobotSecurityNode(SecurityNode):
     def __init__(self, enable_security = True):
         super().__init__('security_node', enable_security)
         self.get_logger().info("Initializing Security Node...")

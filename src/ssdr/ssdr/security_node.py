@@ -31,46 +31,51 @@ class SecurityNode(Node):
             self.node_id = hashlib.sha256(self.public_key_bytes).hexdigest()
 
             if controller:
-                self.public_key_client = self.create_client(KeyExchange, '/exchange_public_key')
+                self.public_key_client = self.create_client(KeyExchange, 'security_node/exchange_public_key')
                 self.key_exchange_timer = self.create_timer(1, self.initiate_key_exchange)
             else:
                 self.create_service(
-                KeyExchange, '/exchange_public_key', self.exchange_public_key_callback
-            )
+                    KeyExchange, '/security_node/exchange_public_key', self.exchange_public_key_callback
+                )
         else:
             self.get_logger().info("Security is disabled. Running without encryption.")
 
     def initiate_key_exchange(self):
+        """Initiate the key exchange process with the security node."""
         if not self.public_key_client.wait_for_service(timeout_sec=1.0):
             self.get_logger().warn("Public key exchange service not available.")
             return
 
         request = KeyExchange.Request()
-        request.data = self.public_key_bytes.decode('utf-8')  # Convert bytes to string
+        request.requester_public_key = self.public_key_bytes.decode('utf-8')  # Convert bytes to string
 
         future = self.public_key_client.call_async(request)
         future.add_done_callback(self.handle_key_exchange_response)
 
     def handle_key_exchange_response(self, future):
+        """Handle the response from the key exchange service. (Client-side)"""
         try:
             response = future.result()
-            peer_public_key_bytes = response.data.encode('utf-8')  # Convert string back to bytes
+            peer_public_key_bytes = response.responder_public_key.encode('utf-8')  # Convert string back to bytes
             self.aes_key = self.exchange_keys(peer_public_key_bytes)
             self.get_logger().info("Shared AES key derived successfully.")
+            # Stop the timer after the key exchange is complete
+            self.destroy_timer(self.key_exchange_timer)
         except Exception as e:
             self.get_logger().error(f"Failed to complete key exchange: {e}")
 
     def exchange_public_key_callback(self, request, response):
+        """Handle incoming public key exchange requests. (Server-side)"""
         try:
-            peer_public_key_bytes = request.data.encode('utf-8')  # Convert string back to bytes
+            peer_public_key_bytes = request.requester_public_key.encode('utf-8')  # Convert string back to bytes
             self.aes_key = self.exchange_keys(peer_public_key_bytes)
             self.get_logger().info("Shared AES key derived successfully.")
 
             # Respond with this node's public key
-            response.data = self.public_key_bytes.decode('utf-8')
+            response.responder_public_key  = self.public_key_bytes.decode('utf-8')
         except Exception as e:
             self.get_logger().error(f"Failed to process public key exchange: {e}")
-            response.data = ""
+            response.responder_public_key = ""
         return response
 
     def encrypt_and_gmac(self, message, timestamp):

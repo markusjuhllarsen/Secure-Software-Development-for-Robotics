@@ -1,9 +1,4 @@
 #!/usr/bin/env python3
-
-from ssdr.utils.ros_setup import setup_ros2_environment
-
-setup_ros2_environment()
-
 import rclpy
 import threading
 from rclpy.executors import MultiThreadedExecutor

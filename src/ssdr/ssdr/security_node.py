@@ -1,5 +1,5 @@
 from rclpy.node import Node
-from ssdr.srv import KeyExchange
+from ssdr_interfaces.srv import KeyExchange
 
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives import serialization

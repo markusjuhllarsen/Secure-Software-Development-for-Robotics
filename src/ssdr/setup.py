@@ -1,6 +1,4 @@
 from setuptools import setup, find_packages
-import os
-from glob import glob
 
 package_name = 'ssdr'
 
@@ -19,12 +17,10 @@ setup(
     data_files=[
         ('share/ament_index/resource_index/packages', 
          ['resource/' + package_name]),
-        ('share/' + package_name, ['package.xml']),
-        # Include the .srv files
-        (os.path.join('share', package_name, 'srv'), glob('srv/*.srv'))    
+        ('share/' + package_name, ['package.xml'])
         ],
     zip_safe=True,
-    maintainer='Markus Juhl Larsen',
+    maintainer='mjl',
     maintainer_email='markusjuhllarsen@gmail.com',
     description='Secure Software Development for Robotics',
     license='Apache License 2.0',
@@ -32,8 +28,8 @@ setup(
     entry_points={
         'console_scripts': [
             'main = ssdr.main:main',
-            'main_security = ssdr.scripts.main_security:main',
-            'remote = ssdr.scripts.remote:main',
+            'main_security = ssdr.main_security:main',
+            'remote = ssdr.remote:main',
         ],
     },
 )

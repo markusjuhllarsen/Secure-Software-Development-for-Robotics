@@ -2,7 +2,7 @@
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives import serialization
 from datetime import datetime, timedelta
-from ssdr.utils.config import MAX_ANGULAR_VELOCITY, MAX_LINEAR_VELOCITY
+from utils.config import MAX_ANGULAR_VELOCITY, MAX_LINEAR_VELOCITY
 
 class SecurityManager:
     """Handles security-related functionality for the robot controller"""

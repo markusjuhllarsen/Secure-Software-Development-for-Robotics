@@ -1,5 +1,5 @@
 import rclpy
-from ssdr.robot_security import RobotSecurityNode
+from robot_security import RobotSecurityNode
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 

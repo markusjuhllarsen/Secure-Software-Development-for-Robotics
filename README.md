@@ -1,8 +1,21 @@
 # Secure-Software-Development-for-Robotics
 
-colcon build --packages-select ssdr  
-source /install/setup.bash  
-ros2 run ssdr main (main_security or remote)  
+To build the interface package (in outer directory of repo):  
+source /opt/ros/jazzy/setup.bash  
+colcon build 
+
+To run the nodes:  
+In one terminal:   
+source /opt/ros/jazzy/setup.bash  
+source install/setup.bash  
+main_security.py (security node)
+
+In another terminal:  
+source /opt/ros/jazzy/setup.bash  
+source install/setup.bash  
+main.py (controller node)
+
+
 
 Run turtlebot4 sim
 1. source /opt/ros/jazzy/setup.bash

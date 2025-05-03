@@ -4,9 +4,9 @@ import threading
 from rclpy.executors import MultiThreadedExecutor
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-from ssdr.controller.robot_controller import SecureTurtlebot4Controller
-from ssdr.gui.gui_app import ButtonControlGUI
-from ssdr.utils.config import APP_NAME, APP_VERSION
+from controller.robot_controller import SecureTurtlebot4Controller
+from gui.gui_app import ButtonControlGUI
+from utils.config import APP_NAME, APP_VERSION
 
 def main():
     """Main entry point of the application"""

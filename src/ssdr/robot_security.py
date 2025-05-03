@@ -1,11 +1,13 @@
 
 from std_msgs.msg import String
 from geometry_msgs.msg import Twist
+from rclpy.callback_groups import ReentrantCallbackGroup
 
-from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+from controller.actions import RobotActionManager
+
 import base64
 
-from ssdr.security_node import SecurityNode
+from security_node import SecurityNode
 
 class RobotSecurityNode(SecurityNode):
     def __init__(self, enable_security = True):
@@ -14,6 +16,12 @@ class RobotSecurityNode(SecurityNode):
 
         self._init_publishers()
         self._init_subscribers()
+
+        # Use reentrant callback group for actions
+        self.callback_group = ReentrantCallbackGroup()
+
+        # Initialize docking manager
+        self.action_manager = RobotActionManager(self)
 
     def _init_publishers(self):
         self.publisher_list = []

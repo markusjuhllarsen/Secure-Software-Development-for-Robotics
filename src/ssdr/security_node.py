@@ -9,11 +9,12 @@ import secrets
 import hashlib
 
 class SecurityNode(Node):
-    def __init__(self, name, enable_security = False, controller = False):
+    def __init__(self, name, enable_security = False, is_controller = False):
         super().__init__(name)
         self.get_logger().info("Initializing Security Node...")
 
         self.enable_security = enable_security
+        self.is_controller = is_controller
 
         """Security setup"""
         if self.enable_security:
@@ -30,7 +31,7 @@ class SecurityNode(Node):
 
             self.node_id = hashlib.sha256(self.public_key_bytes).hexdigest()
 
-            if controller:
+            if self.is_controller:
                 self.public_key_client = self.create_client(KeyExchange, 'security_node/exchange_public_key')
                 self.key_exchange_timer = self.create_timer(1, self.initiate_key_exchange)
             else:
@@ -137,3 +138,23 @@ class SecurityNode(Node):
             return aes_key
         except Exception as e:
             return None
+    
+    def publish_status(self, status_text):
+        """
+        Publish status message and update the GUI
+        """
+        # Log the status
+        self.get_logger().info(f"Status: {status_text}")
+        
+        # Try to publish to the topic if the publisher exists
+        #if hasattr(self, 'status_publisher'):
+        #    try:
+        #        msg = String()
+        #        msg.data = status_text
+        #        self.status_publisher.publish(msg)
+        #    except Exception as e:
+        #        self.get_logger().error(f"Error publishing status: {str(e)}")
+        
+        # Update the GUI status window
+        if hasattr(self, 'gui'):
+            self.gui.update_status(status_text)

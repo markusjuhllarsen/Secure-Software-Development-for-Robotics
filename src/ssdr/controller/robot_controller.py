@@ -7,14 +7,14 @@ from geometry_msgs.msg import Twist
 from std_msgs.msg import String
 from rclpy.callback_groups import ReentrantCallbackGroup
 
-from ssdr.controller.actions import RobotActionManager
-from ssdr.security_node import SecurityNode
+from controller.actions import RobotActionManager
+from security_node import SecurityNode
 
 class SecureTurtlebot4Controller(SecurityNode):
     """Main controller class for the Turtlebot4 with security features"""
     
     def __init__(self, enable_security = False):
-        super().__init__('secure_turtlebot4_controller', enable_security, controller = True)
+        super().__init__('secure_turtlebot4_controller', enable_security, is_controller = True)
         
         # Print node and topic info at startup
         self.get_logger().info("Starting Secure Turtlebot4 Controller - if controls don't work, check topic names")
@@ -139,23 +139,3 @@ class SecureTurtlebot4Controller(SecurityNode):
             
         self.publish_status(status)
         return True
-    
-    def publish_status(self, status_text):
-        """
-        Publish status message and update the GUI
-        """
-        # Log the status
-        self.get_logger().info(f"Status: {status_text}")
-        
-        # Try to publish to the topic if the publisher exists
-        if hasattr(self, 'status_publisher'):
-            try:
-                msg = String()
-                msg.data = status_text
-                self.status_publisher.publish(msg)
-            except Exception as e:
-                self.get_logger().error(f"Error publishing status: {str(e)}")
-        
-        # Update the GUI status window
-        if hasattr(self, 'gui') and self.gui:
-            self.gui.update_status(status_text)

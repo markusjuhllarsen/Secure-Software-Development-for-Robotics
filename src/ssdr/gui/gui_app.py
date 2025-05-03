@@ -7,7 +7,7 @@ import threading
 import time
 import rclpy
 
-from ssdr.utils.config import DEFAULT_LINEAR_VELOCITY, DEFAULT_ANGULAR_VELOCITY, MAX_LINEAR_VELOCITY, MAX_ANGULAR_VELOCITY
+from utils.config import DEFAULT_LINEAR_VELOCITY, DEFAULT_ANGULAR_VELOCITY, MAX_LINEAR_VELOCITY, MAX_ANGULAR_VELOCITY
 
 class ButtonControlGUI:
     """Main GUI class for the Turtlebot4 controller"""
@@ -174,8 +174,8 @@ class ButtonControlGUI:
         self.root.bind('<Left>', lambda event: self.controller.move_robot(0.0, DEFAULT_ANGULAR_VELOCITY))
         self.root.bind('<Right>', lambda event: self.controller.move_robot(0.0, -DEFAULT_ANGULAR_VELOCITY))
         self.root.bind('<space>', lambda event: self.controller.move_robot(0.0, 0.0))
-        self.root.bind('d', lambda event: self.controller.docking.dock_robot())
-        self.root.bind('u', lambda event: self.controller.docking.undock_robot())
+        self.root.bind('d', lambda event: self.controller.action_manager.dock_robot())
+        self.root.bind('u', lambda event: self.controller.action_manager.undock_robot())
     
     def send_custom_velocity(self):
         """Handle custom velocity input and send to robot"""

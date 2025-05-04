@@ -155,7 +155,6 @@ class ButtonControlGUI:
             button.config(text=action_name, style='TButton')
 
     def _toggle_action(self, action):
-        button = self.action_buttons[action[0]]
         if action[1] in self.controller.action_manager.active_goals:
             # Cancel action and change button
             self.controller.action_manager.cancel_action(action[1])
@@ -166,8 +165,6 @@ class ButtonControlGUI:
             elif action[0] == "Undock":
                 self.controller.action_manager.undock_robot()
 
-            self.update_status(f"{action[0]} action start requested.")
-    
     def _create_velocity_controls(self, parent):
         """Create controls for custom velocity input"""
         velocity_frame = ttk.LabelFrame(parent, text="Custom Velocity", padding="15")

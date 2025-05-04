@@ -24,7 +24,7 @@ class ButtonControlGUI:
         # Create main window
         self.root = tk.Tk()
         self.root.title("Secure Turtlebot4 Controller")
-        self.root.geometry("700x600")  # Increased size for better visibility
+        self.root.geometry("700x700")  # Increased size for better visibility
         self.root.resizable(True, True)  # Allow resizing
         
         # Apply styling
@@ -32,6 +32,7 @@ class ButtonControlGUI:
         self.style.configure('TButton', font=('Arial', 12))
         self.style.configure('TFrame', background='#f0f0f0')
         self.style.configure('TLabel', font=('Arial', 12), background='#f0f0f0')
+        self.style.configure('Cancel.TButton', background='red', foreground='white', font=('Arial', 12, 'bold'))
         
         self.create_widgets()
         
@@ -45,7 +46,21 @@ class ButtonControlGUI:
         # Main frame
         main_frame = ttk.Frame(self.root, padding="20")
         main_frame.pack(fill=tk.BOTH, expand=True)
-        
+    
+        # Security tag
+        security_status = "SECURE" if self.controller.enable_security else "NOT SECURE"
+        security_color = "green" if self.controller.enable_security else "red"
+        self.security_label = tk.Label(
+            main_frame,
+            text=security_status,
+            font=('Arial', 12, 'bold'),
+            bg=security_color,
+            fg="white",
+            padx=10,
+            pady=5
+        )
+        self.security_label.grid(row=0, column=0, sticky="w", padx=5, pady=5)
+
         # Title
         title_label = ttk.Label(main_frame, text="Turtlebot4 Secure Control Panel", 
                                font=('Arial', 16, 'bold'))
@@ -110,28 +125,48 @@ class ButtonControlGUI:
         """Create the docking control buttons"""
         dock_frame = ttk.LabelFrame(parent, text="Actions", padding="15")
         dock_frame.grid(row=1, column=1, padx=15, pady=15, sticky="nsew")
+        
+        self.action_buttons = {}
 
-        # Add Dock and Undock buttons with increased size and padding
-        btn_dock = ttk.Button(dock_frame, text="Dock Robot",
-                              command=lambda: self.controller.action_manager.dock_robot())
-        btn_dock.grid(row=0, column=0, padx=10, pady=2, sticky="ew")
-
-        btn_undock = ttk.Button(dock_frame, text="Undock Robot",
-                                command=lambda: self.controller.action_manager.undock_robot())
-        btn_undock.grid(row=1, column=0, padx=10, pady=2, sticky="ew")
-
-        btn_rotate = ttk.Button(dock_frame, text="Rotate",
-                                command=lambda: self.controller.action_manager.rotate_angle(1.57, 0.5))
-        btn_rotate.grid(row=2, column=0, padx=10, pady=2, sticky="ew")
-
-        btn_forward = ttk.Button(dock_frame, text="Drive Forward",
-                                 command=lambda: self.controller.action_manager.drive_distance_unstamped(5.0, 0.3))
-        btn_forward.grid(row=3, column=0, padx=10, pady=2, sticky="ew")
+        for i, action in enumerate(self.controller.action_manager.actions.items()):
+            btn = ttk.Button(
+                dock_frame, 
+                text=action[0],
+                command=lambda action=action: self._toggle_action(action))
+            btn.grid(row=i, column=0, padx=10, pady=2, sticky="ew")
+            self.action_buttons[action[0]] = btn
         
         # Configure the grid to expand
         dock_frame.columnconfigure(0, weight=1)
-        for i in range(2):
+        for i in range(len(self.action_buttons)):
             dock_frame.rowconfigure(i, weight=1)
+    
+    def update_button(self, action_name, state):
+        """
+        Update the button state in the GUI.
+        Args:
+            action_name: The name of the action.
+            state: The new state of the button ("Action" or "Cancel").
+        """
+        button = self.action_buttons[action_name]
+        if state == "Cancel":
+            button.config(text=f"Cancel {action_name}", style='Cancel.TButton')
+        else:
+            button.config(text=action_name, style='TButton')
+
+    def _toggle_action(self, action):
+        button = self.action_buttons[action[0]]
+        if action[1] in self.controller.action_manager.active_goals:
+            # Cancel action and change button
+            self.controller.action_manager.cancel_action(action[1])
+            self.update_status(f"{action[0]} action canceled.")
+        else:
+            if action[0] == "Dock":
+                self.controller.action_manager.dock_robot()
+            elif action[0] == "Undock":
+                self.controller.action_manager.undock_robot()
+
+            self.update_status(f"{action[0]} action start requested.")
     
     def _create_velocity_controls(self, parent):
         """Create controls for custom velocity input"""

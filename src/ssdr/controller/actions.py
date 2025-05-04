@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
-from rclpy.action import ActionClient, ActionServer, GoalResponse, CancelResponse
-from irobot_create_msgs.action import Dock, Undock, NavigateToPosition, RotateAngle
+
+from rclpy.action import ActionClient, ActionServer, CancelResponse
+
+from irobot_create_msgs.action import Dock, Undock, DriveArc, DriveDistance, NavigateToPosition, RotateAngle, WallFollow
 from geometry_msgs.msg import PoseStamped
 import math
 
@@ -10,7 +12,7 @@ class RobotActionManager:
     Generic action manager for Turtlebot4 that handles various robot actions
     """
 
-    def __init__(self, node):
+    def __init__(self, node, update_button_callback = None):
         """
         Initialize the action manager
 
@@ -18,8 +20,18 @@ class RobotActionManager:
             node: The ROS2 node that will own the action clients
         """
         self.node = node
+        action_list = ["Dock", "Undock", "DriveArc", "DriveDistance", "NavigateToPosition", "RotateAngle", "WallFollow"]
+        self.actions = {}
+        for action in action_list:
+            if self.node.is_controller and self.node.enable_security:
+                self.actions[action] = f'Encrypted_{action}'
+            else:
+                self.actions[action] = action
+
         self.action_clients = {}
         self.action_servers = {}
+        self.active_goals = {}
+        self.update_button_callback = update_button_callback
 
         # Initialize action clients
         if self.node.enable_security:
@@ -31,63 +43,42 @@ class RobotActionManager:
         
     def _init_unencrypted_action_clients(self):
         """Initialize all unencrypted action clients needed for the robot"""
-        self.action_clients["Dock"] = ActionClient(
-            self.node,
-            Dock,
-            '/dock',
-            callback_group=self.node.callback_group
-        )
+        for action_name in self.actions:
+            self.action_clients[action_name] = ActionClient(
+                self.node,
+                globals()[action_name],
+                f'/{action_name.lower()}',
+                callback_group=self.node.callback_group
+            )
 
-        self.action_clients["Undock"] = ActionClient(
-            self.node,
-            Undock,
-            '/undock',
-            callback_group=self.node.callback_group
-        )
-
-        """
-        # Navigation actions
-        self.action_clients["navigate"] = ActionClient(
-            self.node,
-            NavigateToPosition,
-            '/navigate_to_position',
-            callback_group=self.node.callback_group
-        )
-
-        # Rotation action
-        self.action_clients["rotate"] = ActionClient(
-            self.node,
-            RotateAngle,
-            '/rotate_angle',
-            callback_group=self.node.callback_group
-        )
-        """
-    
     def _init_encrypted_action_clients(self):
-        """Initialize all unencrypted action clients needed for the robot""" 
-        self.action_clients["Encrypted_dock"] = ActionClient(
-            self.node,
-            Dock,
-            '/encrypted_dock',
-            callback_group=self.node.callback_group
-        )
-
-        self.action_clients["Encrypted_undock"] = ActionClient(
-            self.node,
-            Undock,
-            '/encrypted_undock',
-            callback_group=self.node.callback_group
-        )
+        """Initialize all encrypted action clients""" 
+        
+        for action_name, encrypted_action in self.actions.items():
+            self.action_clients[encrypted_action] = ActionClient(
+                self.node,
+                globals()[action_name],
+                f'/{encrypted_action.lower()}',
+                callback_group=self.node.callback_group
+            )
     
     def _init_forwarding_action_servers(self):
-        """Initialize all unencrypted action clients needed for the robot""" 
+        """Initialize all encrypted action servers needed for decrypting and forwarding actions""" 
+        
+        #for action_name in self.actions.values():
+        #    self.action_clients[action_name] = ActionClient(
+        #        self.node,
+        #        globals()[action_name],
+        #        f'/{action_name.lower()}',
+        #        callback_group=self.node.callback_group
+        #    )
+
         self.action_servers["Encrypted_dock"] = ActionServer(
             self.node,
             Dock,
             '/encrypted_dock',
             execute_callback=self._forward_dock_callback,
-            #goal_callback=self._generic_goal_callback,
-            #cancel_callback=self._generic_cancel_callback
+            cancel_callback=self._cancel_callback,
         )
 
         self.action_servers["Encrypted_undock"] = ActionServer(
@@ -95,29 +86,16 @@ class RobotActionManager:
             Undock,
             '/encrypted_undock',
             execute_callback=self._forward_undock_callback,
-            #goal_callback=self._generic_goal_callback,
-            #cancel_callback=self._generic_cancel_callback
+            cancel_callback=self._cancel_callback,
         )
-
-    #def _generic_goal_callback(self, goal_request):
-    #    """Accept all incoming goals."""
-    #    self.node.get_logger().info("Received goal request")
-    #    return GoalResponse.ACCEPT
-
-    #def _generic_cancel_callback(self, goal_handle):
-    #    """Allow all cancel requests."""
-    #    self.node.get_logger().info("Received cancel request")
-    #    return CancelResponse.ACCEPT
 
     async def _forward_dock_callback(self, goal_handle):
         """
         When recieving Dock action, forward it to the unencrypted Dock client.
-        
-        args:
+        Args:
             goal_handle: The goal handle for the action server
-        
-        returns: 
-
+        Returns: 
+            Dock.Result: The result of the action
         """
         self.node.get_logger().info("Forwarding Dock action...")
         goal_msg = Dock.Goal()
@@ -129,7 +107,7 @@ class RobotActionManager:
         goal_handle_response = await send_goal_future
 
         if not goal_handle_response.accepted:
-            self.node.get_logger().error('Dock goal rejected')
+            self.node.get_logger().error('Dock goal rejected.')
             goal_handle.abort()
             return Dock.Result()
         
@@ -139,7 +117,14 @@ class RobotActionManager:
         return result.result
 
     async def _forward_undock_callback(self, goal_handle):
-        self.node.get_logger().info("Forwarding undock action...")
+        """
+        When recieving Undock action, forward it to the unencrypted Undock client.
+        Args:
+            goal_handle: The goal handle for the action server
+        Returns:
+            Undock.Result: The result of the action
+        """
+        self.node.get_logger().info("Forwarding undock action.")
         goal_msg = Undock.Goal()
     
         client = self.action_clients["Undock"]
@@ -149,7 +134,7 @@ class RobotActionManager:
         goal_handle_response = await send_goal_future
 
         if not goal_handle_response.accepted:
-            self.node.get_logger().error('Undock goal rejected')
+            self.node.get_logger().error('Undock goal rejected.')
             goal_handle.abort()
             return Undock.Result()
 
@@ -158,73 +143,141 @@ class RobotActionManager:
 
         goal_handle.succeed()
         return result.result
+    
+    def _cancel_callback(self, goal_handle):
+        """
+        Handle cancellation requests for actions.
+        Args:
+            goal_handle: The goal handle for the action server
+        Returns:
+            CancelResponse: ACCEPT or REJECT
+        """
+        self.node.get_logger().info(f"Cancel request received for goal: {goal_handle}")
+        return CancelResponse.ACCEPT
 
     def _send_goal(self, action_name, goal_msg):
         """
         Generic method to send an action
-
         Args:
             action_name: Name of the action to send
             goal_msg: The goal message for the action
-            response_callback: Callback for handling the response
-
-        Returns:
-            bool: True if the action was sent successfully
         """
         self.node.get_logger().info(f"Sending {action_name} action...")
 
         # Check if action client exists
         if action_name not in self.action_clients:
-            self.node.get_logger().error(f"{action_name} action client not initialized!")
+            self.node.get_logger().error(f"{action_name} action client not available!")
             self.node.publish_status(f"{action_name} action client not available!")
-            return False
-
+            return
+        
         client = self.action_clients[action_name]
         client.wait_for_server()
 
-        self._send_goal_future = client.send_goal_async(goal_msg, feedback_callback=self._feedback_callback)
-        self._send_goal_future.add_done_callback(lambda future: self._response_callback(action_name, future))
+        send_goal_future = client.send_goal_async(goal_msg, feedback_callback=self._feedback_callback)
+        send_goal_future.add_done_callback(lambda future: self._response_callback(action_name, future))
 
     def _response_callback(self, action_name, future):
+        """
+        Callback for when the send goal response is received
+        Args:
+            action_name: Name of the action
+            future: The future object containing the result
+        """
+        
         goal_handle = future.result()
 
         if not goal_handle.accepted:
-            self.node.get_logger().info(f'{action_name} action rejected')
-            self.node.publish_status(f'{action_name} action rejected')
-            goal_handle.abort()
-            return None
-        self.node.get_logger().info(f'{action_name} action accepted')
-        self.node.publish_status(f'{action_name} action accepted')
+            self.node.get_logger().info(f'{action_name} action rejected.')
+            self.node.publish_status(f'{action_name} action rejected.')
+            return
+         
+        self.node.get_logger().info(f'{action_name} action accepted.')
+        self.node.publish_status(f'{action_name} action accepted.')
+        
+        self.active_goals[action_name] = goal_handle
 
-        self._get_result_future = goal_handle.get_result_async()
-        self._get_result_future.add_done_callback(lambda future: self._result_callback(action_name, future))
-        return self._get_result_future
+        if self.update_button_callback:
+            # Goal accepted, can now cancel
+            self.update_button_callback(action_name, "Cancel")
+
+        get_result_future = goal_handle.get_result_async()
+        get_result_future.add_done_callback(lambda future: self._result_callback(action_name, future))
 
     def _feedback_callback(self, feedback_msg):
+        # Not implemented yet
         feedback = feedback_msg.feedback
 
     def _result_callback(self, action_name, future):
+        """
+        Callback for when the action result is received
+        Args:
+            action_name: Name of the action
+            future: The future object containing the result
+        """
         result = future.result().result
+        del self.active_goals[action_name]
         self.node.get_logger().info(f"{action_name} completed with result: {result}")
-        self.node.publish_status(f"{action_name} completed")
+        self.node.publish_status(f"{action_name} completed.")
+
+        if self.update_button_callback:
+            # Goal finished, can no longer cancel
+            self.update_button_callback(action_name, "Action")
+    
+    def cancel_action(self, action_name):
+        """
+        Cancel an active goal for the specified action.
+        Args:
+            action_name: Name of the action to cancel
+        """
+        if action_name not in self.active_goals:
+            self.node.get_logger().error(f"{action_name} goal not active!")
+            return
+
+        goal_handle = self.active_goals[action_name]
+        cancel_future = goal_handle.cancel_goal_async()
+        cancel_future.add_done_callback(lambda future: self._cancel_done_callback(action_name, future))   
+
+    def _cancel_done_callback(self, action_name, future):
+        """
+        Callback for handling the result of a cancelled action
+        Args:
+            action_name: Name of the action being canceled.
+            future: The future object containing cancel response.
+        """
+        try:
+            cancel_response = future.result()
+            if len(cancel_response.goals_canceling) > 0:
+                self.node.get_logger().info(f"{action_name} goal successfully canceled.")
+                if action_name in self.active_goals:
+                    del self.active_goals[action_name]
+
+                if self.update_button_callback:
+                    # Action canceled, can now do it again
+                    self.update_button_callback(action_name, "Action")
+            else:
+                self.node.get_logger().info(f"No active goals to cancel for {action_name}.")
+        except Exception as e:
+            self.node.get_logger().error(f"Failed to cancel {action_name} goal: {str(e)}")
 
     def dock_robot(self):
         """Send dock action to robot"""
         goal_msg = Dock.Goal()
         if self.node.enable_security:
             self.node.publish_status("Sending Encrypted_dock action.")
-            return self._send_goal("Encrypted_dock", goal_msg)
-        self.node.publish_status("Sending Dock action.")
-        return self._send_goal("Dock", goal_msg)
+            self._send_goal("Encrypted_Dock", goal_msg)
+        else:
+            self.node.publish_status("Sending Dock action.")
+            self._send_goal("Dock", goal_msg)
     
     def undock_robot(self):
         """Send undock action to robot"""
         goal_msg = Undock.Goal()
         if self.node.enable_security:
             self.node.publish_status("Sending Encrypted_undock action.")
-            return self._send_goal("Encrypted_undock", goal_msg)
-        self.node.publish_status("Sending Undock action.")
-        return self._send_goal("Undock", goal_msg)
+            self._send_goal("Encrypted_Undock", goal_msg)
+        else:
+            self.node.publish_status("Sending Undock action.")
+            self._send_goal("Undock", goal_msg)
 
     def navigate_to_pose(self, x, y, theta=0.0):
         """

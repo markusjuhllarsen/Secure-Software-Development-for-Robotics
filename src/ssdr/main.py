@@ -27,7 +27,7 @@ def main():
     
     enable_security = public_key_topic_exists
 
-    enable_security = True  # Force security for testing
+    enable_security = False  # Force security for testing
 
     temp_node.get_logger().info(f"Robot-side security node detected: {enable_security}")
 
@@ -60,6 +60,9 @@ def main():
     
     # Set the reference to the GUI in the controller for status updates
     controller_node.gui = app
+
+    controller_node.action_manager.update_button_callback = app.update_button
+
     #controller_node.security.set_gui(app)
     
     # Add initial status message

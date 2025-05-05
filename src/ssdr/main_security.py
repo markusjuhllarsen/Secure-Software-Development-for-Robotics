@@ -12,7 +12,6 @@ def main(args=None):
         print("Waiting for key exchange to complete...")
         while security_node.aes_key is None:
             rclpy.spin_once(security_node, timeout_sec=0.1)  # Spin the node to process callbacks
-        print("Key exchange completed. AES key derived.")
 
         # Set up AES-GCM with the derived AES key
         security_node.aesgcm = AESGCM(security_node.aes_key)

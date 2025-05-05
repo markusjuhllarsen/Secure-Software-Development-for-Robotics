@@ -144,7 +144,7 @@ class SecurityNode(Node):
         Publish status message and update the GUI
         """
         # Log the status
-        self.get_logger().info(f"Status: {status_text}")
+        self.get_logger().info(status_text)
         
         # Try to publish to the topic if the publisher exists
         #if hasattr(self, 'status_publisher'):

@@ -11,7 +11,6 @@ class RobotActionManager:
     """
     Generic action manager for Turtlebot4 that handles various robot actions
     """
-
     def __init__(self, node, update_button_callback = None):
         """
         Initialize the action manager
@@ -91,13 +90,13 @@ class RobotActionManager:
 
     def _forward_dock_callback(self, goal_handle):
         """
-        When recieving Dock action, forward it to the unencrypted Dock client.
+        When recieving encrypted Dock action, forward it to the unencrypted Dock client.
         Args:
             goal_handle: The goal handle for the action server
         Returns: 
             Dock.Result: The result of the action
         """
-        self.node.get_logger().info("Forwarding Dock action...")
+        self.node.get_logger().info("Forwarding Dock action.")
         goal_msg = Dock.Goal()
 
         client = self.action_clients['Dock']
@@ -108,7 +107,7 @@ class RobotActionManager:
 
     def _forward_undock_callback(self, goal_handle):
         """
-        When recieving Undock action, forward it to the unencrypted Undock client.
+        When recieving encrypted Undock action, forward it to the unencrypted Undock client.
         Args:
             goal_handle: The goal handle for the action server
         Returns:
@@ -181,11 +180,9 @@ class RobotActionManager:
         goal_handle = future.result()
 
         if not goal_handle.accepted:
-            self.node.get_logger().info(f'{action_name} action rejected.')
             self.node.publish_status(f'{action_name} action rejected.')
             return
          
-        self.node.get_logger().info(f'{action_name} action accepted.')
         self.node.publish_status(f'{action_name} action accepted.')
         self.active_goals[action_name] = goal_handle
 
@@ -209,8 +206,7 @@ class RobotActionManager:
         """
         result = future.result().result
         del self.active_goals[action_name]
-        self.node.get_logger().info(f"{action_name} completed with result: {result}")
-        self.node.publish_status(f"{action_name} completed.")
+        self.node.publish_status(f"{action_name} action completed.")
 
         if self.update_button_callback:
             # Goal finished, can no longer cancel

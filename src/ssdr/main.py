@@ -41,7 +41,6 @@ def main():
         print("Waiting for key exchange to complete...")
         while controller_node.aes_key is None:
             rclpy.spin_once(controller_node, timeout_sec=0.1)
-        print("Key exchange completed. AES key derived.")
         controller_node.aesgcm = AESGCM(controller_node.aes_key)
 
     # Set up executor for handling actions properly

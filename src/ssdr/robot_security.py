@@ -3,7 +3,7 @@ from std_msgs.msg import String
 from geometry_msgs.msg import Twist
 from rclpy.callback_groups import ReentrantCallbackGroup
 
-from controller.actions import RobotActionManager
+from actions import RobotActionManager
 
 import base64
 
@@ -12,8 +12,6 @@ from security_node import SecurityNode
 class RobotSecurityNode(SecurityNode):
     def __init__(self, enable_security = True):
         super().__init__('security_node', enable_security)
-        self.get_logger().info("Initializing Security Node...")
-
         self._init_publishers()
         self._init_subscribers()
 

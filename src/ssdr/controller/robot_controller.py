@@ -7,7 +7,7 @@ from geometry_msgs.msg import Twist
 from std_msgs.msg import String
 from rclpy.callback_groups import ReentrantCallbackGroup
 
-from controller.actions import RobotActionManager
+from actions import RobotActionManager
 from security_node import SecurityNode
 
 class SecureTurtlebot4Controller(SecurityNode):

@@ -128,13 +128,13 @@ class ButtonControlGUI:
         
         self.action_buttons = {}
 
-        for i, action in enumerate(self.controller.action_manager.actions.items()):
+        for i, action in enumerate(self.controller.action_manager.actions):
             btn = ttk.Button(
                 dock_frame, 
-                text=action[0],
+                text=action,
                 command=lambda action=action: self._toggle_action(action))
             btn.grid(row=i, column=0, padx=10, pady=2, sticky="ew")
-            self.action_buttons[action[0]] = btn
+            self.action_buttons[action] = btn
         
         # Configure the grid to expand
         dock_frame.columnconfigure(0, weight=1)
@@ -155,14 +155,14 @@ class ButtonControlGUI:
             button.config(text=action_name, style='TButton')
 
     def _toggle_action(self, action):
-        if action[1] in self.controller.action_manager.active_goals:
+        if action in self.controller.action_manager.active_goals:
             # Cancel action and change button
-            self.controller.action_manager.cancel_action(action[1])
-            self.update_status(f"{action[0]} action canceled.")
+            self.controller.action_manager.cancel_action(action)
+            self.update_status(f"{action} action canceled.")
         else:
-            if action[0] == "Dock":
+            if action == "Dock":
                 self.controller.action_manager.dock_robot()
-            elif action[0] == "Undock":
+            elif action == "Undock":
                 self.controller.action_manager.undock_robot()
 
     def _create_velocity_controls(self, parent):

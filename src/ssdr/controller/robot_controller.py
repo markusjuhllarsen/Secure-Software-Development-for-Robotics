@@ -16,9 +16,6 @@ class SecureTurtlebot4Controller(SecurityNode):
     def __init__(self, enable_security = False):
         super().__init__('secure_turtlebot4_controller', enable_security, is_controller = True)
         
-        # Print node and topic info at startup
-        self.get_logger().info("Starting Secure Turtlebot4 Controller - if controls don't work, check topic names")
-        
         # Reference to GUI (will be set in main.py)
         self.gui = None
 
@@ -31,7 +28,7 @@ class SecureTurtlebot4Controller(SecurityNode):
         # Initialize docking manager
         self.action_manager = RobotActionManager(self)
         
-        self.get_logger().info('Secure Turtlebot4 Controller initialized')
+        self.get_logger().info('Secure Turtlebot4 Controller initialized.')
     
     def _init_publishers(self):
         """Initialize all publishers"""

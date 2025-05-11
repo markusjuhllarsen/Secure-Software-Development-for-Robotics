@@ -10,7 +10,7 @@ from utils.config import APP_NAME, APP_VERSION
 
 def main():
     """Main entry point of the application"""
-    print(f"Starting {APP_NAME} v{APP_VERSION}...")
+    print(f"Starting {APP_NAME} v{APP_VERSION}.")
     
     # Initialize ROS2
     rclpy.init()
@@ -38,7 +38,8 @@ def main():
 
     if enable_security:
         # Wait for key exchange to complete
-        print("Waiting for key exchange to complete...")
+
+        print("Waiting for key exchange to complete.")
         while controller_node.aes_key is None:
             rclpy.spin_once(controller_node, timeout_sec=0.1)
         controller_node.aesgcm = AESGCM(controller_node.aes_key)
@@ -50,9 +51,6 @@ def main():
     # Start the executor in a separate thread
     executor_thread = threading.Thread(target=lambda: executor.spin(), daemon=True)
     executor_thread.start()
-    
-    # Print debug info
-    print("ROS2 node initialized. Looking for topics...")
     
     # Create and run the GUI
     app = ButtonControlGUI(controller_node)

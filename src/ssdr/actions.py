@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-from rclpy.action import ActionClient, ActionServer, CancelResponse
+from rclpy.action import ActionClient, ActionServer, GoalResponse, CancelResponse
 
 from irobot_create_msgs.action import Dock, Undock, DriveArc, DriveDistance, NavigateToPosition, RotateAngle, WallFollow
 from geometry_msgs.msg import PoseStamped
@@ -65,13 +65,15 @@ class RobotActionManager:
         #        f'/{action_name.lower()}',
         #        callback_group=self.node.callback_group
         #    )
-
+        
+        # Goal callback must return immediately, so we accept all goals
+        # and defer further goal acceptance handling to execute callback
         self.action_servers["Dock"] = ActionServer(
             self.node,
             Dock,
             '/encrypted_dock',
             execute_callback=self._forward_dock_callback,
-            cancel_callback=self._cancel_callback,
+            cancel_callback=lambda goal_handle: self._cancel_callback(goal_handle, "Dock"),
         )
 
         self.action_servers["Undock"] = ActionServer(
@@ -79,7 +81,7 @@ class RobotActionManager:
             Undock,
             '/encrypted_undock',
             execute_callback=self._forward_undock_callback,
-            cancel_callback=self._cancel_callback,
+            cancel_callback=lambda goal_handle: self._cancel_callback(goal_handle, "Undock"),
         )
 
     async def _forward_dock_callback(self, goal_handle):
@@ -92,27 +94,25 @@ class RobotActionManager:
         """
         self.node.get_logger().info(f"Forwarding Dock action.")
         goal_msg = Dock.Goal()  # Create the goal message from the server's goal
-        goal_handle.succeed()  # Mark the server goal as accepted
-
+        
         # Check if the Dock action client exists
         if "Dock" not in self.action_clients:
             self.node.get_logger().error("Dock action client not available!")
-            result = Dock.Result()
-            return result
+            goal_handle.abort()
+            return Dock.Result()
 
         # Send the goal asynchronously
         client = self.action_clients["Dock"]
         client.wait_for_server()
         send_goal_future = client.send_goal_async(goal_msg)
-
         # Wait for the goal to be sent
         goal_handle_client = await send_goal_future
         if not goal_handle_client.accepted:
             self.node.get_logger().error("Dock action rejected.")
-            result = Dock.Result()
-            return result
+            goal_handle.abort()
+            return Dock.Result()
 
-        self.active_goals["Forwarded_Dock"] = goal_handle_client
+        self.active_goals[id(goal_handle)] = goal_handle_client
 
         self.node.get_logger().info("Dock action goal accepted by the client.")
 
@@ -120,10 +120,17 @@ class RobotActionManager:
         get_result_future = goal_handle_client.get_result_async()
         result = await get_result_future
 
-        del self.active_goals["Forwarded_Dock"]
+        del self.active_goals[id(goal_handle)]
 
-        # Return the result to the server
-        self.node.get_logger().info("Dock action completed.")
+        if result.status == 4:  # SUCCEEDED
+            self.node.publish_status("Dock action succeeded.")
+            goal_handle.succeed()  # Mark the server goal as succeeded
+        elif result.status == 5:  # CANCELED
+            self.node.publish_status("Dock action canceled.")
+            goal_handle.canceled()  # Mark the server goal as canceled
+        else:
+            self.node.publish_status("Dock action aborted.")
+            goal_handle.abort()  # Mark the server goal as aborted
         return result.result
 
     async def _forward_undock_callback(self, goal_handle):
@@ -136,13 +143,12 @@ class RobotActionManager:
         """
         self.node.get_logger().info(f"Forwarding Undock action.")
         goal_msg = Undock.Goal()  # Create the goal message from the server's goal
-        goal_handle.succeed()  # Mark the server goal as accepted
 
         # Check if the Dock action client exists
         if "Undock" not in self.action_clients:
             self.node.get_logger().error("Undock action client not available!")
-            result = Dock.Result()
-            return result
+            goal_handle.abort()
+            return Undock.Result()
 
         # Send the goal asynchronously
         client = self.action_clients["Undock"]
@@ -152,25 +158,32 @@ class RobotActionManager:
         # Wait for the goal to be sent
         goal_handle_client = await send_goal_future
         if not goal_handle_client.accepted:
-            self.node.get_logger().error("Undock action goal rejected by the client!")
-            result = Dock.Result()
-            return result
+            self.node.get_logger().error("Undock action goal rejected by the client.")
+            goal_handle.abort()
+            return Undock.Result()
 
-        self.active_goals["Undock"] = goal_handle_client
+        self.active_goals[id(goal_handle)] = goal_handle_client
 
         self.node.get_logger().info("Undock action goal accepted by the client.")
 
         # Wait for the result asynchronously
         get_result_future = goal_handle_client.get_result_async()
         result = await get_result_future
+        del self.active_goals[id(goal_handle)]
 
-        del self.active_goals["Undock"]
-
-        # Return the result to the server
-        self.node.get_logger().info("Undock action completed.")
+        # Check the result and set the server goal state
+        if result.status == 4:  # SUCCEEDED
+            self.node.publish_status("Undock action succeeded.")
+            goal_handle.succeed()  # Mark the server goal as succeeded
+        elif result.status == 5:  # CANCELED
+            self.node.publish_status("Undock action canceled.")
+            goal_handle.canceled()  # Mark the server goal as canceled
+        else:
+            self.node.publish_status("Undock action aborted.")
+            goal_handle.abort()  # Mark the server goal as aborted
         return result.result
     
-    def _cancel_callback(self, goal_handle):
+    def _cancel_callback(self, goal_handle, action_name):
         """
         Handle cancellation requests for actions.
         Args:
@@ -179,21 +192,19 @@ class RobotActionManager:
             CancelResponse: ACCEPT or REJECT.
         """
         self.node.get_logger().info(f"Cancel request received for goal: {goal_handle}.")
-        
-        action_name = None
-        for name, client_goal_handle in self.active_goals.items():
-            if client_goal_handle == goal_handle:
-                action_name = name
+        cancel_client_goal_handle = None
+        for server_goal_handle_id, client_goal_handle in self.active_goals.items():
+            if server_goal_handle_id == id(goal_handle):
+                cancel_client_goal_handle = client_goal_handle
                 break
         
-        if not action_name:
-            self.node.get_logger().error("No matching action found for the goal handle.")
+        if not cancel_client_goal_handle:
+            self.node.get_logger().error("No matching client goal handle found for the goal handle.")
             return CancelResponse.REJECT
         
-        self.node.get_logger().info(f"Cancelling action: {action_name}.")
-        client_goal_handle = self.active_goals[action_name]
-        cancel_future = client_goal_handle.cancel_goal_async()
-        cancel_future.add_done_callback(lambda future: self._cancel_done_callback(action_name, future))
+        self.node.publish_status(f"Cancelling {action_name} action.")
+        cancel_future = cancel_client_goal_handle.cancel_goal_async()
+        #cancel_future.add_done_callback(lambda future: self._cancel_done_callback(action_name, future))
         return CancelResponse.ACCEPT
 
     def _send_goal(self, action_name, goal_msg):
@@ -203,7 +214,7 @@ class RobotActionManager:
             action_name: Name of the action to send
             goal_msg: The goal message for the action
         """
-        self.node.get_logger().info(f"Sending {action_name} action.")
+        self.node.publish_status(f"Sending {action_name} action.")
 
         # Check if action client exists
         if action_name not in self.action_clients:
@@ -255,15 +266,21 @@ class RobotActionManager:
             action_name: Name of the action
             future: The future object containing the result
         """
-        result = future.result().result
+        goal_handle = future.result()
+        if goal_handle.status == 6:
+            self.node.publish_status(f"{action_name} action rejected or aborted.")
+        elif goal_handle.status == 5:
+            self.node.publish_status(f"{action_name} action canceled.")     
+        else:
+            self.node.publish_status(f"{action_name} action completed.")
+        
         del self.active_goals[action_name]
-        self.node.publish_status(f"{action_name} action completed.")
-
+        
         if self.update_button_callback:
             # Goal finished, can no longer cancel
             self.update_button_callback(action_name, "Action")
         
-        return result
+        return goal_handle.result
     
     def cancel_action(self, action_name):
         """
@@ -277,7 +294,7 @@ class RobotActionManager:
 
         goal_handle = self.active_goals[action_name]
         cancel_future = goal_handle.cancel_goal_async()
-        cancel_future.add_done_callback(lambda future: self._cancel_done_callback(action_name, future))   
+        #cancel_future.add_done_callback(lambda future: self._cancel_done_callback(action_name, future))   
 
     def _cancel_done_callback(self, action_name, future):
         """
@@ -287,13 +304,9 @@ class RobotActionManager:
             future: The future object containing cancel response.
         """
         cancel_response = future.result()
-        if len(cancel_response.goals_canceling) > 0:
-            self.node.get_logger().info(f"{action_name} goal successfully canceled.")
-            del self.active_goals[action_name]
 
-            if self.update_button_callback:
-                # Action canceled, can now do it again
-                self.update_button_callback(action_name, "Action")
+        if len(cancel_response.goals_canceling) > 0:
+            self.node.get_logger().info(f"{action_name} action successfully canceled.")
         else:
             self.node.get_logger().info(f"No active goals to cancel for {action_name}.")
 
@@ -358,8 +371,8 @@ class RobotActionManager:
             self.node.publish_status("Navigation goal rejected!")
             return
 
-        self.node.get_logger().info("Navigation goal accepted, moving to position...")
-        self.node.publish_status("Moving to position...")
+        self.node.get_logger().info("Navigation goal accepted, moving to position.")
+        self.node.publish_status("Moving to position.")
 
         # Request result
         get_result_future = goal_handle.get_result_async()
@@ -416,7 +429,7 @@ class RobotActionManager:
         self.node.get_logger().info(
             f"Using correction factor {correction_factor:.2f}, calculated duration: {duration_sec:.2f}s")
         self.node.publish_status(
-            f"Rotating {'counterclockwise' if direction > 0 else 'clockwise'} by {math.degrees(angle):.1f}°...")
+            f"Rotating {'counterclockwise' if direction > 0 else 'clockwise'} by {math.degrees(angle):.1f}°.")
 
         # Flag to control the execution loop
         if not hasattr(self, 'movement_active'):
@@ -544,7 +557,7 @@ class RobotActionManager:
             f"Moving {'forward' if direction > 0 else 'backward'} {distance}m at {abs(velocity)}m/s")
         self.node.get_logger().info(
             f"Using correction factor {correction_factor:.2f}, calculated duration: {duration_sec:.2f}s")
-        self.node.publish_status(f"Moving {'forward' if direction > 0 else 'backward'} {distance}m...")
+        self.node.publish_status(f"Moving {'forward' if direction > 0 else 'backward'} {distance}m.")
 
         # Flag to control the execution loop
         if not hasattr(self, 'movement_active'):

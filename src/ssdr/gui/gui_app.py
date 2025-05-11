@@ -158,7 +158,6 @@ class ButtonControlGUI:
         if action in self.controller.action_manager.active_goals:
             # Cancel action and change button
             self.controller.action_manager.cancel_action(action)
-            self.update_status(f"{action} action canceled.")
         else:
             if action == "Dock":
                 self.controller.action_manager.dock_robot()

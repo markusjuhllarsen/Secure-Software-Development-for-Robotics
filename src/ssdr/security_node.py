@@ -11,7 +11,7 @@ import hashlib
 class SecurityNode(Node):
     def __init__(self, name, enable_security = False, is_controller = False):
         super().__init__(name)
-        self.get_logger().info("Initializing Security Node...")
+        self.get_logger().info("Initializing Security Node.")
 
         self.enable_security = enable_security
         self.is_controller = is_controller

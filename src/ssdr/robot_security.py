@@ -11,7 +11,7 @@ from security_node import SecurityNode
 
 class RobotSecurityNode(SecurityNode):
     def __init__(self, enable_security = True):
-        super().__init__('security_node', enable_security)
+        super().__init__('robot_security_node', enable_security)
         self._init_publishers()
         self._init_subscribers()
 

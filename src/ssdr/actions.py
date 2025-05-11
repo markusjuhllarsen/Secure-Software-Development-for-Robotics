@@ -57,15 +57,7 @@ class RobotActionManager:
             )
     
     def _init_forwarding_action_servers(self):
-        """Initialize all encrypted action servers needed for decrypting and forwarding actions""" 
-        #for action_name in self.actions.values():
-        #    self.action_clients[action_name] = ActionClient(
-        #        self.node,
-        #        globals()[action_name],
-        #        f'/{action_name.lower()}',
-        #        callback_group=self.node.callback_group
-        #    )
-        
+        """Initialize all encrypted action servers needed for decrypting and forwarding actions"""         
         # Goal callback must return immediately, so we accept all goals
         # and defer further goal acceptance handling to execute callback
         self.action_servers["Dock"] = ActionServer(

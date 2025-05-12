@@ -1,0 +1,758 @@
+[
+    {
+        "label": "ActionClient",
+        "importPath": "rclpy.action",
+        "description": "rclpy.action",
+        "isExtraImport": true,
+        "detail": "rclpy.action",
+        "documentation": {}
+    },
+    {
+        "label": "Dock",
+        "importPath": "irobot_create_msgs.action",
+        "description": "irobot_create_msgs.action",
+        "isExtraImport": true,
+        "detail": "irobot_create_msgs.action",
+        "documentation": {}
+    },
+    {
+        "label": "Undock",
+        "importPath": "irobot_create_msgs.action",
+        "description": "irobot_create_msgs.action",
+        "isExtraImport": true,
+        "detail": "irobot_create_msgs.action",
+        "documentation": {}
+    },
+    {
+        "label": "NavigateToPosition",
+        "importPath": "irobot_create_msgs.action",
+        "description": "irobot_create_msgs.action",
+        "isExtraImport": true,
+        "detail": "irobot_create_msgs.action",
+        "documentation": {}
+    },
+    {
+        "label": "RotateAngle",
+        "importPath": "irobot_create_msgs.action",
+        "description": "irobot_create_msgs.action",
+        "isExtraImport": true,
+        "detail": "irobot_create_msgs.action",
+        "documentation": {}
+    },
+    {
+        "label": "PoseStamped",
+        "importPath": "geometry_msgs.msg",
+        "description": "geometry_msgs.msg",
+        "isExtraImport": true,
+        "detail": "geometry_msgs.msg",
+        "documentation": {}
+    },
+    {
+        "label": "Twist",
+        "importPath": "geometry_msgs.msg",
+        "description": "geometry_msgs.msg",
+        "isExtraImport": true,
+        "detail": "geometry_msgs.msg",
+        "documentation": {}
+    },
+    {
+        "label": "Twist",
+        "importPath": "geometry_msgs.msg",
+        "description": "geometry_msgs.msg",
+        "isExtraImport": true,
+        "detail": "geometry_msgs.msg",
+        "documentation": {}
+    },
+    {
+        "label": "math",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "math",
+        "description": "math",
+        "detail": "math",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "timedelta",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "base64",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "base64",
+        "description": "base64",
+        "detail": "base64",
+        "documentation": {}
+    },
+    {
+        "label": "String",
+        "importPath": "std_msgs.msg",
+        "description": "std_msgs.msg",
+        "isExtraImport": true,
+        "detail": "std_msgs.msg",
+        "documentation": {}
+    },
+    {
+        "label": "String",
+        "importPath": "std_msgs.msg",
+        "description": "std_msgs.msg",
+        "isExtraImport": true,
+        "detail": "std_msgs.msg",
+        "documentation": {}
+    },
+    {
+        "label": "String",
+        "importPath": "std_msgs.msg",
+        "description": "std_msgs.msg",
+        "isExtraImport": true,
+        "detail": "std_msgs.msg",
+        "documentation": {}
+    },
+    {
+        "label": "ReentrantCallbackGroup",
+        "importPath": "rclpy.callback_groups",
+        "description": "rclpy.callback_groups",
+        "isExtraImport": true,
+        "detail": "rclpy.callback_groups",
+        "documentation": {}
+    },
+    {
+        "label": "Sanitizer",
+        "importPath": "controller.sanitizer_manager",
+        "description": "controller.sanitizer_manager",
+        "isExtraImport": true,
+        "detail": "controller.sanitizer_manager",
+        "documentation": {}
+    },
+    {
+        "label": "RobotActionManager",
+        "importPath": "controller.actions",
+        "description": "controller.actions",
+        "isExtraImport": true,
+        "detail": "controller.actions",
+        "documentation": {}
+    },
+    {
+        "label": "SecurityNode",
+        "importPath": "security_node",
+        "description": "security_node",
+        "isExtraImport": true,
+        "detail": "security_node",
+        "documentation": {}
+    },
+    {
+        "label": "SecurityNode",
+        "importPath": "security_node",
+        "description": "security_node",
+        "isExtraImport": true,
+        "detail": "security_node",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_LINEAR_VELOCITY",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_ANGULAR_VELOCITY",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_LINEAR_VELOCITY",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_ANGULAR_VELOCITY",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_ANGULAR_VELOCITY",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_LINEAR_VELOCITY",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_LINEAR_VELOCITY",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_ANGULAR_VELOCITY",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_LINEAR_VELOCITY",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_ANGULAR_VELOCITY",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "APP_NAME",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "APP_VERSION",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "ec",
+        "importPath": "cryptography.hazmat.primitives.asymmetric",
+        "description": "cryptography.hazmat.primitives.asymmetric",
+        "isExtraImport": true,
+        "detail": "cryptography.hazmat.primitives.asymmetric",
+        "documentation": {}
+    },
+    {
+        "label": "ec",
+        "importPath": "cryptography.hazmat.primitives.asymmetric",
+        "description": "cryptography.hazmat.primitives.asymmetric",
+        "isExtraImport": true,
+        "detail": "cryptography.hazmat.primitives.asymmetric",
+        "documentation": {}
+    },
+    {
+        "label": "serialization",
+        "importPath": "cryptography.hazmat.primitives",
+        "description": "cryptography.hazmat.primitives",
+        "isExtraImport": true,
+        "detail": "cryptography.hazmat.primitives",
+        "documentation": {}
+    },
+    {
+        "label": "serialization",
+        "importPath": "cryptography.hazmat.primitives",
+        "description": "cryptography.hazmat.primitives",
+        "isExtraImport": true,
+        "detail": "cryptography.hazmat.primitives",
+        "documentation": {}
+    },
+    {
+        "label": "tkinter",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "tkinter",
+        "description": "tkinter",
+        "detail": "tkinter",
+        "documentation": {}
+    },
+    {
+        "label": "ttk",
+        "importPath": "tkinter",
+        "description": "tkinter",
+        "isExtraImport": true,
+        "detail": "tkinter",
+        "documentation": {}
+    },
+    {
+        "label": "messagebox",
+        "importPath": "tkinter",
+        "description": "tkinter",
+        "isExtraImport": true,
+        "detail": "tkinter",
+        "documentation": {}
+    },
+    {
+        "label": "simpledialog",
+        "importPath": "tkinter",
+        "description": "tkinter",
+        "isExtraImport": true,
+        "detail": "tkinter",
+        "documentation": {}
+    },
+    {
+        "label": "messagebox",
+        "importPath": "tkinter",
+        "description": "tkinter",
+        "isExtraImport": true,
+        "detail": "tkinter",
+        "documentation": {}
+    },
+    {
+        "label": "threading",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "threading",
+        "description": "threading",
+        "detail": "threading",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "rclpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "rclpy",
+        "description": "rclpy",
+        "detail": "rclpy",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "logging",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "logging",
+        "description": "logging",
+        "detail": "logging",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "subprocess",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "subprocess",
+        "description": "subprocess",
+        "detail": "subprocess",
+        "documentation": {}
+    },
+    {
+        "label": "setup_ros2_environment",
+        "importPath": "utils.setup",
+        "description": "utils.setup",
+        "isExtraImport": true,
+        "detail": "utils.setup",
+        "documentation": {}
+    },
+    {
+        "label": "setup_ros2_environment",
+        "importPath": "utils.setup",
+        "description": "utils.setup",
+        "isExtraImport": true,
+        "detail": "utils.setup",
+        "documentation": {}
+    },
+    {
+        "label": "setup_ros2_environment",
+        "importPath": "utils.setup",
+        "description": "utils.setup",
+        "isExtraImport": true,
+        "detail": "utils.setup",
+        "documentation": {}
+    },
+    {
+        "label": "MultiThreadedExecutor",
+        "importPath": "rclpy.executors",
+        "description": "rclpy.executors",
+        "isExtraImport": true,
+        "detail": "rclpy.executors",
+        "documentation": {}
+    },
+    {
+        "label": "AESGCM",
+        "importPath": "cryptography.hazmat.primitives.ciphers.aead",
+        "description": "cryptography.hazmat.primitives.ciphers.aead",
+        "isExtraImport": true,
+        "detail": "cryptography.hazmat.primitives.ciphers.aead",
+        "documentation": {}
+    },
+    {
+        "label": "AESGCM",
+        "importPath": "cryptography.hazmat.primitives.ciphers.aead",
+        "description": "cryptography.hazmat.primitives.ciphers.aead",
+        "isExtraImport": true,
+        "detail": "cryptography.hazmat.primitives.ciphers.aead",
+        "documentation": {}
+    },
+    {
+        "label": "SecureTurtlebot4Controller",
+        "importPath": "controller.robot_controller",
+        "description": "controller.robot_controller",
+        "isExtraImport": true,
+        "detail": "controller.robot_controller",
+        "documentation": {}
+    },
+    {
+        "label": "ButtonControlGUI",
+        "importPath": "gui.gui_app",
+        "description": "gui.gui_app",
+        "isExtraImport": true,
+        "detail": "gui.gui_app",
+        "documentation": {}
+    },
+    {
+        "label": "Node",
+        "importPath": "rclpy.node",
+        "description": "rclpy.node",
+        "isExtraImport": true,
+        "detail": "rclpy.node",
+        "documentation": {}
+    },
+    {
+        "label": "HKDF",
+        "importPath": "cryptography.hazmat.primitives.kdf.hkdf",
+        "description": "cryptography.hazmat.primitives.kdf.hkdf",
+        "isExtraImport": true,
+        "detail": "cryptography.hazmat.primitives.kdf.hkdf",
+        "documentation": {}
+    },
+    {
+        "label": "SHA256",
+        "importPath": "cryptography.hazmat.primitives.hashes",
+        "description": "cryptography.hazmat.primitives.hashes",
+        "isExtraImport": true,
+        "detail": "cryptography.hazmat.primitives.hashes",
+        "documentation": {}
+    },
+    {
+        "label": "secrets",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "secrets",
+        "description": "secrets",
+        "detail": "secrets",
+        "documentation": {}
+    },
+    {
+        "label": "hashlib",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "hashlib",
+        "description": "hashlib",
+        "detail": "hashlib",
+        "documentation": {}
+    },
+    {
+        "label": "setup",
+        "importPath": "setuptools",
+        "description": "setuptools",
+        "isExtraImport": true,
+        "detail": "setuptools",
+        "documentation": {}
+    },
+    {
+        "label": "find_packages",
+        "importPath": "setuptools",
+        "description": "setuptools",
+        "isExtraImport": true,
+        "detail": "setuptools",
+        "documentation": {}
+    },
+    {
+        "label": "RobotActionManager",
+        "kind": 6,
+        "importPath": "controller.actions",
+        "description": "controller.actions",
+        "peekOfCode": "class RobotActionManager:\n    \"\"\"\n    Generic action manager for Turtlebot4 that handles various robot actions\n    \"\"\"\n    def __init__(self, node):\n        \"\"\"\n        Initialize the action manager\n        Args:\n            node: The ROS2 node that will own the action clients\n            enable_security: Whether to enable security checks",
+        "detail": "controller.actions",
+        "documentation": {}
+    },
+    {
+        "label": "SecureTurtlebot4Controller",
+        "kind": 6,
+        "importPath": "controller.robot_controller",
+        "description": "controller.robot_controller",
+        "peekOfCode": "class SecureTurtlebot4Controller(SecurityNode):\n    \"\"\"Main controller class for the Turtlebot4 with security features\"\"\"\n    def __init__(self, enable_security = False):\n        super().__init__('secure_turtlebot4_controller', enable_security)\n        # Print node and topic info at startup\n        self.get_logger().info(\"Starting Secure Turtlebot4 Controller - if controls don't work, check topic names\")\n        # Reference to GUI (will be set in main.py)\n        self.gui = None\n        # Use reentrant callback group for actions\n        self.callback_group = ReentrantCallbackGroup()",
+        "detail": "controller.robot_controller",
+        "documentation": {}
+    },
+    {
+        "label": "Sanitizer",
+        "kind": 6,
+        "importPath": "controller.sanitizer_manager",
+        "description": "controller.sanitizer_manager",
+        "peekOfCode": "class Sanitizer:\n    \"\"\"\n    A utility class to sanitize and validate inputs for robot actions.\n    \"\"\"\n    @staticmethod\n    def sanitize_velocity(value, min_value=-1.0, max_value=1.0, name=\"velocity\"):\n        \"\"\"\n        Sanitize a velocity input (linear or angular) by ensuring it is within the specified range.\n        Args:\n            value (float): The velocity to sanitize.",
+        "detail": "controller.sanitizer_manager",
+        "documentation": {}
+    },
+    {
+        "label": "SecurityManager",
+        "kind": 6,
+        "importPath": "controller.security_manager",
+        "description": "controller.security_manager",
+        "peekOfCode": "class SecurityManager:\n    \"\"\"Handles security-related functionality for the robot controller\"\"\"\n    def __init__(self, logger):\n        self.logger = logger\n        self.private_key = ec.generate_private_key(ec.SECP256R1())\n        self.public_key = self.private_key.public_key()\n        # Serialize the public key for sharing\n        self.public_key_bytes = self.public_key.public_bytes(\n            encoding=serialization.Encoding.PEM,\n            format=serialization.PublicFormat.SubjectPublicKeyInfo",
+        "detail": "controller.security_manager",
+        "documentation": {}
+    },
+    {
+        "label": "ButtonControlGUI",
+        "kind": 6,
+        "importPath": "gui.gui_app",
+        "description": "gui.gui_app",
+        "peekOfCode": "class ButtonControlGUI:\n    \"\"\"Main GUI class for the Turtlebot4 controller\"\"\"\n    def __init__(self, controller_node):\n        \"\"\"\n        Initialize the GUI\n        Args:\n            controller_node: The ROS2 node that controls the robot\n        \"\"\"\n        self.controller = controller_node\n        # Create main window",
+        "detail": "gui.gui_app",
+        "documentation": {}
+    },
+    {
+        "label": "APP_NAME",
+        "kind": 5,
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "peekOfCode": "APP_NAME = \"Secure Turtlebot4 Controller\"\nAPP_VERSION = \"1.0.0\"\n# Robot movement parameters\nDEFAULT_LINEAR_VELOCITY = 0.2  # m/s\nDEFAULT_ANGULAR_VELOCITY = 0.5  # rad/s\nMAX_LINEAR_VELOCITY = 5  # m/s\nMAX_ANGULAR_VELOCITY = 1.0  # rad/s\n# Security parameters\nMAX_COMMANDS_PER_MINUTE = 30\nHMAC_ALGORITHM = \"sha256\"",
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "APP_VERSION",
+        "kind": 5,
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "peekOfCode": "APP_VERSION = \"1.0.0\"\n# Robot movement parameters\nDEFAULT_LINEAR_VELOCITY = 0.2  # m/s\nDEFAULT_ANGULAR_VELOCITY = 0.5  # rad/s\nMAX_LINEAR_VELOCITY = 5  # m/s\nMAX_ANGULAR_VELOCITY = 1.0  # rad/s\n# Security parameters\nMAX_COMMANDS_PER_MINUTE = 30\nHMAC_ALGORITHM = \"sha256\"\nENC_ALGORITHM = \"aes-256-gcm\"",
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_LINEAR_VELOCITY",
+        "kind": 5,
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "peekOfCode": "DEFAULT_LINEAR_VELOCITY = 0.2  # m/s\nDEFAULT_ANGULAR_VELOCITY = 0.5  # rad/s\nMAX_LINEAR_VELOCITY = 5  # m/s\nMAX_ANGULAR_VELOCITY = 1.0  # rad/s\n# Security parameters\nMAX_COMMANDS_PER_MINUTE = 30\nHMAC_ALGORITHM = \"sha256\"\nENC_ALGORITHM = \"aes-256-gcm\"\n# Status topic\nSTATUS_TOPIC = '/turtlebot4/status_msg'",
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_ANGULAR_VELOCITY",
+        "kind": 5,
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "peekOfCode": "DEFAULT_ANGULAR_VELOCITY = 0.5  # rad/s\nMAX_LINEAR_VELOCITY = 5  # m/s\nMAX_ANGULAR_VELOCITY = 1.0  # rad/s\n# Security parameters\nMAX_COMMANDS_PER_MINUTE = 30\nHMAC_ALGORITHM = \"sha256\"\nENC_ALGORITHM = \"aes-256-gcm\"\n# Status topic\nSTATUS_TOPIC = '/turtlebot4/status_msg'",
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_LINEAR_VELOCITY",
+        "kind": 5,
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "peekOfCode": "MAX_LINEAR_VELOCITY = 5  # m/s\nMAX_ANGULAR_VELOCITY = 1.0  # rad/s\n# Security parameters\nMAX_COMMANDS_PER_MINUTE = 30\nHMAC_ALGORITHM = \"sha256\"\nENC_ALGORITHM = \"aes-256-gcm\"\n# Status topic\nSTATUS_TOPIC = '/turtlebot4/status_msg'",
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_ANGULAR_VELOCITY",
+        "kind": 5,
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "peekOfCode": "MAX_ANGULAR_VELOCITY = 1.0  # rad/s\n# Security parameters\nMAX_COMMANDS_PER_MINUTE = 30\nHMAC_ALGORITHM = \"sha256\"\nENC_ALGORITHM = \"aes-256-gcm\"\n# Status topic\nSTATUS_TOPIC = '/turtlebot4/status_msg'",
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_COMMANDS_PER_MINUTE",
+        "kind": 5,
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "peekOfCode": "MAX_COMMANDS_PER_MINUTE = 30\nHMAC_ALGORITHM = \"sha256\"\nENC_ALGORITHM = \"aes-256-gcm\"\n# Status topic\nSTATUS_TOPIC = '/turtlebot4/status_msg'",
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "HMAC_ALGORITHM",
+        "kind": 5,
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "peekOfCode": "HMAC_ALGORITHM = \"sha256\"\nENC_ALGORITHM = \"aes-256-gcm\"\n# Status topic\nSTATUS_TOPIC = '/turtlebot4/status_msg'",
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "ENC_ALGORITHM",
+        "kind": 5,
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "peekOfCode": "ENC_ALGORITHM = \"aes-256-gcm\"\n# Status topic\nSTATUS_TOPIC = '/turtlebot4/status_msg'",
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "STATUS_TOPIC",
+        "kind": 5,
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "peekOfCode": "STATUS_TOPIC = '/turtlebot4/status_msg'",
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "setup_logger",
+        "kind": 2,
+        "importPath": "utils.logging",
+        "description": "utils.logging",
+        "peekOfCode": "def setup_logger(name, log_dir=\"logs\"):\n    \"\"\"\n    Set up a logger with file and console handlers\n    Args:\n        name (str): Name of the logger\n        log_dir (str): Directory to store log files\n    Returns:\n        logging.Logger: Configured logger instance\n    \"\"\"\n    # Create logs directory if it doesn't exist",
+        "detail": "utils.logging",
+        "documentation": {}
+    },
+    {
+        "label": "log_command",
+        "kind": 2,
+        "importPath": "utils.logging",
+        "description": "utils.logging",
+        "peekOfCode": "def log_command(logger, command_type, command_values, result, node_id=\"controller\"):\n    \"\"\"\n    Log a robot command with standardized format\n    Args:\n        logger (logging.Logger): Logger instance\n        command_type (str): Type of command (e.g., \"move\", \"dock\")\n        command_values (dict): Dictionary of command parameters\n        result (bool): Whether the command was successful\n        node_id (str): Identifier for the node issuing the command\n    \"\"\"",
+        "detail": "utils.logging",
+        "documentation": {}
+    },
+    {
+        "label": "log_security_event",
+        "kind": 2,
+        "importPath": "utils.logging",
+        "description": "utils.logging",
+        "peekOfCode": "def log_security_event(logger, event_type, details, severity=\"INFO\"):\n    \"\"\"\n    Log a security-related event\n    Args:\n        logger (logging.Logger): Logger instance\n        event_type (str): Type of security event\n        details (dict): Additional details about the event\n        severity (str): Severity level (INFO, WARNING, ERROR)\n    \"\"\"\n    timestamp = datetime.now().isoformat()",
+        "detail": "utils.logging",
+        "documentation": {}
+    },
+    {
+        "label": "setup_ros2_environment",
+        "kind": 2,
+        "importPath": "utils.setup",
+        "description": "utils.setup",
+        "peekOfCode": "def setup_ros2_environment():\n    # Source the setup file and restart the script with the updated environment\n    ros_setup_file = \"/opt/ros/jazzy/setup.bash\"\n    if \"PYTHONPATH\" not in os.environ: # Check if the environment variable is set\n        if os.path.exists(ros_setup_file):\n            # Source the setup file and capture environment variables\n            command = f\"bash -c 'source {ros_setup_file} && env'\"\n            proc = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True, executable=\"/bin/bash\")\n            output, _ = proc.communicate()\n            # Parse the environment variables",
+        "detail": "utils.setup",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def main():\n    \"\"\"Main entry point of the application\"\"\"\n    print(f\"Starting {APP_NAME} v{APP_VERSION}...\")\n    # Initialize ROS2\n    rclpy.init()\n    temp_node = rclpy.create_node('temp_node')\n    rclpy.spin_once(temp_node, timeout_sec=1.0)\n    # Check if the /public_key topic exists\n    public_key_topic_exists = False\n    for topic_name, _ in temp_node.get_topic_names_and_types():",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "configure_remote_connection",
+        "kind": 2,
+        "importPath": "remote",
+        "description": "remote",
+        "peekOfCode": "def configure_remote_connection():\n    \"\"\"\n    Collect IP addresses for master and host, configure the environment, and display commands for the master PC.\n    \"\"\"\n    setup_ros2_environment()\n    # Create a Tkinter root window (hidden)\n    root = tk.Tk()\n    root.withdraw()  # Hide the root window\n    simulation = messagebox.askyesno(\"Simulation\", \"Is this the simulation PC?\")\n    # Prompt the user for the master and host IP addresses",
+        "detail": "remote",
+        "documentation": {}
+    },
+    {
+        "label": "SecurityNode",
+        "kind": 6,
+        "importPath": "robot_security",
+        "description": "robot_security",
+        "peekOfCode": "class SecurityNode(SecurityNode):\n    def __init__(self, enable_security = True):\n        super().__init__('security_node', enable_security)\n        self.get_logger().info(\"Initializing Security Node...\")\n        self._init_publishers()\n        self._init_subscribers()\n    def _init_publishers(self):\n        self.publisher_list = []\n        self.publisher_list.append(self.create_publisher(\n            Twist,",
+        "detail": "robot_security",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "robot_security",
+        "description": "robot_security",
+        "peekOfCode": "def main(args=None):\n    rclpy.init(args=args)\n    security_node = SecurityNode()\n    try:\n        # Wait for key exchange to complete\n        print(\"Waiting for key exchange to complete...\")\n        while security_node.aes_key is None:\n            rclpy.spin_once(security_node, timeout_sec=0.1)  # Spin the node to process callbacks\n        print(\"Key exchange completed. AES key derived.\")\n        # Set up AES-GCM with the derived AES key",
+        "detail": "robot_security",
+        "documentation": {}
+    },
+    {
+        "label": "SecurityNode",
+        "kind": 6,
+        "importPath": "security_node",
+        "description": "security_node",
+        "peekOfCode": "class SecurityNode(Node):\n    def __init__(self, name, enable_security = False):\n        super().__init__(name)\n        self.get_logger().info(\"Initializing Security Node...\")\n        self.enable_security = enable_security\n        \"\"\"Security setup\"\"\"\n        if self.enable_security:\n            # Generate ECDH keys\n            self.private_key = ec.generate_private_key(ec.SECP256R1())\n            self.public_key = self.private_key.public_key()",
+        "detail": "security_node",
+        "documentation": {}
+    }
+]

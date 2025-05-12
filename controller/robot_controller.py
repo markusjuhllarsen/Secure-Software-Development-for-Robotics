@@ -6,6 +6,8 @@ import base64
 from geometry_msgs.msg import Twist
 from std_msgs.msg import String
 from rclpy.callback_groups import ReentrantCallbackGroup
+from controller.sanitizer_manager import Sanitizer
+
 
 from controller.actions import RobotActionManager
 from security_node import SecurityNode
@@ -95,8 +97,10 @@ class SecureTurtlebot4Controller(SecurityNode):
         #if not self.security.rate_limit_and_sanitize_command(linear_x, angular_z):
         #    return False
         
-        linear_x = float(linear_x)
-        angular_z = float(angular_z)
+        # Sanitize inputs
+        linear_x = Sanitizer.sanitize_velocity(linear_x, min_value=-1.0, max_value=1.0, name="linear_x")
+        angular_z = Sanitizer.sanitize_velocity(angular_z, min_value=-1.0, max_value=1.0, name="angular_z")
+
 
         if self.enable_security:
             timestamp = datetime.now().isoformat()
@@ -144,6 +148,9 @@ class SecureTurtlebot4Controller(SecurityNode):
         """
         Publish status message and update the GUI
         """
+         # Sanitize input
+        status_text = Sanitizer.sanitize_status_text(status_text, name="status_text")
+
         # Log the status
         self.get_logger().info(f"Status: {status_text}")
         

@@ -1,0 +1,13 @@
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore build, install, and log directories
+build/
+install/
+log/
+
+# Ignore ROS 2 colcon build artifacts
+.colcon/
+.vscode/PythonImportHelper-v2-Completion.json

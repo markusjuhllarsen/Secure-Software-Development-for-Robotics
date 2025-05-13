@@ -14,7 +14,6 @@ class RobotActionManager:
     def __init__(self, node, update_button_callback = None):
         """
         Initialize the action manager
-
         Args:
             node: The ROS2 node that will own the action clients
         """
@@ -195,11 +194,9 @@ class RobotActionManager:
             self.update_button_callback(action_name, "Cancel")
 
         get_result_future = goal_handle.get_result_async()
-        print("Hello")
         get_result_future.add_done_callback(
             lambda future: self._result_callback(action_name, future)
         )
-        print("Hello2")
 
     def _feedback_callback(self, feedback_msg):
         # Not implemented yet
@@ -212,7 +209,6 @@ class RobotActionManager:
             action_name: Name of the action
             future: The future object containing the result
         """
-        print("Hello3")
         goal_handle = future.result()
         if goal_handle.status == 6:
             self.node.publish_status(f"{action_name} action rejected or aborted.")
@@ -382,45 +378,145 @@ class RobotActionManager:
         goal_msg.radius = radius
         goal_msg.max_translation_speed = max_translation_speed
         return goal_msg
+
+    def navigate_to_position(self, x=1.0, y=2.0, theta=1.57, achieve_goal_heading=True, max_translation_speed=0.3, max_rotation_speed=1.9):
+        """
+        Send a NavigateToPosition action to the robot.
+
+        Args:
+            x (float): X-coordinate of the goal position in meters.
+            y (float): Y-coordinate of the goal position in meters.
+            theta (float): Orientation (yaw) of the goal position in radians.
+            achieve_goal_heading (bool): Whether to achieve the goal heading for final orientation.
+            max_translation_speed (float): Maximum translation speed (m/s).
+            max_rotation_speed (float): Maximum rotation speed (rad/s).
+        """
+        if self.node.enable_security:
+            # Encrypt the action name and goal
+            timestamp = time.time()
+            goal_msg = EncryptedAction.Goal()
+            goal_msg.action_name = self.node.encrypt_and_gmac("NavigateToPosition", timestamp)
+            goal_msg.encrypted_goal = self.node.encrypt_and_gmac(
+                f"{x},{y},{theta},{achieve_goal_heading},{max_translation_speed},{max_rotation_speed}", timestamp
+            )
+        else:
+            # Create the NavigateToPosition goal message
+            goal_msg = NavigateToPosition.Goal()
+            goal_msg.goal_pose = PoseStamped()
+            goal_msg.goal_pose.header.frame_id = "map"
+            goal_msg.goal_pose.pose.position.x = float(x)
+            goal_msg.goal_pose.pose.position.y = float(y)
+            goal_msg.goal_pose.pose.orientation.z = math.sin(theta / 2.0)
+            goal_msg.goal_pose.pose.orientation.w = math.cos(theta / 2.0)
+            goal_msg.achieve_goal_heading = bool(achieve_goal_heading)
+            goal_msg.max_translation_speed = float(max_translation_speed)
+            goal_msg.max_rotation_speed = float(max_rotation_speed)
+
+        # Send the goal
+        self._send_goal("NavigateToPosition", goal_msg)
+    
+    def parse_navigate_to_position_goal(self, goal_str):
+        """
+        Parse the goal string for the NavigateToPosition action.
+
+        Args:
+            goal_str (str): The goal string in the format "x,y,theta,achieve_goal_heading,max_translation_speed,max_rotation_speed".
+
+        Returns:
+            NavigateToPosition.Goal: The constructed goal message.
+        """
+        x, y, theta, achieve_goal_heading, max_translation_speed, max_rotation_speed = goal_str.split(",")
+        goal_msg = NavigateToPosition.Goal()
+        goal_msg.goal_pose = PoseStamped()
+        goal_msg.goal_pose.header.frame_id = "map"
+        goal_msg.goal_pose.pose.position.x = float(x)
+        goal_msg.goal_pose.pose.position.y = float(y)
+        goal_msg.goal_pose.pose.orientation.z = math.sin(float(theta) / 2.0)
+        goal_msg.goal_pose.pose.orientation.w = math.cos(float(theta) / 2.0)
+        goal_msg.achieve_goal_heading = bool(int(achieve_goal_heading))
+        goal_msg.max_translation_speed = float(max_translation_speed)
+        goal_msg.max_rotation_speed = float(max_rotation_speed)
+        return goal_msg
+
+    def rotate_angle(self, angle=1.57, max_rotation_speed=1.9):
+        """
+        Send a RotateAngle action to the robot.
+
+        Args:
+            angle (float): Relative angle (radians) to rotate from the current position.
+            max_rotation_speed (float): Maximum rotation speed (rad/s).
+        """
+        if self.node.enable_security:
+            # Encrypt the action name and goal
+            timestamp = time.time()
+            goal_msg = EncryptedAction.Goal()
+            goal_msg.action_name = self.node.encrypt_and_gmac("RotateAngle", timestamp)
+            goal_msg.encrypted_goal = self.node.encrypt_and_gmac(f"{angle},{max_rotation_speed}", timestamp)
+        else:
+            # Create the RotateAngle goal message
+            goal_msg = RotateAngle.Goal()
+            goal_msg.angle = float(angle)
+            goal_msg.max_rotation_speed = float(max_rotation_speed)
+
+        # Send the goal
+        self._send_goal("RotateAngle", goal_msg)
     
     def parse_rotate_angle_goal(self, goal_str):
         """
         Parse the goal string for the RotateAngle action.
+
         Args:
             goal_str (str): The goal string in the format "angle,max_rotation_speed".
+
         Returns:
             RotateAngle.Goal: The constructed goal message.
         """
-        try:
-            angle, max_rotation_speed = map(float, goal_str.split(","))
-            goal_msg = RotateAngle.Goal()
-            goal_msg.angle = angle
-            goal_msg.max_rotation_speed = max_rotation_speed
-            return goal_msg
-        except ValueError:
-            raise ValueError(f"Invalid goal string for RotateAngle: {goal_str}")
+        angle, max_rotation_speed = map(float, goal_str.split(","))
+        goal_msg = RotateAngle.Goal()
+        goal_msg.angle = angle
+        goal_msg.max_rotation_speed = max_rotation_speed
+        return goal_msg
+    
+    def wall_follow(self, follow_side=1, max_runtime_seconds=5):
+        """
+        Send a WallFollow action to the robot.
 
-    def parse_navigate_to_pose_goal(self, goal_str):
-        """
-        Parse the goal string for the NavigateToPose action.
         Args:
-            goal_str (str): The goal string in the format "x,y,theta".
-        Returns:
-            NavigateToPose.Goal: The constructed goal message.
+            follow_side (int): Side to follow (-1 for right, 1 for left).
+            max_runtime_seconds (int): Maximum runtime for the wall-following action in seconds.
         """
-        try:
-            x, y, theta = map(float, goal_str.split(","))
-            goal_msg = NavigateToPose.Goal()
-            pose = PoseStamped()
-            pose.header.frame_id = "map"
-            pose.pose.position.x = x
-            pose.pose.position.y = y
-            pose.pose.orientation.z = math.sin(theta / 2.0)
-            pose.pose.orientation.w = math.cos(theta / 2.0)
-            goal_msg.pose = pose
-            return goal_msg
-        except ValueError:
-            raise ValueError(f"Invalid goal string for NavigateToPose: {goal_str}")
+        if self.node.enable_security:
+            # Encrypt the action name and goal
+            timestamp = time.time()
+            goal_msg = EncryptedAction.Goal()
+            goal_msg.action_name = self.node.encrypt_and_gmac("WallFollow", timestamp)
+            goal_msg.encrypted_goal = self.node.encrypt_and_gmac(f"{follow_side},{max_runtime_seconds}", timestamp)
+        else:
+            # Create the WallFollow goal message
+            goal_msg = WallFollow.Goal()
+            goal_msg.follow_side = int(follow_side)
+            goal_msg.max_runtime.sec = int(max_runtime_seconds)
+            goal_msg.max_runtime.nanosec = 0
+
+        # Send the goal
+        self._send_goal("WallFollow", goal_msg)
+    
+    def parse_wall_follow_goal(self, goal_str):
+        """
+        Parse the goal string for the WallFollow action.
+
+        Args:
+            goal_str (str): The goal string in the format "follow_side,max_runtime_seconds".
+
+        Returns:
+            WallFollow.Goal: The constructed goal message.
+        """
+        follow_side, max_runtime_seconds = map(int, goal_str.split(","))
+        goal_msg = WallFollow.Goal()
+        goal_msg.follow_side = follow_side
+        goal_msg.max_runtime.sec = max_runtime_seconds
+        goal_msg.max_runtime.nanosec = 0
+        return goal_msg
 
     def parse_goal(self, action_name, goal_str):
         """
@@ -435,6 +531,7 @@ class RobotActionManager:
             "Dock": self.parse_dock_goal,
             "Undock": self.parse_undock_goal,
             "DriveDistance": self.parse_drive_distance_goal,
+            "DriveArc": self.parse_drive_arc_goal,
             "RotateAngle": self.parse_rotate_angle_goal,
             "NavigateToPose": self.parse_navigate_to_pose_goal,
         }

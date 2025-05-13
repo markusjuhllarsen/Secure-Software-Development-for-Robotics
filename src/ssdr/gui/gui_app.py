@@ -163,6 +163,16 @@ class ButtonControlGUI:
                 self.controller.action_manager.dock_robot()
             elif action == "Undock":
                 self.controller.action_manager.undock_robot()
+            elif action == "DriveArc":
+                self.controller.action_manager.drive_arc()
+            elif action == "DriveDistance":
+                self.controller.action_manager.drive_distance()
+            elif action == "NavigateToPosition":
+                self.controller.action_manager.navigate_to_position()
+            elif action == "RotateAngle":
+                self.controller.action_manager.rotate_angle()
+            elif action == "WallFollow":
+                self.controller.action_manager.wall_follow()
 
     def _create_velocity_controls(self, parent):
         """Create controls for custom velocity input"""

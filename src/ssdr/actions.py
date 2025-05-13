@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 from rclpy.action import ActionClient, ActionServer, GoalResponse, CancelResponse
 from ssdr_interfaces.action import EncryptedAction
 from irobot_create_msgs.action import Dock, Undock, DriveArc, DriveDistance, NavigateToPosition, RotateAngle, WallFollow
@@ -20,7 +19,15 @@ class RobotActionManager:
             node: The ROS2 node that will own the action clients
         """
         self.node = node
-        self.actions = ["Dock", "Undock", "DriveArc", "DriveDistance", "NavigateToPosition", "RotateAngle", "WallFollow"]
+        self.actions = {
+            "Dock": "/dock",
+            "Undock": "/undock",
+            "DriveArc": "/drive_arc",
+            "DriveDistance": "/drive_distance",
+            "NavigateToPosition": "/navigate_to_position",
+            "RotateAngle": "/rotate_angle",
+            "WallFollow": "/wall_follow",
+        }
         self.active_goals = {}
         self.update_button_callback = update_button_callback
 
@@ -37,11 +44,11 @@ class RobotActionManager:
     def _init_unencrypted_action_clients(self):
         """Initialize all unencrypted action clients needed for the robot"""
         self.action_clients = {}
-        for action_name in self.actions:
+        for action_name , topic_name in self.actions.items():
             self.action_clients[action_name] = ActionClient(
                 self.node,
                 globals()[action_name],
-                f'/{action_name.lower()}',
+                topic_name,
                 callback_group=self.node.callback_group
             )
 
@@ -50,7 +57,7 @@ class RobotActionManager:
         self.encrypted_client = ActionClient(
             self.node,
             EncryptedAction,
-            f'/encrypted_forward',
+            '/encrypted_forward',
             callback_group=self.node.callback_group
         )
     
@@ -80,10 +87,9 @@ class RobotActionManager:
         """
         action_name = goal_handle._goal_request.action_name
         action_name = self.node.decrypt_and_verify(action_name)
-        goal_msg = goal_handle._goal_request.encrypted_goal
-        goal_msg = self.node.decrypt_and_verify(goal_msg)
-        goal_msg = globals()[action_name].Goal()   
-
+        goal_str = goal_handle._goal_request.encrypted_goal
+        goal_str = self.node.decrypt_and_verify(goal_str)
+        goal_msg = self.parse_goal(action_name, goal_str)
         self.node.get_logger().info(f"Forwarding {action_name} action.")  
 
         # Send the goal asynchronously
@@ -92,6 +98,7 @@ class RobotActionManager:
         send_goal_future = client.send_goal_async(goal_msg)
         # Wait for the goal to be sent
         goal_handle_client = await send_goal_future
+
         if not goal_handle_client.accepted:
             self.node.get_logger().error(f"{action_name} action rejected.")
             goal_handle.abort()
@@ -154,7 +161,8 @@ class RobotActionManager:
             action_name: Name of the action to send
             goal_msg: The goal message for the action
         """
-        self.node.publish_status(f"Sending {action_name} action.")        
+        self.node.publish_status(f"Sending {action_name} action.")   
+
         if self.node.enable_security:
             client = self.encrypted_client
         else:     
@@ -187,9 +195,11 @@ class RobotActionManager:
             self.update_button_callback(action_name, "Cancel")
 
         get_result_future = goal_handle.get_result_async()
+        print("Hello")
         get_result_future.add_done_callback(
             lambda future: self._result_callback(action_name, future)
         )
+        print("Hello2")
 
     def _feedback_callback(self, feedback_msg):
         # Not implemented yet
@@ -202,6 +212,7 @@ class RobotActionManager:
             action_name: Name of the action
             future: The future object containing the result
         """
+        print("Hello3")
         goal_handle = future.result()
         if goal_handle.status == 6:
             self.node.publish_status(f"{action_name} action rejected or aborted.")
@@ -257,6 +268,16 @@ class RobotActionManager:
             goal_msg = Dock.Goal()
         self._send_goal("Dock", goal_msg)
     
+    def parse_dock_goal(self, goal_str):
+        """
+        Parse the goal string for the Dock action.
+        Args:
+            goal_str (str): The goal string (empty for Dock).
+        Returns:
+            Dock.Goal: The constructed goal message.
+        """
+        return Dock.Goal()  # Dock action does not require additional parameters
+    
     def undock_robot(self):
         """Send undock action to robot."""
         if self.node.enable_security:
@@ -267,321 +288,155 @@ class RobotActionManager:
         else:
             goal_msg = Undock.Goal()
         self._send_goal("Undock", goal_msg)
-
-    def navigate_to_pose(self, x, y, theta=0.0):
+    
+    def parse_undock_goal(self, goal_str):
         """
-        Use the nav2 action to navigate to a pose
-        This uses the ROS2 Navigation2 stack if available
-
+        Parse the goal string for the Undock action.
         Args:
-            x: X coordinate in meters
-            y: Y coordinate in meters
-            theta: Orientation in radians
-        """
-        # Try to import the nav2 messages
-        try:
-            from nav2_msgs.action import NavigateToPose
-        except ImportError:
-            self.node.get_logger().error("Nav2 messages not available. Is navigation2 installed?")
-            self.node.publish_status("Navigation2 not available")
-            return False
-
-        # Initialize the action client if not already done
-        if "nav2" not in self.action_clients:
-            self.action_clients["nav2"] = ActionClient(
-                self.node,
-                NavigateToPose,
-                'navigate_to_pose',
-                callback_group=self.node.callback_group
-            )
-
-        # Create the goal
-        goal_msg = NavigateToPose.Goal()
-
-        # Set the goal position
-        pose = PoseStamped()
-        # Don't set the timestamp at all - let Nav2 handle it
-        pose.header.frame_id = "map"
-        pose.pose.position.x = float(x)
-        pose.pose.position.y = float(y)
-        pose.pose.orientation.z = math.sin(theta / 2.0)
-        pose.pose.orientation.w = math.cos(theta / 2.0)
-
-        goal_msg.pose = pose
-
-        # Send the action
-        return self._send_goal("nav2", goal_msg, self._nav2_response_callback)
-
-    def _navigate_response_callback(self, future):
-        goal_handle = future.result()
-        if not goal_handle.accepted:
-            self.node.get_logger().error("Navigation goal rejected!")
-            self.node.publish_status("Navigation goal rejected!")
-            return
-
-        self.node.get_logger().info("Navigation goal accepted, moving to position.")
-        self.node.publish_status("Moving to position.")
-
-        # Request result
-        get_result_future = goal_handle.get_result_async()
-        get_result_future.add_done_callback(self._navigate_result_callback)
-
-    def _navigate_result_callback(self, future):
-        result = future.result().result
-        self.node.get_logger().info(f"Navigation completed: {result}")
-        self.node.publish_status("Navigation completed")
-
-    def rotate_angle(self, angle_rad=1.57, max_rotation_speed=0.5):
-        """
-        Rotate the robot by a specific angle using cmd_vel_unstamped
-
-        Args:
-            angle_rad: Angle to rotate in radians (positive is counterclockwise, negative is clockwise)
-            max_rotation_speed: Maximum rotation speed in rad/s (should be positive)
-
+            goal_str (str): The goal string (empty for Undock).
         Returns:
-            bool: True if the command was sent successfully
+            Undock.Goal: The constructed goal message.
         """
-        from geometry_msgs.msg import Twist
-        import time
-        import threading
-        import math
+        return Undock.Goal()  # Undock action does not require additional parameters
 
-        # Create a publisher for unstamped velocity commands if it doesn't exist
-        if not hasattr(self, 'unstamped_vel_publisher'):
-            self.unstamped_vel_publisher = self.node.create_publisher(
-                Twist,
-                '/cmd_vel_unstamped',  # Unstamped velocity commands topic
-                10
-            )
-
-        # Ensure positive rotation speed and determine direction
-        direction = 1 if angle_rad >= 0 else -1
-        rotation_speed = abs(max_rotation_speed) * direction
-        angle = abs(angle_rad)
-
-        # Create rotation command
-        twist = Twist()
-        twist.angular.z = float(rotation_speed)
-
-        # Add a correction factor for real-world rotation
-        # Robots often need more time to complete rotations accurately
-        correction_factor = 1.2
-
-        # Calculate duration
-        duration_sec = (angle / abs(rotation_speed)) * correction_factor
-
-        # Log the command
-        self.node.get_logger().info(
-            f"Rotating {'counterclockwise' if direction > 0 else 'clockwise'} by {angle:.2f} radians ({math.degrees(angle):.1f}°)")
-        self.node.get_logger().info(
-            f"Using correction factor {correction_factor:.2f}, calculated duration: {duration_sec:.2f}s")
-        self.node.publish_status(
-            f"Rotating {'counterclockwise' if direction > 0 else 'clockwise'} by {math.degrees(angle):.1f}°.")
-
-        # Flag to control the execution loop
-        if not hasattr(self, 'movement_active'):
-            self.movement_active = False
-
-        # Stop any existing movement first
-        if self.movement_active:
-            self.movement_active = False
-            time.sleep(0.5)  # Give time for existing movement to stop
-
-        # Define the rotation control in a separate thread
-        def execute_rotation():
-            # Set the active flag
-            self.movement_active = True
-
-            # Calculate the end time
-            start_time = time.time()
-            end_time = start_time + duration_sec
-
-            # Acceleration phase - 0.5 second
-            accel_start = time.time()
-            accel_duration = 0.5  # 0.5 second acceleration
-
-            # Track current velocity for smooth acceleration/deceleration
-            current_velocity = 0.0
-            target_velocity = rotation_speed
-
-            # Main movement loop with high frequency updates (50Hz)
-            refresh_rate = 0.02  # 20ms refresh (50Hz)
-
-            try:
-                while self.movement_active and time.time() < end_time:
-                    current_time = time.time()
-
-                    # Calculate current target velocity based on phase
-                    if current_time < accel_start + accel_duration:
-                        # Acceleration phase
-                        progress = (current_time - accel_start) / accel_duration
-                        current_velocity = target_velocity * min(1.0, progress)
-                    elif current_time > end_time - 0.5:
-                        # Deceleration phase (last 0.5 second)
-                        progress = (end_time - current_time) / 0.5
-                        current_velocity = target_velocity * max(0.0, progress)
-                    else:
-                        # Constant velocity phase
-                        current_velocity = target_velocity
-
-                    # Create and send velocity command
-                    cmd = Twist()
-                    cmd.angular.z = float(current_velocity)
-                    self.unstamped_vel_publisher.publish(cmd)
-
-                    # Short sleep for smooth control
-                    time.sleep(refresh_rate)
-
-                # Final stop command
-                stop_cmd = Twist()
-                for _ in range(5):
-                    self.unstamped_vel_publisher.publish(stop_cmd)
-                    time.sleep(0.02)
-
-            except Exception as e:
-                self.node.get_logger().error(f"Error in rotation thread: {str(e)}")
-            finally:
-                # Always send stop command when done or if exception occurs
-                stop_cmd = Twist()
-                for _ in range(5):
-                    self.unstamped_vel_publisher.publish(stop_cmd)
-                    time.sleep(0.02)
-
-                self.movement_active = False
-                self.node.publish_status("Rotation completed")
-
-        # Start the rotation in a background thread
-        rotation_thread = threading.Thread(target=execute_rotation)
-        rotation_thread.daemon = True
-        rotation_thread.start()
-
-        return True
-
-    def drive_distance_unstamped(self, distance=1.0, velocity=0.2):
+    def drive_distance(self, distance=10.0, velocity=3.0):
         """
-        Move forward by a specified distance using cmd_vel_unstamped topic
-        With smooth continuous motion and adjusted correction factor
+        Move the robot a specified distance using DriveDistance action
 
         Args:
             distance: Distance to travel in meters (positive for forward, negative for backward)
             velocity: Linear velocity in m/s (should be positive)
         """
-        from geometry_msgs.msg import Twist
-        import time
-        import threading
-
-        # Create a publisher for unstamped velocity commands if it doesn't exist
-        if not hasattr(self, 'unstamped_vel_publisher'):
-            self.unstamped_vel_publisher = self.node.create_publisher(
-                Twist,
-                '/cmd_vel_unstamped',  # Unstamped velocity commands topic
-                10
-            )
-
-        # Use positive velocity and adjust sign based on distance
-        direction = 1 if distance >= 0 else -1
-        velocity = abs(velocity) * direction
-        distance = abs(distance)
-
-        # Create velocity command
-        twist = Twist()
-        twist.linear.x = float(velocity)
-
-        # Reduced correction factor - about 25% less than previous implementation
-        if distance <= 1.0:
-            correction_factor = 1.1  # Reduced from 1.2
-        elif distance <= 2.0:
-            correction_factor = 1.2  # Reduced from 1.4
+        if self.node.enable_security:
+            timestamp = time.time()
+            goal_msg = EncryptedAction.Goal()
+            goal_msg.action_name = self.node.encrypt_and_gmac("DriveDistance", timestamp)
+            goal_msg.encrypted_goal = self.node.encrypt_and_gmac(f"{distance},{velocity}", timestamp)
         else:
-            # Reduced multiplier from 0.16 to 0.12 (25% reduction)
-            correction_factor = 1.1 + (distance * 0.08)
+            goal_msg = DriveDistance.Goal()
+            goal_msg.distance = float(distance)
+            goal_msg.max_translation_speed = float(velocity)
 
-        # Calculate duration with the correction factor
-        duration_sec = (distance / abs(velocity)) * correction_factor
+        self._send_goal("DriveDistance", goal_msg)
+    
+    def parse_drive_distance_goal(self, goal_str):
+        """
+        Parse the goal string for the DriveDistance action.
+        Args:
+            goal_str (str): The goal string in the format "distance,velocity".
+        Returns:
+            DriveDistance.Goal: The constructed goal message.
+        """
+        try:
+            distance, velocity = map(float, goal_str.split(","))
+            goal_msg = DriveDistance.Goal()
+            goal_msg.distance = distance
+            goal_msg.max_translation_speed = velocity
+            return goal_msg
+        except ValueError:
+            raise ValueError(f"Invalid goal string for DriveDistance: {goal_str}")
+    
+    def drive_arc(self, translate_direction=-1, angle=2.57, radius=1.0, max_translation_speed=0.3):
+        """
+        Send a DriveArc action to the robot.
 
-        # Log the command with correction factor info
-        self.node.get_logger().info(
-            f"Moving {'forward' if direction > 0 else 'backward'} {distance}m at {abs(velocity)}m/s")
-        self.node.get_logger().info(
-            f"Using correction factor {correction_factor:.2f}, calculated duration: {duration_sec:.2f}s")
-        self.node.publish_status(f"Moving {'forward' if direction > 0 else 'backward'} {distance}m.")
+        Args:
+            translate_direction (int): Direction of translation (1 for forward, -1 for backward).
+            angle (float): Relative angle (radians) to rotate along the arc.
+            radius (float): Radius of the arc (meters).
+            max_translation_speed (float): Maximum translation speed (m/s).
+        """
+        if self.node.enable_security:
+            # Encrypt the action name and goal
+            timestamp = time.time()
+            goal_msg = EncryptedAction.Goal()
+            goal_msg.action_name = self.node.encrypt_and_gmac("DriveArc", timestamp)
+            goal_msg.encrypted_goal = self.node.encrypt_and_gmac(
+                f"{translate_direction},{angle},{radius},{max_translation_speed}", timestamp
+            )
+        else:
+            # Create the DriveArc goal message
+            goal_msg = DriveArc.Goal()
+            goal_msg.translate_direction = int(translate_direction)
+            goal_msg.angle = float(angle)
+            goal_msg.radius = float(radius)
+            goal_msg.max_translation_speed = float(max_translation_speed)
 
-        # Flag to control the execution loop
-        if not hasattr(self, 'movement_active'):
-            self.movement_active = False
+        # Send the goal
+        self._send_goal("DriveArc", goal_msg)
+    
+    def parse_drive_arc_goal(self, goal_str):
+        """
+        Parse the goal string for the DriveArc action.
 
-        # Stop any existing movement first
-        if self.movement_active:
-            self.movement_active = False
-            time.sleep(0.5)  # Give time for existing movement to stop
+        Args:
+            goal_str (str): The goal string in the format "translate_direction,angle,radius,max_translation_speed".
 
-        # Define the motion control in a separate thread
-        def execute_movement():
-            # Set the active flag
-            self.movement_active = True
+        Returns:
+            DriveArc.Goal: The constructed goal message.
+        """
+        translate_direction, angle, radius, max_translation_speed = map(float, goal_str.split(","))
+        goal_msg = DriveArc.Goal()
+        goal_msg.translate_direction = int(translate_direction)
+        goal_msg.angle = angle
+        goal_msg.radius = radius
+        goal_msg.max_translation_speed = max_translation_speed
+        return goal_msg
+    
+    def parse_rotate_angle_goal(self, goal_str):
+        """
+        Parse the goal string for the RotateAngle action.
+        Args:
+            goal_str (str): The goal string in the format "angle,max_rotation_speed".
+        Returns:
+            RotateAngle.Goal: The constructed goal message.
+        """
+        try:
+            angle, max_rotation_speed = map(float, goal_str.split(","))
+            goal_msg = RotateAngle.Goal()
+            goal_msg.angle = angle
+            goal_msg.max_rotation_speed = max_rotation_speed
+            return goal_msg
+        except ValueError:
+            raise ValueError(f"Invalid goal string for RotateAngle: {goal_str}")
 
-            # Calculate the end time
-            start_time = time.time()
-            end_time = start_time + duration_sec
+    def parse_navigate_to_pose_goal(self, goal_str):
+        """
+        Parse the goal string for the NavigateToPose action.
+        Args:
+            goal_str (str): The goal string in the format "x,y,theta".
+        Returns:
+            NavigateToPose.Goal: The constructed goal message.
+        """
+        try:
+            x, y, theta = map(float, goal_str.split(","))
+            goal_msg = NavigateToPose.Goal()
+            pose = PoseStamped()
+            pose.header.frame_id = "map"
+            pose.pose.position.x = x
+            pose.pose.position.y = y
+            pose.pose.orientation.z = math.sin(theta / 2.0)
+            pose.pose.orientation.w = math.cos(theta / 2.0)
+            goal_msg.pose = pose
+            return goal_msg
+        except ValueError:
+            raise ValueError(f"Invalid goal string for NavigateToPose: {goal_str}")
 
-            # Acceleration phase - 1 second
-            accel_start = time.time()
-            accel_duration = 1.0  # 1 second acceleration
+    def parse_goal(self, action_name, goal_str):
+        """
+        Parse the goal string for the specified action.
+        Args:
+            action_name (str): The name of the action (e.g., "Dock", "DriveDistance").
+            goal_str (str): The goal string to parse.
+        Returns:
+            Goal: The constructed goal message for the action.
+        """
+        parsers = {
+            "Dock": self.parse_dock_goal,
+            "Undock": self.parse_undock_goal,
+            "DriveDistance": self.parse_drive_distance_goal,
+            "RotateAngle": self.parse_rotate_angle_goal,
+            "NavigateToPose": self.parse_navigate_to_pose_goal,
+        }
 
-            # Track current velocity for smooth acceleration/deceleration
-            current_velocity = 0.0
-            target_velocity = velocity
-
-            # Main movement loop with high frequency updates (50Hz)
-            refresh_rate = 0.02  # 20ms refresh (50Hz)
-
-            try:
-                while self.movement_active and time.time() < end_time:
-                    current_time = time.time()
-
-                    # Calculate current target velocity based on phase
-                    if current_time < accel_start + accel_duration:
-                        # Acceleration phase
-                        progress = (current_time - accel_start) / accel_duration
-                        current_velocity = target_velocity * min(1.0, progress)
-                    elif current_time > end_time - 1.0:
-                        # Deceleration phase (last 1 second)
-                        progress = (end_time - current_time) / 1.0
-                        current_velocity = target_velocity * max(0.0, progress)
-                    else:
-                        # Constant velocity phase
-                        current_velocity = target_velocity
-
-                    # Create and send velocity command
-                    cmd = Twist()
-                    cmd.linear.x = float(current_velocity)
-                    self.unstamped_vel_publisher.publish(cmd)
-
-                    # Short sleep for smooth control
-                    time.sleep(refresh_rate)
-
-                # Final stop command
-                stop_cmd = Twist()
-                for _ in range(5):
-                    self.unstamped_vel_publisher.publish(stop_cmd)
-                    time.sleep(0.02)
-
-            except Exception as e:
-                self.node.get_logger().error(f"Error in movement thread: {str(e)}")
-            finally:
-                # Always send stop command when done or if exception occurs
-                stop_cmd = Twist()
-                for _ in range(5):
-                    self.unstamped_vel_publisher.publish(stop_cmd)
-                    time.sleep(0.02)
-
-                self.movement_active = False
-                self.node.publish_status("Movement completed")
-
-        # Start the movement in a background thread
-        movement_thread = threading.Thread(target=execute_movement)
-        movement_thread.daemon = True
-        movement_thread.start()
-
-        return True
+        return parsers[action_name](goal_str)

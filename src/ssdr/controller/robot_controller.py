@@ -93,8 +93,18 @@ class SecureTurtlebot4Controller(SecurityNode):
         self.current_command = (linear_x, angular_z)
         if self.movement_timer is None:
             self.movement_timer = self.create_timer(1, self._repeat_command)  # Publish every 0.1 seconds
-            self.publish_status("Started repeating movement command.")
-    
+        if linear_x > 0 and angular_z == 0:
+            status = "Moving forward"
+        elif linear_x < 0 and angular_z == 0:
+            status = "Moving backward"
+        elif linear_x == 0 and angular_z > 0:
+            status = "Turning left"
+        elif linear_x == 0 and angular_z < 0:
+            status = "Turning right"
+        
+        self.publish_status(status)
+
+
     def stop_repeating_command(self):
         """
         Stop repeating the movement command.
@@ -102,8 +112,8 @@ class SecureTurtlebot4Controller(SecurityNode):
         if self.movement_timer is not None:
             self.movement_timer.cancel()
             self.movement_timer = None
+            self.publish_status("Stopped")
             self.move_robot(0, 0) # Stop the robot
-            self.publish_status("Stopped repeating movement command.")
 
     def _repeat_command(self):
         """
@@ -145,20 +155,7 @@ class SecureTurtlebot4Controller(SecurityNode):
         
         # Log the command and update status
         self.get_logger().info(f"Movement command sent to all topics: linear={linear_x}, angular={angular_z}")
-        
-        # Create a human-readable status message
-        if linear_x > 0 and angular_z == 0:
-            status = "Moving forward"
-        elif linear_x < 0 and angular_z == 0:
-            status = "Moving backward"
-        elif linear_x == 0 and angular_z > 0:
-            status = "Turning left"
-        elif linear_x == 0 and angular_z < 0:
-            status = "Turning right"
-        elif linear_x == 0 and angular_z == 0:
-            status = "Stopped"
         #else:
         #    status = f"Moving: linear={linear_x}, angular={angular_z}" #!!!!
-            
-        self.publish_status(status)
+
         return True

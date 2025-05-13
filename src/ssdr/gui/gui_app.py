@@ -94,25 +94,25 @@ class ButtonControlGUI:
         
         # Movement buttons - increased size and padding
         btn_forward = ttk.Button(control_frame, text="Forward", 
-                                command=lambda: self.controller.move_robot(DEFAULT_LINEAR_VELOCITY, 0.0))
+                                command=lambda: self.controller.start_repeating_command(DEFAULT_LINEAR_VELOCITY, 0.0))
         btn_forward.grid(row=0, column=1, padx=10, pady=10, sticky="ew")
         
         btn_left = ttk.Button(control_frame, text="Turn Left", 
-                             command=lambda: self.controller.move_robot(0.0, DEFAULT_ANGULAR_VELOCITY))
+                             command=lambda: self.controller.start_repeating_command(0.0, DEFAULT_ANGULAR_VELOCITY))
         btn_left.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
         
         btn_stop = ttk.Button(control_frame, text="STOP", 
-                             command=lambda: self.controller.move_robot(0.0, 0.0),
+                             command=lambda: self.controller.stop_repeating_command(),
                              style='Stop.TButton')
         self.style.configure('Stop.TButton', background='red', foreground='white', font=('Arial', 12, 'bold'))
         btn_stop.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
         
         btn_right = ttk.Button(control_frame, text="Turn Right", 
-                              command=lambda: self.controller.move_robot(0.0, -DEFAULT_ANGULAR_VELOCITY))
+                              command=lambda: self.controller.start_repeating_command(0.0, -DEFAULT_ANGULAR_VELOCITY))
         btn_right.grid(row=1, column=2, padx=10, pady=10, sticky="ew")
         
         btn_backward = ttk.Button(control_frame, text="Backward", 
-                                 command=lambda: self.controller.move_robot(-DEFAULT_LINEAR_VELOCITY, 0.0))
+                                 command=lambda: self.controller.start_repeating_command(-DEFAULT_LINEAR_VELOCITY, 0.0))
         btn_backward.grid(row=2, column=1, padx=10, pady=10, sticky="ew")
         
         # Configure the grid to expand

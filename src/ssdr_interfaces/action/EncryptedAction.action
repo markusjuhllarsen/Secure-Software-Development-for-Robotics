@@ -1,6 +1,6 @@
 # Goal
 string encrypted_goal  # The encrypted goal message
-string action_name     # The type of the action (e.g., "Dock", "Undock")
+string action_name     # The name of the action (e.g., "Dock", "Undock")
 
 ---
 # Result

@@ -72,10 +72,6 @@ class RobotActionManager:
             cancel_callback=lambda goal_handle: self._cancel_callback(goal_handle),
         )
 
-    # TODO: Cancel encryption
-    # TODO: Remove extra encrypted action clients
-    # TODO: Add more actions
-
     async def _forward_callback(self, goal_handle):
         """
         When recieving encrypted action, decrypt it and forward it to the appropriate unencrypted client.
@@ -323,14 +319,11 @@ class RobotActionManager:
         Returns:
             DriveDistance.Goal: The constructed goal message.
         """
-        try:
-            distance, velocity = map(float, goal_str.split(","))
-            goal_msg = DriveDistance.Goal()
-            goal_msg.distance = distance
-            goal_msg.max_translation_speed = velocity
-            return goal_msg
-        except ValueError:
-            raise ValueError(f"Invalid goal string for DriveDistance: {goal_str}")
+        distance, velocity = map(float, goal_str.split(","))
+        goal_msg = DriveDistance.Goal()
+        goal_msg.distance = distance
+        goal_msg.max_translation_speed = velocity
+        return goal_msg
     
     def drive_arc(self, translate_direction=-1, angle=2.57, radius=1.0, max_translation_speed=0.3):
         """
@@ -533,7 +526,8 @@ class RobotActionManager:
             "DriveDistance": self.parse_drive_distance_goal,
             "DriveArc": self.parse_drive_arc_goal,
             "RotateAngle": self.parse_rotate_angle_goal,
-            "NavigateToPose": self.parse_navigate_to_pose_goal,
+            "NavigateToPose": self.parse_navigate_to_position_goal,
+            "WallFollow": self.parse_wall_follow_goal,
         }
 
         return parsers[action_name](goal_str)

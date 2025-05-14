@@ -92,7 +92,7 @@ class SecureTurtlebot4Controller(SecurityNode):
         """
         self.current_command = (linear_x, angular_z)
         if self.movement_timer is None:
-            self.movement_timer = self.create_timer(1, self._repeat_command)  # Publish every 0.1 seconds
+            self.movement_timer = self.create_timer(0.7, self._repeat_command)  # Publish every 0.1 seconds
         if linear_x > 0 and angular_z == 0:
             status = "Moving forward"
         elif linear_x < 0 and angular_z == 0:

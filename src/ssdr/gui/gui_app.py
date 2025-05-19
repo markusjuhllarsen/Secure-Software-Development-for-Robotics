@@ -8,6 +8,7 @@ import time
 import rclpy
 
 from utils.config import DEFAULT_LINEAR_VELOCITY, DEFAULT_ANGULAR_VELOCITY, MAX_LINEAR_VELOCITY, MAX_ANGULAR_VELOCITY
+from controller.sanitizer_manager import Sanitizer
 
 class ButtonControlGUI:
     """Main GUI class for the Turtlebot4 controller"""
@@ -210,23 +211,20 @@ class ButtonControlGUI:
     
     def send_custom_velocity(self):
         """Handle custom velocity input and send to robot"""
+        linear = float()
+        angular = float()
+        
         try:
-            linear = float(self.linear_entry.get())
-            angular = float(self.angular_entry.get())
+            # Using more descriptive names for potential error messages
+            linear_x = Sanitizer.sanitize_velocity(self.linear_entry.get(), min_value=-1.0, max_value=1.0, name="Linear velocity input")
+            angular_z = Sanitizer.sanitize_velocity(self.angular_entry.get(), min_value=-1.0, max_value=1.0, name="Angular velocity input")
+        except ValueError as e:
+            error_message = f"Invalid input: {str(e)}"
+            messagebox.showerror("Invalid Input", error_message)
+            return False
+
+        self.controller.move_robot(linear_x, angular_z)
             
-            # Validate input values for safety
-            if abs(linear) > MAX_LINEAR_VELOCITY:
-                messagebox.showerror("Invalid Input", 
-                                    f"Linear velocity must be between -{MAX_LINEAR_VELOCITY} and {MAX_LINEAR_VELOCITY} m/s")
-                return
-            if abs(angular) > MAX_ANGULAR_VELOCITY:
-                messagebox.showerror("Invalid Input", 
-                                    f"Angular velocity must be between -{MAX_ANGULAR_VELOCITY} and {MAX_ANGULAR_VELOCITY} rad/s")
-                return
-                
-            self.controller.move_robot(linear, angular)
-        except ValueError:
-            messagebox.showerror("Invalid Input", "Please enter valid numbers for velocities")
     
     def update_status(self, status_msg):
         """Update the status display with a new message"""

@@ -1,5 +1,4 @@
-from utils.config import MAX_LINEAR_VELOCITY, MAX_ANGULAR_VELOCITY, DEFAULT_LINEAR_VELOCITY, DEFAULT_ANGULAR_VELOCITY
-
+from utils.config import MAX_LINEAR_VELOCITY, MAX_ANGULAR_VELOCITY
 class Sanitizer:
     """
     A utility class to sanitize and validate inputs for robot actions.

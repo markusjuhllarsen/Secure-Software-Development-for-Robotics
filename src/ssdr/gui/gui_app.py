@@ -21,7 +21,7 @@ class ButtonControlGUI:
             controller_node: The ROS2 node that controls the robot
         """
         self.controller = controller_node
-        
+        self.running_action = False
         # Create main window
         self.root = tk.Tk()
         self.root.title("Secure Turtlebot4 Controller")
@@ -95,25 +95,25 @@ class ButtonControlGUI:
         
         # Movement buttons - increased size and padding
         btn_forward = ttk.Button(control_frame, text="Forward", 
-                                command=lambda: self.controller.move_robot(DEFAULT_LINEAR_VELOCITY, 0.0))
+                                command=lambda: self.controller.start_repeating_command(DEFAULT_LINEAR_VELOCITY, 0.0))
         btn_forward.grid(row=0, column=1, padx=10, pady=10, sticky="ew")
         
         btn_left = ttk.Button(control_frame, text="Turn Left", 
-                             command=lambda: self.controller.move_robot(0.0, DEFAULT_ANGULAR_VELOCITY))
+                             command=lambda: self.controller.start_repeating_command(0.0, DEFAULT_ANGULAR_VELOCITY))
         btn_left.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
         
         btn_stop = ttk.Button(control_frame, text="STOP", 
-                             command=lambda: self.controller.move_robot(0.0, 0.0),
+                             command=lambda: self.controller.stop_repeating_command(),
                              style='Stop.TButton')
         self.style.configure('Stop.TButton', background='red', foreground='white', font=('Arial', 12, 'bold'))
         btn_stop.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
         
         btn_right = ttk.Button(control_frame, text="Turn Right", 
-                              command=lambda: self.controller.move_robot(0.0, -DEFAULT_ANGULAR_VELOCITY))
+                              command=lambda: self.controller.start_repeating_command(0.0, -DEFAULT_ANGULAR_VELOCITY))
         btn_right.grid(row=1, column=2, padx=10, pady=10, sticky="ew")
         
         btn_backward = ttk.Button(control_frame, text="Backward", 
-                                 command=lambda: self.controller.move_robot(-DEFAULT_LINEAR_VELOCITY, 0.0))
+                                 command=lambda: self.controller.start_repeating_command(-DEFAULT_LINEAR_VELOCITY, 0.0))
         btn_backward.grid(row=2, column=1, padx=10, pady=10, sticky="ew")
         
         # Configure the grid to expand
@@ -151,8 +151,10 @@ class ButtonControlGUI:
         """
         button = self.action_buttons[action_name]
         if state == "Cancel":
+            self.running_action = True
             button.config(text=f"Cancel {action_name}", style='Cancel.TButton')
         else:
+            self.running_action = False
             button.config(text=action_name, style='TButton')
 
     def _toggle_action(self, action):
@@ -160,10 +162,94 @@ class ButtonControlGUI:
             # Cancel action and change button
             self.controller.action_manager.cancel_action(action)
         else:
-            if action == "Dock":
-                self.controller.action_manager.dock_robot()
-            elif action == "Undock":
-                self.controller.action_manager.undock_robot()
+            # Actions without parameters
+            if action in ["Dock", "Undock"]:
+                getattr(self.controller.action_manager, f"{action.lower()}_robot")()
+            elif action in ["DriveArc", "DriveDistance", "NavigateToPosition", "RotateAngle", "WallFollow"]:
+                # Actions with parameters
+                self._show_parameter_popup(action)
+
+    def _show_parameter_popup(self, action):
+        """
+        Show a popup window to enter parameters for the selected action.
+        Args:
+            action (str): The name of the action.
+        """
+        popup = tk.Toplevel(self.root)
+        popup.title(f"Enter Parameters for {action}")
+        popup.geometry("400x300")
+        
+        # Parameter fields
+        param_labels = []
+        param_entries = []
+
+        # Define parameters for each action
+        action_params = {
+            "DriveArc": [("Translate Direction (1/-1)", "1"), ("Angle (radians)", "2.57"), ("Radius (meters)", "1.0"), ("Max Translation Speed (m/s)", "0.3")],
+            "DriveDistance": [("Distance (meters)", "1.0"), ("Max Translation Speed (m/s)", "0.3")],
+            "NavigateToPosition": [("X (meters)", "0.0"), ("Y (meters)", "0.0"), ("Theta (radians)", "0.0"), ("Achieve Goal Heading (1/0)", "1"), ("Max Translation Speed (m/s)", "0.3"), ("Max Rotation Speed (rad/s)", "1.9")],
+            "RotateAngle": [("Angle (radians)", "1.57"), ("Max Rotation Speed (rad/s)", "1.9")],
+            "WallFollow": [("Follow Side (1/-1)", "1"), ("Max Runtime (seconds)", "60")]
+        }
+
+        # Create input fields for the parameters
+        for i, (label_text, default_value) in enumerate(action_params[action]):
+            label = ttk.Label(popup, text=label_text)
+            label.grid(row=i, column=0, padx=10, pady=5, sticky="w")
+            entry = ttk.Entry(popup)
+            entry.insert(0, default_value)
+            entry.grid(row=i, column=1, padx=10, pady=5, sticky="ew")
+            param_labels.append(label)
+            param_entries.append(entry)
+
+        # Submit button
+        def submit_parameters():
+            # Collect parameters from the entries
+            params = [entry.get() for entry in param_entries]
+            try:
+                # Convert parameters to appropriate types and call the action
+                if action == "DriveArc":
+                    self.controller.action_manager.drive_arc(
+                        translate_direction=int(params[0]),
+                        angle=float(params[1]),
+                        radius=float(params[2]),
+                        max_translation_speed=float(params[3])
+                    )
+                elif action == "DriveDistance":
+                    self.controller.action_manager.drive_distance(
+                        distance=float(params[0]),
+                        velocity=float(params[1])
+                    )
+                elif action == "NavigateToPosition":
+                    self.controller.action_manager.navigate_to_position(
+                        x=float(params[0]),
+                        y=float(params[1]),
+                        theta=float(params[2]),
+                        achieve_goal_heading=bool(int(params[3])),
+                        max_translation_speed=float(params[4]),
+                        max_rotation_speed=float(params[5])
+                    )
+                elif action == "RotateAngle":
+                    self.controller.action_manager.rotate_angle(
+                        angle=float(params[0]),
+                        max_rotation_speed=float(params[1])
+                    )
+                elif action == "WallFollow":
+                    self.controller.action_manager.wall_follow(
+                        follow_side=int(params[0]),
+                        max_runtime_seconds=int(params[1])
+                    )
+                popup.destroy()  # Close the popup after submitting
+            except ValueError as e:
+                messagebox.showerror("Invalid Input", f"Error: {e}")
+
+        submit_button = ttk.Button(popup, text="Submit", command=submit_parameters)
+        submit_button.grid(row=len(action_params[action]), column=0, columnspan=2, pady=10)
+
+        # Configure the popup grid
+        for i in range(len(action_params[action]) + 1):
+            popup.rowconfigure(i, weight=1)
+        popup.columnconfigure(1, weight=1)
 
     def _create_velocity_controls(self, parent):
         """Create controls for custom velocity input"""

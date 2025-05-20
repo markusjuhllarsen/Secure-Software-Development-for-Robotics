@@ -7,6 +7,7 @@ from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 from cryptography.hazmat.primitives.hashes import SHA256
 import secrets
 import hashlib
+import base64
 
 class SecurityNode(Node):
     def __init__(self, name, enable_security = False, is_controller = False):
@@ -88,13 +89,17 @@ class SecurityNode(Node):
         Returns:
             str: The GMAC as a hexadecimal string.
         """
+        # DO WE NEED TIMESTAMP IF USING NONCE??????????????????
+        #
+        #
+        #
         data = f"{message}:{timestamp}".encode()
         nonce = secrets.token_bytes(12)
         encrypted_data = self.aesgcm.encrypt(nonce, data, None)
-
-        return nonce, encrypted_data
+        combined = nonce + encrypted_data
+        return base64.b64encode(combined).decode('utf-8')
         
-    def decrypt_and_verify(self, encrypted_data, nonce):
+    def decrypt_and_verify(self, encrypted_message):
         """
         Decrypt the message and verify GMAC to ensure confidentiality and integrity
         Args:
@@ -107,10 +112,13 @@ class SecurityNode(Node):
         try:
             # Decrypt the data and verify GMAC
             # The GMAC is verified during decryption, so if it fails, an exception will be raised
+            combined = base64.b64decode(encrypted_message)
+            nonce, encrypted_data = combined[:12], combined[12:]
             decrypted_data = self.aesgcm.decrypt(nonce, encrypted_data, None).decode()
             message, _ = decrypted_data.split(':', 1)  # Split by the first colon
             return message
         except Exception as e:
+            self.get_logger().error(f"Decryption failed: {e}")
             return None
         
     def exchange_keys(self, peer_public_key_bytes):

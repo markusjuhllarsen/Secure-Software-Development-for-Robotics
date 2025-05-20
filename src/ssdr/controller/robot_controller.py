@@ -160,6 +160,6 @@ class SecureTurtlebot4Controller(SecurityNode):
         # Log the command and update status
         self.get_logger().info(f"Movement command sent to all topics: linear={linear_x}, angular={angular_z}")
         #else:
-        #    status = f"Moving: linear={linear_x}, angular={angular_z}" #!!!!
+        #    status = f"Moving: linear={linear_x}, angular={angular_z}" 
 
         return True

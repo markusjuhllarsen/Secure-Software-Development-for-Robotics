@@ -60,7 +60,7 @@ class SecurityManager:
         current_time = datetime.now()
         
         # Rate limiting check
-        time_diff = current_time - self.last_command_time
+        time_diff = current_time - self.last_command_timesa
         if time_diff <= timedelta(minutes=1):
             self.command_count += 1
             if self.command_count > self.max_commands_per_minute:

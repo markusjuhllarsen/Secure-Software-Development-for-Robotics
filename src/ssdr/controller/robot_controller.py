@@ -130,13 +130,19 @@ class SecureTurtlebot4Controller(SecurityNode):
         Send movement command with specified linear and angular velocities
         Publishing to all cmd_vel topics to ensure it works
         """
-        # Security validation
-        #if not self.security.rate_limit_and_sanitize_command(linear_x, angular_z):
-        #    return False
-        
-        # Sanitize inputs
-        linear_x = Sanitizer.sanitize_velocity(linear_x, min_value=-1.0, max_value=1.0, name="linear_x")
-        angular_z = Sanitizer.sanitize_velocity(angular_z, min_value=-1.0, max_value=1.0, name="angular_z")
+       
+           # If sanitization returns None or False, do not proceed
+        if linear_x is False and angular_z is False:
+            self.get_logger().error("Rate limit exceeded or invalid input.")
+            if hasattr(self, 'gui') and self.gui:
+                self.gui.update_status(linear_x)
+                self.gui.update_status(angular_z)
+                self.gui.update_status("Rate limit exceeded or invalid input.")
+            return False
+
+        # Ensure values are floats
+        linear_x = float(linear_x)
+        angular_z = float(angular_z)
 
 
         if self.enable_security:

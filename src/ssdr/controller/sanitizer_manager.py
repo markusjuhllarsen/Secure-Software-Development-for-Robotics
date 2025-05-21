@@ -9,9 +9,9 @@ class Sanitizer:
     # Rate limiting settings
     _last_command_time = {}  # Dict to track last command time for each command type
     _command_intervals = {
-        'movement': 0.1,     # Minimum seconds between movement commands in seconds
-        'action': 1.0,       # Minimum seconds between action commands
-        'default': 0.2       # Default minimum interval
+        'movement': 5,     # Minimum seconds between movement commands in seconds
+        'action': 3.0,       # Minimum seconds between action commands
+        'default': 2       # Default minimum interval
     }
     _rate_limit_lock = Lock()  # Thread safety for rate limiting
 
@@ -61,7 +61,7 @@ class Sanitizer:
         """
         # Apply rate limiting for velocity commands
         if not Sanitizer.check_rate_limit('movement'):
-            raise ValueError(f"Rate limit exceeded for {name}. Please wait before sending more commands.")
+            return False
             
         if "linear" in name.lower():
             default_max = MAX_LINEAR_VELOCITY

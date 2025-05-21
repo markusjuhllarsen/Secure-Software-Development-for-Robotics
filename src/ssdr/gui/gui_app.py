@@ -340,6 +340,7 @@ class ButtonControlGUI:
                 self.controller.move_robot(linear_x, angular_z)
             except ValueError as e:
                 self.update_status(f"Command rejected: {str(e)}")
+                messagebox.showerror("Invalid Input", f"Error: {e}")
                 
         def handle_action_command(action_func):
             try:

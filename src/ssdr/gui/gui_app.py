@@ -8,6 +8,7 @@ import time
 import rclpy
 
 from utils.config import DEFAULT_LINEAR_VELOCITY, DEFAULT_ANGULAR_VELOCITY, MAX_LINEAR_VELOCITY, MAX_ANGULAR_VELOCITY
+from controller.sanitizer_manager import Sanitizer
 
 class ButtonControlGUI:
     """Main GUI class for the Turtlebot4 controller"""
@@ -20,7 +21,7 @@ class ButtonControlGUI:
             controller_node: The ROS2 node that controls the robot
         """
         self.controller = controller_node
-        
+        self.running_action = False
         # Create main window
         self.root = tk.Tk()
         self.root.title("Secure Turtlebot4 Controller")
@@ -94,25 +95,25 @@ class ButtonControlGUI:
         
         # Movement buttons - increased size and padding
         btn_forward = ttk.Button(control_frame, text="Forward", 
-                                command=lambda: self.controller.move_robot(DEFAULT_LINEAR_VELOCITY, 0.0))
+                                command=lambda: self.controller.start_repeating_command(DEFAULT_LINEAR_VELOCITY, 0.0))
         btn_forward.grid(row=0, column=1, padx=10, pady=10, sticky="ew")
         
         btn_left = ttk.Button(control_frame, text="Turn Left", 
-                             command=lambda: self.controller.move_robot(0.0, DEFAULT_ANGULAR_VELOCITY))
+                             command=lambda: self.controller.start_repeating_command(0.0, DEFAULT_ANGULAR_VELOCITY))
         btn_left.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
         
         btn_stop = ttk.Button(control_frame, text="STOP", 
-                             command=lambda: self.controller.move_robot(0.0, 0.0),
+                             command=lambda: self.controller.stop_repeating_command(),
                              style='Stop.TButton')
         self.style.configure('Stop.TButton', background='red', foreground='white', font=('Arial', 12, 'bold'))
         btn_stop.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
         
         btn_right = ttk.Button(control_frame, text="Turn Right", 
-                              command=lambda: self.controller.move_robot(0.0, -DEFAULT_ANGULAR_VELOCITY))
+                              command=lambda: self.controller.start_repeating_command(0.0, -DEFAULT_ANGULAR_VELOCITY))
         btn_right.grid(row=1, column=2, padx=10, pady=10, sticky="ew")
         
         btn_backward = ttk.Button(control_frame, text="Backward", 
-                                 command=lambda: self.controller.move_robot(-DEFAULT_LINEAR_VELOCITY, 0.0))
+                                 command=lambda: self.controller.start_repeating_command(-DEFAULT_LINEAR_VELOCITY, 0.0))
         btn_backward.grid(row=2, column=1, padx=10, pady=10, sticky="ew")
         
         # Configure the grid to expand
@@ -150,8 +151,10 @@ class ButtonControlGUI:
         """
         button = self.action_buttons[action_name]
         if state == "Cancel":
+            self.running_action = True
             button.config(text=f"Cancel {action_name}", style='Cancel.TButton')
         else:
+            self.running_action = False
             button.config(text=action_name, style='TButton')
 
     def _toggle_action(self, action):
@@ -159,11 +162,140 @@ class ButtonControlGUI:
             # Cancel action and change button
             self.controller.action_manager.cancel_action(action)
         else:
-            if action == "Dock":
-                self.controller.action_manager.dock_robot()
-            elif action == "Undock":
-                self.controller.action_manager.undock_robot()
+            # Actions without parameters
+            if action in ["Dock", "Undock"]:
+                getattr(self.controller.action_manager, f"{action.lower()}_robot")()
+            elif action in ["DriveArc", "DriveDistance", "NavigateToPosition", "RotateAngle", "WallFollow"]:
+                # Actions with parameters
+                self._show_parameter_popup(action)
+    def _show_parameter_popup(self, action):
+        """
+        Show a popup window to enter parameters for the selected action.
+        Args:
+            action (str): The name of the action.
+        """
+        popup = tk.Toplevel(self.root)
+        popup.title(f"Enter Parameters for {action}")
+        popup.geometry("400x300")
+        
+        # Parameter fields
+        param_labels = []
+        param_entries = []
 
+        # Define parameters for each action with their types and limits
+        action_params = {
+            "DriveArc": [
+                {"name": "Translate Direction (1/-1)", "default": "1", "type": "int", "min": -1, "max": 1},
+                {"name": "Angle (radians)", "default": "2.57", "type": "float", "min": -6.28, "max": 6.28},
+                {"name": "Radius (meters)", "default": "1.0", "type": "float", "min": 0.0, "max": 5.0},
+                {"name": "Max Translation Speed (m/s)", "default": "0.3", "type": "float", "min": 0.0, "max": MAX_LINEAR_VELOCITY}
+            ],
+            "DriveDistance": [
+                {"name": "Distance (meters)", "default": "1.0", "type": "float", "min": -10.0, "max": 10.0},
+                {"name": "Max Translation Speed (m/s)", "default": "0.3", "type": "float", "min": 0.0, "max": MAX_LINEAR_VELOCITY}
+            ],
+            "NavigateToPosition": [
+                {"name": "X (meters)", "default": "0.0", "type": "float", "min": -50.0, "max": 50.0},
+                {"name": "Y (meters)", "default": "0.0", "type": "float", "min": -50.0, "max": 50.0},
+                {"name": "Theta (radians)", "default": "0.0", "type": "float", "min": -6.28, "max": 6.28},
+                {"name": "Achieve Goal Heading (1/0)", "default": "1", "type": "bool"},
+                {"name": "Max Translation Speed (m/s)", "default": "0.3", "type": "float", "min": 0.0, "max": MAX_LINEAR_VELOCITY},
+                {"name": "Max Rotation Speed (rad/s)", "default": "1.9", "type": "float", "min": 0.0, "max": MAX_ANGULAR_VELOCITY}
+            ],
+            "RotateAngle": [
+                {"name": "Angle (radians)", "default": "1.57", "type": "float", "min": -6.28, "max": 6.28},
+                {"name": "Max Rotation Speed (rad/s)", "default": "1.9", "type": "float", "min": 0.0, "max": MAX_ANGULAR_VELOCITY}
+            ],
+            "WallFollow": [
+                {"name": "Follow Side (1/-1)", "default": "1", "type": "int", "min": -1, "max": 1},
+                {"name": "Max Runtime (seconds)", "default": "60", "type": "int", "min": 1, "max": 300}
+            ]
+        }
+
+        # Create input fields for the parameters
+        for i, param_info in enumerate(action_params[action]):
+            label = ttk.Label(popup, text=param_info["name"])
+            label.grid(row=i, column=0, padx=10, pady=5, sticky="w")
+            entry = ttk.Entry(popup)
+            entry.insert(0, param_info["default"])
+            entry.grid(row=i, column=1, padx=10, pady=5, sticky="ew")
+            param_labels.append(label)
+            param_entries.append((entry, param_info))
+
+        # Submit button
+        def submit_parameters():
+            sanitized_params = []
+            
+            try:
+                # Check action rate limiting first
+                if not Sanitizer.check_rate_limit('action'):
+                    messagebox.showerror("Rate Limit Exceeded", 
+                                        "Please wait before sending another action command.")
+                    return
+                    
+                # Validate and sanitize all parameters
+                for entry, param_info in param_entries:
+                    value = entry.get()
+                    param_name = param_info["name"]
+                    param_type = param_info["type"]
+                    min_val = param_info.get("min")
+                    max_val = param_info.get("max")
+                    
+                    # Sanitize the parameter
+                    sanitized_value = Sanitizer.sanitize_action_param(
+                        value, param_type, min_val, max_val, param_name
+                    )
+                    sanitized_params.append(sanitized_value)
+                
+                # After validation, call the appropriate action
+                if action == "DriveArc":
+                    self.controller.action_manager.drive_arc(
+                        translate_direction=sanitized_params[0],
+                        angle=sanitized_params[1],
+                        radius=sanitized_params[2],
+                        max_translation_speed=sanitized_params[3]
+                    )
+                elif action == "DriveDistance":
+                    self.controller.action_manager.drive_distance(
+                        distance=sanitized_params[0],
+                        velocity=sanitized_params[1]
+                    )
+                elif action == "NavigateToPosition":
+                    self.controller.action_manager.navigate_to_position(
+                        x=sanitized_params[0],
+                        y=sanitized_params[1],
+                        theta=sanitized_params[2],
+                        achieve_goal_heading=sanitized_params[3],
+                        max_translation_speed=sanitized_params[4],
+                        max_rotation_speed=sanitized_params[5]
+                    )
+                elif action == "RotateAngle":
+                    self.controller.action_manager.rotate_angle(
+                        angle=sanitized_params[0],
+                        max_rotation_speed=sanitized_params[1]
+                    )
+                elif action == "WallFollow":
+                    self.controller.action_manager.wall_follow(
+                        follow_side=sanitized_params[0],
+                        max_runtime_seconds=sanitized_params[1]
+                    )
+                popup.destroy()  # Close the popup after submitting
+                
+                # Update status
+                self.update_status(f"Action {action} started with validated parameters")
+            except ValueError as e:
+                messagebox.showerror("Invalid Input", f"Error: {e}")
+                self.update_status(f"Error in {action} parameters: {e}")
+
+        submit_button = ttk.Button(popup, text="Submit", command=submit_parameters)
+        submit_button.grid(row=len(action_params[action]), column=0, columnspan=2, pady=10)
+
+        # Configure the popup grid
+        for i in range(len(action_params[action]) + 1):
+            popup.rowconfigure(i, weight=1)
+        popup.columnconfigure(1, weight=1)
+        
+    
     def _create_velocity_controls(self, parent):
         """Create controls for custom velocity input"""
         velocity_frame = ttk.LabelFrame(parent, text="Custom Velocity", padding="15")
@@ -200,33 +332,50 @@ class ButtonControlGUI:
     
     def _setup_keyboard_shortcuts(self):
         """Set up keyboard shortcuts for robot control"""
-        self.root.bind('<Up>', lambda event: self.controller.move_robot(DEFAULT_LINEAR_VELOCITY, 0.0))
-        self.root.bind('<Down>', lambda event: self.controller.move_robot(-DEFAULT_LINEAR_VELOCITY, 0.0))
-        self.root.bind('<Left>', lambda event: self.controller.move_robot(0.0, DEFAULT_ANGULAR_VELOCITY))
-        self.root.bind('<Right>', lambda event: self.controller.move_robot(0.0, -DEFAULT_ANGULAR_VELOCITY))
-        self.root.bind('<space>', lambda event: self.controller.move_robot(0.0, 0.0))
-        self.root.bind('d', lambda event: self.controller.action_manager.dock_robot())
-        self.root.bind('u', lambda event: self.controller.action_manager.undock_robot())
-    
+        def handle_move_command(linear, angular):
+            try:
+                # Apply rate limiting via the sanitizer
+                linear_x = Sanitizer.sanitize_velocity(linear, name="Keyboard linear velocity")
+                angular_z = Sanitizer.sanitize_velocity(angular, name="Keyboard angular velocity")
+                self.controller.move_robot(linear_x, angular_z)
+            except ValueError as e:
+                self.update_status(f"Command rejected: {str(e)}")
+                messagebox.showerror("Invalid Input", f"Error: {e}")
+                
+        def handle_action_command(action_func):
+            try:
+                if Sanitizer.check_rate_limit('action'):
+                    action_func()
+                else:
+                    self.update_status("Action rate limit exceeded. Please wait.")
+            except ValueError as e:
+                self.update_status(f"Command rejected: {str(e)}")
+                
+        # Bind keyboard events with rate limiting
+        self.root.bind('<Up>', lambda event: handle_move_command(DEFAULT_LINEAR_VELOCITY, 0.0))
+        self.root.bind('<Down>', lambda event: handle_move_command(-DEFAULT_LINEAR_VELOCITY, 0.0))
+        self.root.bind('<Left>', lambda event: handle_move_command(0.0, DEFAULT_ANGULAR_VELOCITY))
+        self.root.bind('<Right>', lambda event: handle_move_command(0.0, -DEFAULT_ANGULAR_VELOCITY))
+        self.root.bind('<space>', lambda event: handle_move_command(0.0, 0.0))
+        self.root.bind('d', lambda event: handle_action_command(self.controller.action_manager.dock_robot))
+        self.root.bind('u', lambda event: handle_action_command(self.controller.action_manager.undock_robot))
+        
     def send_custom_velocity(self):
         """Handle custom velocity input and send to robot"""
+        linear = float()
+        angular = float()
+        
         try:
-            linear = float(self.linear_entry.get())
-            angular = float(self.angular_entry.get())
+            # Using more descriptive names for potential error messages
+            linear_x = Sanitizer.sanitize_velocity(self.linear_entry.get(), min_value=-1.0, max_value=1.0, name="Linear velocity input")
+            angular_z = Sanitizer.sanitize_velocity(self.angular_entry.get(), min_value=-1.0, max_value=1.0, name="Angular velocity input")
+        except ValueError as e:
+            error_message = f"Invalid input: {str(e)}"
+            messagebox.showerror("Invalid Input", error_message)
+            return False
+
+        self.controller.move_robot(linear_x, angular_z)
             
-            # Validate input values for safety
-            if abs(linear) > MAX_LINEAR_VELOCITY:
-                messagebox.showerror("Invalid Input", 
-                                    f"Linear velocity must be between -{MAX_LINEAR_VELOCITY} and {MAX_LINEAR_VELOCITY} m/s")
-                return
-            if abs(angular) > MAX_ANGULAR_VELOCITY:
-                messagebox.showerror("Invalid Input", 
-                                    f"Angular velocity must be between -{MAX_ANGULAR_VELOCITY} and {MAX_ANGULAR_VELOCITY} rad/s")
-                return
-                
-            self.controller.move_robot(linear, angular)
-        except ValueError:
-            messagebox.showerror("Invalid Input", "Please enter valid numbers for velocities")
     
     def update_status(self, status_msg):
         """Update the status display with a new message"""

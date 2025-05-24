@@ -6,6 +6,8 @@ import base64
 from geometry_msgs.msg import Twist
 from std_msgs.msg import String
 from rclpy.callback_groups import ReentrantCallbackGroup
+from controller.sanitizer_manager import Sanitizer
+
 
 from actions import RobotActionManager
 from security_node import SecurityNode
@@ -18,6 +20,9 @@ class SecureTurtlebot4Controller(SecurityNode):
         
         # Reference to GUI (will be set in main.py)
         self.gui = None
+
+        self.movement_timer = None
+        self.current_command = None  # Store the current movement command
 
         # Use reentrant callback group for actions
         self.callback_group = ReentrantCallbackGroup()
@@ -79,30 +84,71 @@ class SecureTurtlebot4Controller(SecurityNode):
         # Log status messages from the robot
         self.get_logger().info(msg.data)
         
-        # Update GUI with the status message
+        # Update GUI with the status messagestart
         if hasattr(self, 'gui') and self.gui:
             self.gui.update_status("msg.data")
-    
+
+    def start_repeating_command(self, linear_x, angular_z):
+        """
+        Start repeating the movement command at a fixed interval.
+        """
+        self.current_command = (linear_x, angular_z)
+        if self.movement_timer is None:
+            self.movement_timer = self.create_timer(0.7, self._repeat_command)  # Publish every 0.1 seconds
+        if linear_x > 0 and angular_z == 0:
+            status = "Moving forward"
+        elif linear_x < 0 and angular_z == 0:
+            status = "Moving backward"
+        elif linear_x == 0 and angular_z > 0:
+            status = "Turning left"
+        elif linear_x == 0 and angular_z < 0:
+            status = "Turning right"
+        
+        self.publish_status(status)
+
+
+    def stop_repeating_command(self):
+        """
+        Stop repeating the movement command.
+        """
+        if self.movement_timer is not None:
+            self.movement_timer.cancel()
+            self.movement_timer = None
+            self.publish_status("Stopped")
+            self.move_robot(0, 0) # Stop the robot
+
+    def _repeat_command(self):
+        """
+        Publish the current movement command repeatedly.
+        """
+        if self.current_command is not None:
+            linear_x, angular_z = self.current_command
+            self.move_robot(linear_x, angular_z)
+
     def move_robot(self, linear_x, angular_z):
         """
         Send movement command with specified linear and angular velocities
         Publishing to all cmd_vel topics to ensure it works
         """
-        # Security validation
-        #if not self.security.rate_limit_and_sanitize_command(linear_x, angular_z):
-        #    return False
-        
+       
+           # If sanitization returns None or False, do not proceed
+        if linear_x is False and angular_z is False:
+            self.get_logger().error("Rate limit exceeded or invalid input.")
+            if hasattr(self, 'gui') and self.gui:
+                self.gui.update_status(linear_x)
+                self.gui.update_status(angular_z)
+                self.gui.update_status("Rate limit exceeded or invalid input.")
+            return False
+
+        # Ensure values are floats
         linear_x = float(linear_x)
         angular_z = float(angular_z)
+
 
         if self.enable_security:
             timestamp = datetime.now().isoformat()
             message = f"{linear_x},{angular_z}"
-            nonce, encrypted = self.encrypt_and_gmac(message, timestamp)
-
-            nonce_b64 = base64.b64encode(nonce).decode()
-            encrypted_data_b64 = base64.b64encode(encrypted).decode()
-            encrypted_msg = f"{nonce_b64}|{encrypted_data_b64}"
+            encrypted_msg= self.encrypt_and_gmac(message, timestamp)
             message = String()
             message.data = encrypted_msg
         else:
@@ -119,20 +165,7 @@ class SecureTurtlebot4Controller(SecurityNode):
         
         # Log the command and update status
         self.get_logger().info(f"Movement command sent to all topics: linear={linear_x}, angular={angular_z}")
-        
-        # Create a human-readable status message
-        if linear_x > 0 and angular_z == 0:
-            status = "Moving forward"
-        elif linear_x < 0 and angular_z == 0:
-            status = "Moving backward"
-        elif linear_x == 0 and angular_z > 0:
-            status = "Turning left"
-        elif linear_x == 0 and angular_z < 0:
-            status = "Turning right"
-        elif linear_x == 0 and angular_z == 0:
-            status = "Stopped"
         #else:
-        #    status = f"Moving: linear={linear_x}, angular={angular_z}" #!!!!
-            
-        self.publish_status(status)
+        #    status = f"Moving: linear={linear_x}, angular={angular_z}" 
+
         return True

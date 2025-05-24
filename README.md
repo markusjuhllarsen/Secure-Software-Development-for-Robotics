@@ -1,6 +1,6 @@
 # Secure-Software-Development-for-Robotics
 
-To build the interface package (in outer directory of repo):  
+To build the interface and irobot_create_nodes packages(in outer directory of repo):  
 source /opt/ros/jazzy/setup.bash  
 colcon build 
 

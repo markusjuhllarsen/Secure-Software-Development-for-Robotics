@@ -1,0 +1,1421 @@
+[
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "getenv",
+        "importPath": "os",
+        "description": "os",
+        "isExtraImport": true,
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "getenv",
+        "importPath": "os",
+        "description": "os",
+        "isExtraImport": true,
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "builtins",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "builtins",
+        "description": "builtins",
+        "detail": "builtins",
+        "documentation": {}
+    },
+    {
+        "label": "rosidl_parser.definition",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "rosidl_parser.definition",
+        "description": "rosidl_parser.definition",
+        "detail": "rosidl_parser.definition",
+        "documentation": {}
+    },
+    {
+        "label": "find_packages",
+        "importPath": "setuptools",
+        "description": "setuptools",
+        "isExtraImport": true,
+        "detail": "setuptools",
+        "documentation": {}
+    },
+    {
+        "label": "setup",
+        "importPath": "setuptools",
+        "description": "setuptools",
+        "isExtraImport": true,
+        "detail": "setuptools",
+        "documentation": {}
+    },
+    {
+        "label": "argparse",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "argparse",
+        "description": "argparse",
+        "detail": "argparse",
+        "documentation": {}
+    },
+    {
+        "label": "OrderedDict",
+        "importPath": "collections",
+        "description": "collections",
+        "isExtraImport": true,
+        "detail": "collections",
+        "documentation": {}
+    },
+    {
+        "label": "OrderedDict",
+        "importPath": "collections",
+        "description": "collections",
+        "isExtraImport": true,
+        "detail": "collections",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "timedelta",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "base64",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "base64",
+        "description": "base64",
+        "detail": "base64",
+        "documentation": {}
+    },
+    {
+        "label": "Twist",
+        "importPath": "geometry_msgs.msg",
+        "description": "geometry_msgs.msg",
+        "isExtraImport": true,
+        "detail": "geometry_msgs.msg",
+        "documentation": {}
+    },
+    {
+        "label": "PoseStamped",
+        "importPath": "geometry_msgs.msg",
+        "description": "geometry_msgs.msg",
+        "isExtraImport": true,
+        "detail": "geometry_msgs.msg",
+        "documentation": {}
+    },
+    {
+        "label": "Twist",
+        "importPath": "geometry_msgs.msg",
+        "description": "geometry_msgs.msg",
+        "isExtraImport": true,
+        "detail": "geometry_msgs.msg",
+        "documentation": {}
+    },
+    {
+        "label": "String",
+        "importPath": "std_msgs.msg",
+        "description": "std_msgs.msg",
+        "isExtraImport": true,
+        "detail": "std_msgs.msg",
+        "documentation": {}
+    },
+    {
+        "label": "String",
+        "importPath": "std_msgs.msg",
+        "description": "std_msgs.msg",
+        "isExtraImport": true,
+        "detail": "std_msgs.msg",
+        "documentation": {}
+    },
+    {
+        "label": "ReentrantCallbackGroup",
+        "importPath": "rclpy.callback_groups",
+        "description": "rclpy.callback_groups",
+        "isExtraImport": true,
+        "detail": "rclpy.callback_groups",
+        "documentation": {}
+    },
+    {
+        "label": "ReentrantCallbackGroup",
+        "importPath": "rclpy.callback_groups",
+        "description": "rclpy.callback_groups",
+        "isExtraImport": true,
+        "detail": "rclpy.callback_groups",
+        "documentation": {}
+    },
+    {
+        "label": "Sanitizer",
+        "importPath": "controller.sanitizer_manager",
+        "description": "controller.sanitizer_manager",
+        "isExtraImport": true,
+        "detail": "controller.sanitizer_manager",
+        "documentation": {}
+    },
+    {
+        "label": "Sanitizer",
+        "importPath": "controller.sanitizer_manager",
+        "description": "controller.sanitizer_manager",
+        "isExtraImport": true,
+        "detail": "controller.sanitizer_manager",
+        "documentation": {}
+    },
+    {
+        "label": "RobotActionManager",
+        "importPath": "actions",
+        "description": "actions",
+        "isExtraImport": true,
+        "detail": "actions",
+        "documentation": {}
+    },
+    {
+        "label": "RobotActionManager",
+        "importPath": "actions",
+        "description": "actions",
+        "isExtraImport": true,
+        "detail": "actions",
+        "documentation": {}
+    },
+    {
+        "label": "SecurityNode",
+        "importPath": "security_node",
+        "description": "security_node",
+        "isExtraImport": true,
+        "detail": "security_node",
+        "documentation": {}
+    },
+    {
+        "label": "SecurityNode",
+        "importPath": "security_node",
+        "description": "security_node",
+        "isExtraImport": true,
+        "detail": "security_node",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_LINEAR_VELOCITY",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_ANGULAR_VELOCITY",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_ANGULAR_VELOCITY",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_LINEAR_VELOCITY",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_LINEAR_VELOCITY",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_ANGULAR_VELOCITY",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_LINEAR_VELOCITY",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_ANGULAR_VELOCITY",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "APP_NAME",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "APP_VERSION",
+        "importPath": "utils.config",
+        "description": "utils.config",
+        "isExtraImport": true,
+        "detail": "utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "ec",
+        "importPath": "cryptography.hazmat.primitives.asymmetric",
+        "description": "cryptography.hazmat.primitives.asymmetric",
+        "isExtraImport": true,
+        "detail": "cryptography.hazmat.primitives.asymmetric",
+        "documentation": {}
+    },
+    {
+        "label": "ec",
+        "importPath": "cryptography.hazmat.primitives.asymmetric",
+        "description": "cryptography.hazmat.primitives.asymmetric",
+        "isExtraImport": true,
+        "detail": "cryptography.hazmat.primitives.asymmetric",
+        "documentation": {}
+    },
+    {
+        "label": "serialization",
+        "importPath": "cryptography.hazmat.primitives",
+        "description": "cryptography.hazmat.primitives",
+        "isExtraImport": true,
+        "detail": "cryptography.hazmat.primitives",
+        "documentation": {}
+    },
+    {
+        "label": "serialization",
+        "importPath": "cryptography.hazmat.primitives",
+        "description": "cryptography.hazmat.primitives",
+        "isExtraImport": true,
+        "detail": "cryptography.hazmat.primitives",
+        "documentation": {}
+    },
+    {
+        "label": "tkinter",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "tkinter",
+        "description": "tkinter",
+        "detail": "tkinter",
+        "documentation": {}
+    },
+    {
+        "label": "ttk",
+        "importPath": "tkinter",
+        "description": "tkinter",
+        "isExtraImport": true,
+        "detail": "tkinter",
+        "documentation": {}
+    },
+    {
+        "label": "messagebox",
+        "importPath": "tkinter",
+        "description": "tkinter",
+        "isExtraImport": true,
+        "detail": "tkinter",
+        "documentation": {}
+    },
+    {
+        "label": "simpledialog",
+        "importPath": "tkinter",
+        "description": "tkinter",
+        "isExtraImport": true,
+        "detail": "tkinter",
+        "documentation": {}
+    },
+    {
+        "label": "messagebox",
+        "importPath": "tkinter",
+        "description": "tkinter",
+        "isExtraImport": true,
+        "detail": "tkinter",
+        "documentation": {}
+    },
+    {
+        "label": "threading",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "threading",
+        "description": "threading",
+        "detail": "threading",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "rclpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "rclpy",
+        "description": "rclpy",
+        "detail": "rclpy",
+        "documentation": {}
+    },
+    {
+        "label": "logging",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "logging",
+        "description": "logging",
+        "detail": "logging",
+        "documentation": {}
+    },
+    {
+        "label": "subprocess",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "subprocess",
+        "description": "subprocess",
+        "detail": "subprocess",
+        "documentation": {}
+    },
+    {
+        "label": "ActionClient",
+        "importPath": "rclpy.action",
+        "description": "rclpy.action",
+        "isExtraImport": true,
+        "detail": "rclpy.action",
+        "documentation": {}
+    },
+    {
+        "label": "ActionServer",
+        "importPath": "rclpy.action",
+        "description": "rclpy.action",
+        "isExtraImport": true,
+        "detail": "rclpy.action",
+        "documentation": {}
+    },
+    {
+        "label": "GoalResponse",
+        "importPath": "rclpy.action",
+        "description": "rclpy.action",
+        "isExtraImport": true,
+        "detail": "rclpy.action",
+        "documentation": {}
+    },
+    {
+        "label": "CancelResponse",
+        "importPath": "rclpy.action",
+        "description": "rclpy.action",
+        "isExtraImport": true,
+        "detail": "rclpy.action",
+        "documentation": {}
+    },
+    {
+        "label": "Dock",
+        "importPath": "irobot_create_msgs.action",
+        "description": "irobot_create_msgs.action",
+        "isExtraImport": true,
+        "detail": "irobot_create_msgs.action",
+        "documentation": {}
+    },
+    {
+        "label": "Undock",
+        "importPath": "irobot_create_msgs.action",
+        "description": "irobot_create_msgs.action",
+        "isExtraImport": true,
+        "detail": "irobot_create_msgs.action",
+        "documentation": {}
+    },
+    {
+        "label": "DriveArc",
+        "importPath": "irobot_create_msgs.action",
+        "description": "irobot_create_msgs.action",
+        "isExtraImport": true,
+        "detail": "irobot_create_msgs.action",
+        "documentation": {}
+    },
+    {
+        "label": "DriveDistance",
+        "importPath": "irobot_create_msgs.action",
+        "description": "irobot_create_msgs.action",
+        "isExtraImport": true,
+        "detail": "irobot_create_msgs.action",
+        "documentation": {}
+    },
+    {
+        "label": "NavigateToPosition",
+        "importPath": "irobot_create_msgs.action",
+        "description": "irobot_create_msgs.action",
+        "isExtraImport": true,
+        "detail": "irobot_create_msgs.action",
+        "documentation": {}
+    },
+    {
+        "label": "RotateAngle",
+        "importPath": "irobot_create_msgs.action",
+        "description": "irobot_create_msgs.action",
+        "isExtraImport": true,
+        "detail": "irobot_create_msgs.action",
+        "documentation": {}
+    },
+    {
+        "label": "WallFollow",
+        "importPath": "irobot_create_msgs.action",
+        "description": "irobot_create_msgs.action",
+        "isExtraImport": true,
+        "detail": "irobot_create_msgs.action",
+        "documentation": {}
+    },
+    {
+        "label": "math",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "math",
+        "description": "math",
+        "detail": "math",
+        "documentation": {}
+    },
+    {
+        "label": "MultiThreadedExecutor",
+        "importPath": "rclpy.executors",
+        "description": "rclpy.executors",
+        "isExtraImport": true,
+        "detail": "rclpy.executors",
+        "documentation": {}
+    },
+    {
+        "label": "AESGCM",
+        "importPath": "cryptography.hazmat.primitives.ciphers.aead",
+        "description": "cryptography.hazmat.primitives.ciphers.aead",
+        "isExtraImport": true,
+        "detail": "cryptography.hazmat.primitives.ciphers.aead",
+        "documentation": {}
+    },
+    {
+        "label": "AESGCM",
+        "importPath": "cryptography.hazmat.primitives.ciphers.aead",
+        "description": "cryptography.hazmat.primitives.ciphers.aead",
+        "isExtraImport": true,
+        "detail": "cryptography.hazmat.primitives.ciphers.aead",
+        "documentation": {}
+    },
+    {
+        "label": "SecureTurtlebot4Controller",
+        "importPath": "controller.robot_controller",
+        "description": "controller.robot_controller",
+        "isExtraImport": true,
+        "detail": "controller.robot_controller",
+        "documentation": {}
+    },
+    {
+        "label": "ButtonControlGUI",
+        "importPath": "gui.gui_app",
+        "description": "gui.gui_app",
+        "isExtraImport": true,
+        "detail": "gui.gui_app",
+        "documentation": {}
+    },
+    {
+        "label": "RobotSecurityNode",
+        "importPath": "robot_security",
+        "description": "robot_security",
+        "isExtraImport": true,
+        "detail": "robot_security",
+        "documentation": {}
+    },
+    {
+        "label": "setup_ros2_environment",
+        "importPath": "ssdr.utils.ros_setup",
+        "description": "ssdr.utils.ros_setup",
+        "isExtraImport": true,
+        "detail": "ssdr.utils.ros_setup",
+        "documentation": {}
+    },
+    {
+        "label": "Node",
+        "importPath": "rclpy.node",
+        "description": "rclpy.node",
+        "isExtraImport": true,
+        "detail": "rclpy.node",
+        "documentation": {}
+    },
+    {
+        "label": "KeyExchange",
+        "importPath": "ssdr_interfaces.srv",
+        "description": "ssdr_interfaces.srv",
+        "isExtraImport": true,
+        "detail": "ssdr_interfaces.srv",
+        "documentation": {}
+    },
+    {
+        "label": "HKDF",
+        "importPath": "cryptography.hazmat.primitives.kdf.hkdf",
+        "description": "cryptography.hazmat.primitives.kdf.hkdf",
+        "isExtraImport": true,
+        "detail": "cryptography.hazmat.primitives.kdf.hkdf",
+        "documentation": {}
+    },
+    {
+        "label": "SHA256",
+        "importPath": "cryptography.hazmat.primitives.hashes",
+        "description": "cryptography.hazmat.primitives.hashes",
+        "isExtraImport": true,
+        "detail": "cryptography.hazmat.primitives.hashes",
+        "documentation": {}
+    },
+    {
+        "label": "secrets",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "secrets",
+        "description": "secrets",
+        "detail": "secrets",
+        "documentation": {}
+    },
+    {
+        "label": "hashlib",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "hashlib",
+        "description": "hashlib",
+        "detail": "hashlib",
+        "documentation": {}
+    },
+    {
+        "label": "Metaclass_KeyExchange_Request",
+        "kind": 6,
+        "importPath": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "description": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "peekOfCode": "class Metaclass_KeyExchange_Request(type):\n    \"\"\"Metaclass of message 'KeyExchange_Request'.\"\"\"\n    _CREATE_ROS_MESSAGE = None\n    _CONVERT_FROM_PY = None\n    _CONVERT_TO_PY = None\n    _DESTROY_ROS_MESSAGE = None\n    _TYPE_SUPPORT = None\n    __constants = {\n    }\n    @classmethod",
+        "detail": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "documentation": {}
+    },
+    {
+        "label": "KeyExchange_Request",
+        "kind": 6,
+        "importPath": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "description": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "peekOfCode": "class KeyExchange_Request(metaclass=Metaclass_KeyExchange_Request):\n    \"\"\"Message class 'KeyExchange_Request'.\"\"\"\n    __slots__ = [\n        '_requester_public_key',\n        '_check_fields',\n    ]\n    _fields_and_field_types = {\n        'requester_public_key': 'string',\n    }\n    # This attribute is used to store an rosidl_parser.definition variable",
+        "detail": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "documentation": {}
+    },
+    {
+        "label": "Metaclass_KeyExchange_Response",
+        "kind": 6,
+        "importPath": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "description": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "peekOfCode": "class Metaclass_KeyExchange_Response(type):\n    \"\"\"Metaclass of message 'KeyExchange_Response'.\"\"\"\n    _CREATE_ROS_MESSAGE = None\n    _CONVERT_FROM_PY = None\n    _CONVERT_TO_PY = None\n    _DESTROY_ROS_MESSAGE = None\n    _TYPE_SUPPORT = None\n    __constants = {\n    }\n    @classmethod",
+        "detail": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "documentation": {}
+    },
+    {
+        "label": "KeyExchange_Response",
+        "kind": 6,
+        "importPath": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "description": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "peekOfCode": "class KeyExchange_Response(metaclass=Metaclass_KeyExchange_Response):\n    \"\"\"Message class 'KeyExchange_Response'.\"\"\"\n    __slots__ = [\n        '_responder_public_key',\n        '_check_fields',\n    ]\n    _fields_and_field_types = {\n        'responder_public_key': 'string',\n    }\n    # This attribute is used to store an rosidl_parser.definition variable",
+        "detail": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "documentation": {}
+    },
+    {
+        "label": "Metaclass_KeyExchange_Event",
+        "kind": 6,
+        "importPath": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "description": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "peekOfCode": "class Metaclass_KeyExchange_Event(type):\n    \"\"\"Metaclass of message 'KeyExchange_Event'.\"\"\"\n    _CREATE_ROS_MESSAGE = None\n    _CONVERT_FROM_PY = None\n    _CONVERT_TO_PY = None\n    _DESTROY_ROS_MESSAGE = None\n    _TYPE_SUPPORT = None\n    __constants = {\n    }\n    @classmethod",
+        "detail": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "documentation": {}
+    },
+    {
+        "label": "KeyExchange_Event",
+        "kind": 6,
+        "importPath": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "description": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "peekOfCode": "class KeyExchange_Event(metaclass=Metaclass_KeyExchange_Event):\n    \"\"\"Message class 'KeyExchange_Event'.\"\"\"\n    __slots__ = [\n        '_info',\n        '_request',\n        '_response',\n        '_check_fields',\n    ]\n    _fields_and_field_types = {\n        'info': 'service_msgs/ServiceEventInfo',",
+        "detail": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "documentation": {}
+    },
+    {
+        "label": "Metaclass_KeyExchange",
+        "kind": 6,
+        "importPath": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "description": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "peekOfCode": "class Metaclass_KeyExchange(type):\n    \"\"\"Metaclass of service 'KeyExchange'.\"\"\"\n    _TYPE_SUPPORT = None\n    @classmethod\n    def __import_type_support__(cls):\n        try:\n            from rosidl_generator_py import import_type_support\n            module = import_type_support('ssdr_interfaces')\n        except ImportError:\n            import logging",
+        "detail": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "documentation": {}
+    },
+    {
+        "label": "KeyExchange",
+        "kind": 6,
+        "importPath": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "description": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "peekOfCode": "class KeyExchange(metaclass=Metaclass_KeyExchange):\n    from ssdr_interfaces.srv._key_exchange import KeyExchange_Request as Request\n    from ssdr_interfaces.srv._key_exchange import KeyExchange_Response as Response\n    from ssdr_interfaces.srv._key_exchange import KeyExchange_Event as Event\n    def __init__(self):\n        raise NotImplementedError('Service classes can not be instantiated')",
+        "detail": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "documentation": {}
+    },
+    {
+        "label": "ros_python_check_fields",
+        "kind": 5,
+        "importPath": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "description": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "peekOfCode": "ros_python_check_fields = getenv('ROS_PYTHON_CHECK_FIELDS', default='')\n# Import statements for member types\nimport builtins  # noqa: E402, I100\nimport rosidl_parser.definition  # noqa: E402, I100\nclass Metaclass_KeyExchange_Request(type):\n    \"\"\"Metaclass of message 'KeyExchange_Request'.\"\"\"\n    _CREATE_ROS_MESSAGE = None\n    _CONVERT_FROM_PY = None\n    _CONVERT_TO_PY = None\n    _DESTROY_ROS_MESSAGE = None",
+        "detail": "build.ssdr_interfaces.ament_cmake_python.ssdr_interfaces.ssdr_interfaces.srv._key_exchange",
+        "documentation": {}
+    },
+    {
+        "label": "Metaclass_KeyExchange_Request",
+        "kind": 6,
+        "importPath": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "description": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "peekOfCode": "class Metaclass_KeyExchange_Request(type):\n    \"\"\"Metaclass of message 'KeyExchange_Request'.\"\"\"\n    _CREATE_ROS_MESSAGE = None\n    _CONVERT_FROM_PY = None\n    _CONVERT_TO_PY = None\n    _DESTROY_ROS_MESSAGE = None\n    _TYPE_SUPPORT = None\n    __constants = {\n    }\n    @classmethod",
+        "detail": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "documentation": {}
+    },
+    {
+        "label": "KeyExchange_Request",
+        "kind": 6,
+        "importPath": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "description": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "peekOfCode": "class KeyExchange_Request(metaclass=Metaclass_KeyExchange_Request):\n    \"\"\"Message class 'KeyExchange_Request'.\"\"\"\n    __slots__ = [\n        '_requester_public_key',\n        '_check_fields',\n    ]\n    _fields_and_field_types = {\n        'requester_public_key': 'string',\n    }\n    # This attribute is used to store an rosidl_parser.definition variable",
+        "detail": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "documentation": {}
+    },
+    {
+        "label": "Metaclass_KeyExchange_Response",
+        "kind": 6,
+        "importPath": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "description": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "peekOfCode": "class Metaclass_KeyExchange_Response(type):\n    \"\"\"Metaclass of message 'KeyExchange_Response'.\"\"\"\n    _CREATE_ROS_MESSAGE = None\n    _CONVERT_FROM_PY = None\n    _CONVERT_TO_PY = None\n    _DESTROY_ROS_MESSAGE = None\n    _TYPE_SUPPORT = None\n    __constants = {\n    }\n    @classmethod",
+        "detail": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "documentation": {}
+    },
+    {
+        "label": "KeyExchange_Response",
+        "kind": 6,
+        "importPath": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "description": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "peekOfCode": "class KeyExchange_Response(metaclass=Metaclass_KeyExchange_Response):\n    \"\"\"Message class 'KeyExchange_Response'.\"\"\"\n    __slots__ = [\n        '_responder_public_key',\n        '_check_fields',\n    ]\n    _fields_and_field_types = {\n        'responder_public_key': 'string',\n    }\n    # This attribute is used to store an rosidl_parser.definition variable",
+        "detail": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "documentation": {}
+    },
+    {
+        "label": "Metaclass_KeyExchange_Event",
+        "kind": 6,
+        "importPath": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "description": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "peekOfCode": "class Metaclass_KeyExchange_Event(type):\n    \"\"\"Metaclass of message 'KeyExchange_Event'.\"\"\"\n    _CREATE_ROS_MESSAGE = None\n    _CONVERT_FROM_PY = None\n    _CONVERT_TO_PY = None\n    _DESTROY_ROS_MESSAGE = None\n    _TYPE_SUPPORT = None\n    __constants = {\n    }\n    @classmethod",
+        "detail": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "documentation": {}
+    },
+    {
+        "label": "KeyExchange_Event",
+        "kind": 6,
+        "importPath": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "description": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "peekOfCode": "class KeyExchange_Event(metaclass=Metaclass_KeyExchange_Event):\n    \"\"\"Message class 'KeyExchange_Event'.\"\"\"\n    __slots__ = [\n        '_info',\n        '_request',\n        '_response',\n        '_check_fields',\n    ]\n    _fields_and_field_types = {\n        'info': 'service_msgs/ServiceEventInfo',",
+        "detail": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "documentation": {}
+    },
+    {
+        "label": "Metaclass_KeyExchange",
+        "kind": 6,
+        "importPath": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "description": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "peekOfCode": "class Metaclass_KeyExchange(type):\n    \"\"\"Metaclass of service 'KeyExchange'.\"\"\"\n    _TYPE_SUPPORT = None\n    @classmethod\n    def __import_type_support__(cls):\n        try:\n            from rosidl_generator_py import import_type_support\n            module = import_type_support('ssdr_interfaces')\n        except ImportError:\n            import logging",
+        "detail": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "documentation": {}
+    },
+    {
+        "label": "KeyExchange",
+        "kind": 6,
+        "importPath": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "description": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "peekOfCode": "class KeyExchange(metaclass=Metaclass_KeyExchange):\n    from ssdr_interfaces.srv._key_exchange import KeyExchange_Request as Request\n    from ssdr_interfaces.srv._key_exchange import KeyExchange_Response as Response\n    from ssdr_interfaces.srv._key_exchange import KeyExchange_Event as Event\n    def __init__(self):\n        raise NotImplementedError('Service classes can not be instantiated')",
+        "detail": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "documentation": {}
+    },
+    {
+        "label": "ros_python_check_fields",
+        "kind": 5,
+        "importPath": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "description": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "peekOfCode": "ros_python_check_fields = getenv('ROS_PYTHON_CHECK_FIELDS', default='')\n# Import statements for member types\nimport builtins  # noqa: E402, I100\nimport rosidl_parser.definition  # noqa: E402, I100\nclass Metaclass_KeyExchange_Request(type):\n    \"\"\"Metaclass of message 'KeyExchange_Request'.\"\"\"\n    _CREATE_ROS_MESSAGE = None\n    _CONVERT_FROM_PY = None\n    _CONVERT_TO_PY = None\n    _DESTROY_ROS_MESSAGE = None",
+        "detail": "build.ssdr_interfaces.rosidl_generator_py.ssdr_interfaces.srv._key_exchange",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "def main(argv=sys.argv[1:]):  # noqa: D103\n    parser = argparse.ArgumentParser(\n        description='Output shell commands for the packages in topological '\n                    'order')\n    parser.add_argument(\n        'primary_extension',\n        help='The file extension of the primary shell')\n    parser.add_argument(\n        'additional_extension', nargs='?',\n        help='The additional file extension to be considered')",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "get_packages",
+        "kind": 2,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "def get_packages(prefix_path, merged_install):\n    \"\"\"\n    Find packages based on colcon-specific files created during installation.\n    :param Path prefix_path: The install prefix path of all packages\n    :param bool merged_install: The flag if the packages are all installed\n      directly in the prefix or if each package is installed in a subdirectory\n      named after the package\n    :returns: A mapping from the package name to the set of runtime\n      dependencies\n    :rtype: dict",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "add_package_runtime_dependencies",
+        "kind": 2,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "def add_package_runtime_dependencies(path, packages):\n    \"\"\"\n    Check the path and if it exists extract the packages runtime dependencies.\n    :param Path path: The resource file containing the runtime dependencies\n    :param dict packages: A mapping from package names to the sets of runtime\n      dependencies to add to\n    \"\"\"\n    content = path.read_text()\n    dependencies = set(content.split(os.pathsep) if content else [])\n    packages[path.name] = dependencies",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "order_packages",
+        "kind": 2,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "def order_packages(packages):\n    \"\"\"\n    Order packages topologically.\n    :param dict packages: A mapping from package name to the set of runtime\n      dependencies\n    :returns: The package names\n    :rtype: list\n    \"\"\"\n    # select packages with no dependencies in alphabetical order\n    to_be_ordered = list(packages.keys())",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "reduce_cycle_set",
+        "kind": 2,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "def reduce_cycle_set(packages):\n    \"\"\"\n    Reduce the set of packages to the ones part of the circular dependency.\n    :param dict packages: A mapping from package name to the set of runtime\n      dependencies which is modified in place\n    \"\"\"\n    last_depended = None\n    while len(packages) > 0:\n        # get all remaining dependencies\n        depended = set()",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "get_commands",
+        "kind": 2,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "def get_commands(pkg_name, prefix, primary_extension, additional_extension):\n    commands = []\n    package_dsv_path = os.path.join(prefix, 'share', pkg_name, 'package.dsv')\n    if os.path.exists(package_dsv_path):\n        commands += process_dsv_file(\n            package_dsv_path, prefix, primary_extension, additional_extension)\n    return commands\ndef process_dsv_file(\n    dsv_path, prefix, primary_extension=None, additional_extension=None\n):",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "process_dsv_file",
+        "kind": 2,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "def process_dsv_file(\n    dsv_path, prefix, primary_extension=None, additional_extension=None\n):\n    commands = []\n    if _include_comments():\n        commands.append(FORMAT_STR_COMMENT_LINE.format_map({'comment': dsv_path}))\n    with open(dsv_path, 'r') as h:\n        content = h.read()\n    lines = content.splitlines()\n    basenames = OrderedDict()",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "handle_dsv_types_except_source",
+        "kind": 2,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "def handle_dsv_types_except_source(type_, remainder, prefix):\n    commands = []\n    if type_ in (DSV_TYPE_SET, DSV_TYPE_SET_IF_UNSET):\n        try:\n            env_name, value = remainder.split(';', 1)\n        except ValueError:\n            raise RuntimeError(\n                \"doesn't contain a semicolon separating the environment name \"\n                'from the value')\n        try_prefixed_value = os.path.join(prefix, value) if value else prefix",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "FORMAT_STR_COMMENT_LINE",
+        "kind": 5,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "FORMAT_STR_COMMENT_LINE = '# {comment}'\nFORMAT_STR_SET_ENV_VAR = 'Set-Item -Path \"Env:{name}\" -Value \"{value}\"'\nFORMAT_STR_USE_ENV_VAR = '$env:{name}'\nFORMAT_STR_INVOKE_SCRIPT = '_colcon_prefix_powershell_source_script \"{script_path}\"'  # noqa: E501\nFORMAT_STR_REMOVE_LEADING_SEPARATOR = ''  # noqa: E501\nFORMAT_STR_REMOVE_TRAILING_SEPARATOR = ''  # noqa: E501\nDSV_TYPE_APPEND_NON_DUPLICATE = 'append-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE = 'prepend-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS = 'prepend-non-duplicate-if-exists'\nDSV_TYPE_SET = 'set'",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "FORMAT_STR_SET_ENV_VAR",
+        "kind": 5,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "FORMAT_STR_SET_ENV_VAR = 'Set-Item -Path \"Env:{name}\" -Value \"{value}\"'\nFORMAT_STR_USE_ENV_VAR = '$env:{name}'\nFORMAT_STR_INVOKE_SCRIPT = '_colcon_prefix_powershell_source_script \"{script_path}\"'  # noqa: E501\nFORMAT_STR_REMOVE_LEADING_SEPARATOR = ''  # noqa: E501\nFORMAT_STR_REMOVE_TRAILING_SEPARATOR = ''  # noqa: E501\nDSV_TYPE_APPEND_NON_DUPLICATE = 'append-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE = 'prepend-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS = 'prepend-non-duplicate-if-exists'\nDSV_TYPE_SET = 'set'\nDSV_TYPE_SET_IF_UNSET = 'set-if-unset'",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "FORMAT_STR_USE_ENV_VAR",
+        "kind": 5,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "FORMAT_STR_USE_ENV_VAR = '$env:{name}'\nFORMAT_STR_INVOKE_SCRIPT = '_colcon_prefix_powershell_source_script \"{script_path}\"'  # noqa: E501\nFORMAT_STR_REMOVE_LEADING_SEPARATOR = ''  # noqa: E501\nFORMAT_STR_REMOVE_TRAILING_SEPARATOR = ''  # noqa: E501\nDSV_TYPE_APPEND_NON_DUPLICATE = 'append-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE = 'prepend-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS = 'prepend-non-duplicate-if-exists'\nDSV_TYPE_SET = 'set'\nDSV_TYPE_SET_IF_UNSET = 'set-if-unset'\nDSV_TYPE_SOURCE = 'source'",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "FORMAT_STR_INVOKE_SCRIPT",
+        "kind": 5,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "FORMAT_STR_INVOKE_SCRIPT = '_colcon_prefix_powershell_source_script \"{script_path}\"'  # noqa: E501\nFORMAT_STR_REMOVE_LEADING_SEPARATOR = ''  # noqa: E501\nFORMAT_STR_REMOVE_TRAILING_SEPARATOR = ''  # noqa: E501\nDSV_TYPE_APPEND_NON_DUPLICATE = 'append-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE = 'prepend-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS = 'prepend-non-duplicate-if-exists'\nDSV_TYPE_SET = 'set'\nDSV_TYPE_SET_IF_UNSET = 'set-if-unset'\nDSV_TYPE_SOURCE = 'source'\ndef main(argv=sys.argv[1:]):  # noqa: D103",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "FORMAT_STR_REMOVE_LEADING_SEPARATOR",
+        "kind": 5,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "FORMAT_STR_REMOVE_LEADING_SEPARATOR = ''  # noqa: E501\nFORMAT_STR_REMOVE_TRAILING_SEPARATOR = ''  # noqa: E501\nDSV_TYPE_APPEND_NON_DUPLICATE = 'append-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE = 'prepend-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS = 'prepend-non-duplicate-if-exists'\nDSV_TYPE_SET = 'set'\nDSV_TYPE_SET_IF_UNSET = 'set-if-unset'\nDSV_TYPE_SOURCE = 'source'\ndef main(argv=sys.argv[1:]):  # noqa: D103\n    parser = argparse.ArgumentParser(",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "FORMAT_STR_REMOVE_TRAILING_SEPARATOR",
+        "kind": 5,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "FORMAT_STR_REMOVE_TRAILING_SEPARATOR = ''  # noqa: E501\nDSV_TYPE_APPEND_NON_DUPLICATE = 'append-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE = 'prepend-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS = 'prepend-non-duplicate-if-exists'\nDSV_TYPE_SET = 'set'\nDSV_TYPE_SET_IF_UNSET = 'set-if-unset'\nDSV_TYPE_SOURCE = 'source'\ndef main(argv=sys.argv[1:]):  # noqa: D103\n    parser = argparse.ArgumentParser(\n        description='Output shell commands for the packages in topological '",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "DSV_TYPE_APPEND_NON_DUPLICATE",
+        "kind": 5,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "DSV_TYPE_APPEND_NON_DUPLICATE = 'append-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE = 'prepend-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS = 'prepend-non-duplicate-if-exists'\nDSV_TYPE_SET = 'set'\nDSV_TYPE_SET_IF_UNSET = 'set-if-unset'\nDSV_TYPE_SOURCE = 'source'\ndef main(argv=sys.argv[1:]):  # noqa: D103\n    parser = argparse.ArgumentParser(\n        description='Output shell commands for the packages in topological '\n                    'order')",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "DSV_TYPE_PREPEND_NON_DUPLICATE",
+        "kind": 5,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "DSV_TYPE_PREPEND_NON_DUPLICATE = 'prepend-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS = 'prepend-non-duplicate-if-exists'\nDSV_TYPE_SET = 'set'\nDSV_TYPE_SET_IF_UNSET = 'set-if-unset'\nDSV_TYPE_SOURCE = 'source'\ndef main(argv=sys.argv[1:]):  # noqa: D103\n    parser = argparse.ArgumentParser(\n        description='Output shell commands for the packages in topological '\n                    'order')\n    parser.add_argument(",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "DSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS",
+        "kind": 5,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "DSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS = 'prepend-non-duplicate-if-exists'\nDSV_TYPE_SET = 'set'\nDSV_TYPE_SET_IF_UNSET = 'set-if-unset'\nDSV_TYPE_SOURCE = 'source'\ndef main(argv=sys.argv[1:]):  # noqa: D103\n    parser = argparse.ArgumentParser(\n        description='Output shell commands for the packages in topological '\n                    'order')\n    parser.add_argument(\n        'primary_extension',",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "DSV_TYPE_SET",
+        "kind": 5,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "DSV_TYPE_SET = 'set'\nDSV_TYPE_SET_IF_UNSET = 'set-if-unset'\nDSV_TYPE_SOURCE = 'source'\ndef main(argv=sys.argv[1:]):  # noqa: D103\n    parser = argparse.ArgumentParser(\n        description='Output shell commands for the packages in topological '\n                    'order')\n    parser.add_argument(\n        'primary_extension',\n        help='The file extension of the primary shell')",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "DSV_TYPE_SET_IF_UNSET",
+        "kind": 5,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "DSV_TYPE_SET_IF_UNSET = 'set-if-unset'\nDSV_TYPE_SOURCE = 'source'\ndef main(argv=sys.argv[1:]):  # noqa: D103\n    parser = argparse.ArgumentParser(\n        description='Output shell commands for the packages in topological '\n                    'order')\n    parser.add_argument(\n        'primary_extension',\n        help='The file extension of the primary shell')\n    parser.add_argument(",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "DSV_TYPE_SOURCE",
+        "kind": 5,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "DSV_TYPE_SOURCE = 'source'\ndef main(argv=sys.argv[1:]):  # noqa: D103\n    parser = argparse.ArgumentParser(\n        description='Output shell commands for the packages in topological '\n                    'order')\n    parser.add_argument(\n        'primary_extension',\n        help='The file extension of the primary shell')\n    parser.add_argument(\n        'additional_extension', nargs='?',",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "env_state",
+        "kind": 5,
+        "importPath": "install._local_setup_util_ps1",
+        "description": "install._local_setup_util_ps1",
+        "peekOfCode": "env_state = {}\ndef _append_unique_value(name, value):\n    global env_state\n    if name not in env_state:\n        if os.environ.get(name):\n            env_state[name] = set(os.environ[name].split(os.pathsep))\n        else:\n            env_state[name] = set()\n    # append even if the variable has not been set yet, in case a shell script sets the\n    # same variable without the knowledge of this Python script.",
+        "detail": "install._local_setup_util_ps1",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "def main(argv=sys.argv[1:]):  # noqa: D103\n    parser = argparse.ArgumentParser(\n        description='Output shell commands for the packages in topological '\n                    'order')\n    parser.add_argument(\n        'primary_extension',\n        help='The file extension of the primary shell')\n    parser.add_argument(\n        'additional_extension', nargs='?',\n        help='The additional file extension to be considered')",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "get_packages",
+        "kind": 2,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "def get_packages(prefix_path, merged_install):\n    \"\"\"\n    Find packages based on colcon-specific files created during installation.\n    :param Path prefix_path: The install prefix path of all packages\n    :param bool merged_install: The flag if the packages are all installed\n      directly in the prefix or if each package is installed in a subdirectory\n      named after the package\n    :returns: A mapping from the package name to the set of runtime\n      dependencies\n    :rtype: dict",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "add_package_runtime_dependencies",
+        "kind": 2,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "def add_package_runtime_dependencies(path, packages):\n    \"\"\"\n    Check the path and if it exists extract the packages runtime dependencies.\n    :param Path path: The resource file containing the runtime dependencies\n    :param dict packages: A mapping from package names to the sets of runtime\n      dependencies to add to\n    \"\"\"\n    content = path.read_text()\n    dependencies = set(content.split(os.pathsep) if content else [])\n    packages[path.name] = dependencies",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "order_packages",
+        "kind": 2,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "def order_packages(packages):\n    \"\"\"\n    Order packages topologically.\n    :param dict packages: A mapping from package name to the set of runtime\n      dependencies\n    :returns: The package names\n    :rtype: list\n    \"\"\"\n    # select packages with no dependencies in alphabetical order\n    to_be_ordered = list(packages.keys())",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "reduce_cycle_set",
+        "kind": 2,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "def reduce_cycle_set(packages):\n    \"\"\"\n    Reduce the set of packages to the ones part of the circular dependency.\n    :param dict packages: A mapping from package name to the set of runtime\n      dependencies which is modified in place\n    \"\"\"\n    last_depended = None\n    while len(packages) > 0:\n        # get all remaining dependencies\n        depended = set()",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "get_commands",
+        "kind": 2,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "def get_commands(pkg_name, prefix, primary_extension, additional_extension):\n    commands = []\n    package_dsv_path = os.path.join(prefix, 'share', pkg_name, 'package.dsv')\n    if os.path.exists(package_dsv_path):\n        commands += process_dsv_file(\n            package_dsv_path, prefix, primary_extension, additional_extension)\n    return commands\ndef process_dsv_file(\n    dsv_path, prefix, primary_extension=None, additional_extension=None\n):",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "process_dsv_file",
+        "kind": 2,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "def process_dsv_file(\n    dsv_path, prefix, primary_extension=None, additional_extension=None\n):\n    commands = []\n    if _include_comments():\n        commands.append(FORMAT_STR_COMMENT_LINE.format_map({'comment': dsv_path}))\n    with open(dsv_path, 'r') as h:\n        content = h.read()\n    lines = content.splitlines()\n    basenames = OrderedDict()",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "handle_dsv_types_except_source",
+        "kind": 2,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "def handle_dsv_types_except_source(type_, remainder, prefix):\n    commands = []\n    if type_ in (DSV_TYPE_SET, DSV_TYPE_SET_IF_UNSET):\n        try:\n            env_name, value = remainder.split(';', 1)\n        except ValueError:\n            raise RuntimeError(\n                \"doesn't contain a semicolon separating the environment name \"\n                'from the value')\n        try_prefixed_value = os.path.join(prefix, value) if value else prefix",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "FORMAT_STR_COMMENT_LINE",
+        "kind": 5,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "FORMAT_STR_COMMENT_LINE = '# {comment}'\nFORMAT_STR_SET_ENV_VAR = 'export {name}=\"{value}\"'\nFORMAT_STR_USE_ENV_VAR = '${name}'\nFORMAT_STR_INVOKE_SCRIPT = 'COLCON_CURRENT_PREFIX=\"{prefix}\" _colcon_prefix_sh_source_script \"{script_path}\"'  # noqa: E501\nFORMAT_STR_REMOVE_LEADING_SEPARATOR = 'if [ \"$(echo -n ${name} | head -c 1)\" = \":\" ]; then export {name}=${{{name}#?}} ; fi'  # noqa: E501\nFORMAT_STR_REMOVE_TRAILING_SEPARATOR = 'if [ \"$(echo -n ${name} | tail -c 1)\" = \":\" ]; then export {name}=${{{name}%?}} ; fi'  # noqa: E501\nDSV_TYPE_APPEND_NON_DUPLICATE = 'append-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE = 'prepend-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS = 'prepend-non-duplicate-if-exists'\nDSV_TYPE_SET = 'set'",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "FORMAT_STR_SET_ENV_VAR",
+        "kind": 5,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "FORMAT_STR_SET_ENV_VAR = 'export {name}=\"{value}\"'\nFORMAT_STR_USE_ENV_VAR = '${name}'\nFORMAT_STR_INVOKE_SCRIPT = 'COLCON_CURRENT_PREFIX=\"{prefix}\" _colcon_prefix_sh_source_script \"{script_path}\"'  # noqa: E501\nFORMAT_STR_REMOVE_LEADING_SEPARATOR = 'if [ \"$(echo -n ${name} | head -c 1)\" = \":\" ]; then export {name}=${{{name}#?}} ; fi'  # noqa: E501\nFORMAT_STR_REMOVE_TRAILING_SEPARATOR = 'if [ \"$(echo -n ${name} | tail -c 1)\" = \":\" ]; then export {name}=${{{name}%?}} ; fi'  # noqa: E501\nDSV_TYPE_APPEND_NON_DUPLICATE = 'append-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE = 'prepend-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS = 'prepend-non-duplicate-if-exists'\nDSV_TYPE_SET = 'set'\nDSV_TYPE_SET_IF_UNSET = 'set-if-unset'",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "FORMAT_STR_USE_ENV_VAR",
+        "kind": 5,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "FORMAT_STR_USE_ENV_VAR = '${name}'\nFORMAT_STR_INVOKE_SCRIPT = 'COLCON_CURRENT_PREFIX=\"{prefix}\" _colcon_prefix_sh_source_script \"{script_path}\"'  # noqa: E501\nFORMAT_STR_REMOVE_LEADING_SEPARATOR = 'if [ \"$(echo -n ${name} | head -c 1)\" = \":\" ]; then export {name}=${{{name}#?}} ; fi'  # noqa: E501\nFORMAT_STR_REMOVE_TRAILING_SEPARATOR = 'if [ \"$(echo -n ${name} | tail -c 1)\" = \":\" ]; then export {name}=${{{name}%?}} ; fi'  # noqa: E501\nDSV_TYPE_APPEND_NON_DUPLICATE = 'append-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE = 'prepend-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS = 'prepend-non-duplicate-if-exists'\nDSV_TYPE_SET = 'set'\nDSV_TYPE_SET_IF_UNSET = 'set-if-unset'\nDSV_TYPE_SOURCE = 'source'",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "FORMAT_STR_INVOKE_SCRIPT",
+        "kind": 5,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "FORMAT_STR_INVOKE_SCRIPT = 'COLCON_CURRENT_PREFIX=\"{prefix}\" _colcon_prefix_sh_source_script \"{script_path}\"'  # noqa: E501\nFORMAT_STR_REMOVE_LEADING_SEPARATOR = 'if [ \"$(echo -n ${name} | head -c 1)\" = \":\" ]; then export {name}=${{{name}#?}} ; fi'  # noqa: E501\nFORMAT_STR_REMOVE_TRAILING_SEPARATOR = 'if [ \"$(echo -n ${name} | tail -c 1)\" = \":\" ]; then export {name}=${{{name}%?}} ; fi'  # noqa: E501\nDSV_TYPE_APPEND_NON_DUPLICATE = 'append-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE = 'prepend-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS = 'prepend-non-duplicate-if-exists'\nDSV_TYPE_SET = 'set'\nDSV_TYPE_SET_IF_UNSET = 'set-if-unset'\nDSV_TYPE_SOURCE = 'source'\ndef main(argv=sys.argv[1:]):  # noqa: D103",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "FORMAT_STR_REMOVE_LEADING_SEPARATOR",
+        "kind": 5,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "FORMAT_STR_REMOVE_LEADING_SEPARATOR = 'if [ \"$(echo -n ${name} | head -c 1)\" = \":\" ]; then export {name}=${{{name}#?}} ; fi'  # noqa: E501\nFORMAT_STR_REMOVE_TRAILING_SEPARATOR = 'if [ \"$(echo -n ${name} | tail -c 1)\" = \":\" ]; then export {name}=${{{name}%?}} ; fi'  # noqa: E501\nDSV_TYPE_APPEND_NON_DUPLICATE = 'append-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE = 'prepend-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS = 'prepend-non-duplicate-if-exists'\nDSV_TYPE_SET = 'set'\nDSV_TYPE_SET_IF_UNSET = 'set-if-unset'\nDSV_TYPE_SOURCE = 'source'\ndef main(argv=sys.argv[1:]):  # noqa: D103\n    parser = argparse.ArgumentParser(",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "FORMAT_STR_REMOVE_TRAILING_SEPARATOR",
+        "kind": 5,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "FORMAT_STR_REMOVE_TRAILING_SEPARATOR = 'if [ \"$(echo -n ${name} | tail -c 1)\" = \":\" ]; then export {name}=${{{name}%?}} ; fi'  # noqa: E501\nDSV_TYPE_APPEND_NON_DUPLICATE = 'append-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE = 'prepend-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS = 'prepend-non-duplicate-if-exists'\nDSV_TYPE_SET = 'set'\nDSV_TYPE_SET_IF_UNSET = 'set-if-unset'\nDSV_TYPE_SOURCE = 'source'\ndef main(argv=sys.argv[1:]):  # noqa: D103\n    parser = argparse.ArgumentParser(\n        description='Output shell commands for the packages in topological '",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "DSV_TYPE_APPEND_NON_DUPLICATE",
+        "kind": 5,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "DSV_TYPE_APPEND_NON_DUPLICATE = 'append-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE = 'prepend-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS = 'prepend-non-duplicate-if-exists'\nDSV_TYPE_SET = 'set'\nDSV_TYPE_SET_IF_UNSET = 'set-if-unset'\nDSV_TYPE_SOURCE = 'source'\ndef main(argv=sys.argv[1:]):  # noqa: D103\n    parser = argparse.ArgumentParser(\n        description='Output shell commands for the packages in topological '\n                    'order')",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "DSV_TYPE_PREPEND_NON_DUPLICATE",
+        "kind": 5,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "DSV_TYPE_PREPEND_NON_DUPLICATE = 'prepend-non-duplicate'\nDSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS = 'prepend-non-duplicate-if-exists'\nDSV_TYPE_SET = 'set'\nDSV_TYPE_SET_IF_UNSET = 'set-if-unset'\nDSV_TYPE_SOURCE = 'source'\ndef main(argv=sys.argv[1:]):  # noqa: D103\n    parser = argparse.ArgumentParser(\n        description='Output shell commands for the packages in topological '\n                    'order')\n    parser.add_argument(",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "DSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS",
+        "kind": 5,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "DSV_TYPE_PREPEND_NON_DUPLICATE_IF_EXISTS = 'prepend-non-duplicate-if-exists'\nDSV_TYPE_SET = 'set'\nDSV_TYPE_SET_IF_UNSET = 'set-if-unset'\nDSV_TYPE_SOURCE = 'source'\ndef main(argv=sys.argv[1:]):  # noqa: D103\n    parser = argparse.ArgumentParser(\n        description='Output shell commands for the packages in topological '\n                    'order')\n    parser.add_argument(\n        'primary_extension',",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "DSV_TYPE_SET",
+        "kind": 5,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "DSV_TYPE_SET = 'set'\nDSV_TYPE_SET_IF_UNSET = 'set-if-unset'\nDSV_TYPE_SOURCE = 'source'\ndef main(argv=sys.argv[1:]):  # noqa: D103\n    parser = argparse.ArgumentParser(\n        description='Output shell commands for the packages in topological '\n                    'order')\n    parser.add_argument(\n        'primary_extension',\n        help='The file extension of the primary shell')",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "DSV_TYPE_SET_IF_UNSET",
+        "kind": 5,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "DSV_TYPE_SET_IF_UNSET = 'set-if-unset'\nDSV_TYPE_SOURCE = 'source'\ndef main(argv=sys.argv[1:]):  # noqa: D103\n    parser = argparse.ArgumentParser(\n        description='Output shell commands for the packages in topological '\n                    'order')\n    parser.add_argument(\n        'primary_extension',\n        help='The file extension of the primary shell')\n    parser.add_argument(",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "DSV_TYPE_SOURCE",
+        "kind": 5,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "DSV_TYPE_SOURCE = 'source'\ndef main(argv=sys.argv[1:]):  # noqa: D103\n    parser = argparse.ArgumentParser(\n        description='Output shell commands for the packages in topological '\n                    'order')\n    parser.add_argument(\n        'primary_extension',\n        help='The file extension of the primary shell')\n    parser.add_argument(\n        'additional_extension', nargs='?',",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "env_state",
+        "kind": 5,
+        "importPath": "install._local_setup_util_sh",
+        "description": "install._local_setup_util_sh",
+        "peekOfCode": "env_state = {}\ndef _append_unique_value(name, value):\n    global env_state\n    if name not in env_state:\n        if os.environ.get(name):\n            env_state[name] = set(os.environ[name].split(os.pathsep))\n        else:\n            env_state[name] = set()\n    # append even if the variable has not been set yet, in case a shell script sets the\n    # same variable without the knowledge of this Python script.",
+        "detail": "install._local_setup_util_sh",
+        "documentation": {}
+    },
+    {
+        "label": "SecureTurtlebot4Controller",
+        "kind": 6,
+        "importPath": "src.ssdr.controller.robot_controller",
+        "description": "src.ssdr.controller.robot_controller",
+        "peekOfCode": "class SecureTurtlebot4Controller(SecurityNode):\n    \"\"\"Main controller class for the Turtlebot4 with security features\"\"\"\n    def __init__(self, enable_security = False):\n        super().__init__('secure_turtlebot4_controller', enable_security, is_controller = True)\n        # Reference to GUI (will be set in main.py)\n        self.gui = None\n        # Use reentrant callback group for actions\n        self.callback_group = ReentrantCallbackGroup()\n        # Initialize non-encrypted publishers\n        self._init_publishers()",
+        "detail": "src.ssdr.controller.robot_controller",
+        "documentation": {}
+    },
+    {
+        "label": "Sanitizer",
+        "kind": 6,
+        "importPath": "src.ssdr.controller.sanitizer_manager",
+        "description": "src.ssdr.controller.sanitizer_manager",
+        "peekOfCode": "class Sanitizer:\n    \"\"\"\n    A utility class to sanitize and validate inputs for robot actions.\n    \"\"\"\n    @staticmethod\n    def sanitize_velocity(value, min_value=-1.0, max_value=1.0, name=\"velocity\"):\n        \"\"\"\n        Sanitize a velocity input (linear or angular) by ensuring it is within the specified range.\n        Args:\n            value (float): The velocity to sanitize.",
+        "detail": "src.ssdr.controller.sanitizer_manager",
+        "documentation": {}
+    },
+    {
+        "label": "SecurityManager",
+        "kind": 6,
+        "importPath": "src.ssdr.controller.security_manager",
+        "description": "src.ssdr.controller.security_manager",
+        "peekOfCode": "class SecurityManager:\n    \"\"\"Handles security-related functionality for the robot controller\"\"\"\n    def __init__(self, logger):\n        self.logger = logger\n        self.private_key = ec.generate_private_key(ec.SECP256R1())\n        self.public_key = self.private_key.public_key()\n        # Serialize the public key for sharing\n        self.public_key_bytes = self.public_key.public_bytes(\n            encoding=serialization.Encoding.PEM,\n            format=serialization.PublicFormat.SubjectPublicKeyInfo",
+        "detail": "src.ssdr.controller.security_manager",
+        "documentation": {}
+    },
+    {
+        "label": "ButtonControlGUI",
+        "kind": 6,
+        "importPath": "src.ssdr.gui.gui_app",
+        "description": "src.ssdr.gui.gui_app",
+        "peekOfCode": "class ButtonControlGUI:\n    \"\"\"Main GUI class for the Turtlebot4 controller\"\"\"\n    def __init__(self, controller_node):\n        \"\"\"\n        Initialize the GUI\n        Args:\n            controller_node: The ROS2 node that controls the robot\n        \"\"\"\n        self.controller = controller_node\n        # Create main window",
+        "detail": "src.ssdr.gui.gui_app",
+        "documentation": {}
+    },
+    {
+        "label": "APP_NAME",
+        "kind": 5,
+        "importPath": "src.ssdr.utils.config",
+        "description": "src.ssdr.utils.config",
+        "peekOfCode": "APP_NAME = \"Secure Turtlebot4 Controller\"\nAPP_VERSION = \"1.0.0\"\n# Robot movement parameters\nDEFAULT_LINEAR_VELOCITY = 0.2  # m/s\nDEFAULT_ANGULAR_VELOCITY = 0.5  # rad/s\nMAX_LINEAR_VELOCITY = 5  # m/s\nMAX_ANGULAR_VELOCITY = 1.0  # rad/s\n# Security parameters\nMAX_COMMANDS_PER_MINUTE = 30\nHMAC_ALGORITHM = \"sha256\"",
+        "detail": "src.ssdr.utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "APP_VERSION",
+        "kind": 5,
+        "importPath": "src.ssdr.utils.config",
+        "description": "src.ssdr.utils.config",
+        "peekOfCode": "APP_VERSION = \"1.0.0\"\n# Robot movement parameters\nDEFAULT_LINEAR_VELOCITY = 0.2  # m/s\nDEFAULT_ANGULAR_VELOCITY = 0.5  # rad/s\nMAX_LINEAR_VELOCITY = 5  # m/s\nMAX_ANGULAR_VELOCITY = 1.0  # rad/s\n# Security parameters\nMAX_COMMANDS_PER_MINUTE = 30\nHMAC_ALGORITHM = \"sha256\"\nENC_ALGORITHM = \"aes-256-gcm\"",
+        "detail": "src.ssdr.utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_LINEAR_VELOCITY",
+        "kind": 5,
+        "importPath": "src.ssdr.utils.config",
+        "description": "src.ssdr.utils.config",
+        "peekOfCode": "DEFAULT_LINEAR_VELOCITY = 0.2  # m/s\nDEFAULT_ANGULAR_VELOCITY = 0.5  # rad/s\nMAX_LINEAR_VELOCITY = 5  # m/s\nMAX_ANGULAR_VELOCITY = 1.0  # rad/s\n# Security parameters\nMAX_COMMANDS_PER_MINUTE = 30\nHMAC_ALGORITHM = \"sha256\"\nENC_ALGORITHM = \"aes-256-gcm\"\n# Status topic\nSTATUS_TOPIC = '/turtlebot4/status_msg'",
+        "detail": "src.ssdr.utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_ANGULAR_VELOCITY",
+        "kind": 5,
+        "importPath": "src.ssdr.utils.config",
+        "description": "src.ssdr.utils.config",
+        "peekOfCode": "DEFAULT_ANGULAR_VELOCITY = 0.5  # rad/s\nMAX_LINEAR_VELOCITY = 5  # m/s\nMAX_ANGULAR_VELOCITY = 1.0  # rad/s\n# Security parameters\nMAX_COMMANDS_PER_MINUTE = 30\nHMAC_ALGORITHM = \"sha256\"\nENC_ALGORITHM = \"aes-256-gcm\"\n# Status topic\nSTATUS_TOPIC = '/turtlebot4/status_msg'",
+        "detail": "src.ssdr.utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_LINEAR_VELOCITY",
+        "kind": 5,
+        "importPath": "src.ssdr.utils.config",
+        "description": "src.ssdr.utils.config",
+        "peekOfCode": "MAX_LINEAR_VELOCITY = 5  # m/s\nMAX_ANGULAR_VELOCITY = 1.0  # rad/s\n# Security parameters\nMAX_COMMANDS_PER_MINUTE = 30\nHMAC_ALGORITHM = \"sha256\"\nENC_ALGORITHM = \"aes-256-gcm\"\n# Status topic\nSTATUS_TOPIC = '/turtlebot4/status_msg'",
+        "detail": "src.ssdr.utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_ANGULAR_VELOCITY",
+        "kind": 5,
+        "importPath": "src.ssdr.utils.config",
+        "description": "src.ssdr.utils.config",
+        "peekOfCode": "MAX_ANGULAR_VELOCITY = 1.0  # rad/s\n# Security parameters\nMAX_COMMANDS_PER_MINUTE = 30\nHMAC_ALGORITHM = \"sha256\"\nENC_ALGORITHM = \"aes-256-gcm\"\n# Status topic\nSTATUS_TOPIC = '/turtlebot4/status_msg'",
+        "detail": "src.ssdr.utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_COMMANDS_PER_MINUTE",
+        "kind": 5,
+        "importPath": "src.ssdr.utils.config",
+        "description": "src.ssdr.utils.config",
+        "peekOfCode": "MAX_COMMANDS_PER_MINUTE = 30\nHMAC_ALGORITHM = \"sha256\"\nENC_ALGORITHM = \"aes-256-gcm\"\n# Status topic\nSTATUS_TOPIC = '/turtlebot4/status_msg'",
+        "detail": "src.ssdr.utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "HMAC_ALGORITHM",
+        "kind": 5,
+        "importPath": "src.ssdr.utils.config",
+        "description": "src.ssdr.utils.config",
+        "peekOfCode": "HMAC_ALGORITHM = \"sha256\"\nENC_ALGORITHM = \"aes-256-gcm\"\n# Status topic\nSTATUS_TOPIC = '/turtlebot4/status_msg'",
+        "detail": "src.ssdr.utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "ENC_ALGORITHM",
+        "kind": 5,
+        "importPath": "src.ssdr.utils.config",
+        "description": "src.ssdr.utils.config",
+        "peekOfCode": "ENC_ALGORITHM = \"aes-256-gcm\"\n# Status topic\nSTATUS_TOPIC = '/turtlebot4/status_msg'",
+        "detail": "src.ssdr.utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "STATUS_TOPIC",
+        "kind": 5,
+        "importPath": "src.ssdr.utils.config",
+        "description": "src.ssdr.utils.config",
+        "peekOfCode": "STATUS_TOPIC = '/turtlebot4/status_msg'",
+        "detail": "src.ssdr.utils.config",
+        "documentation": {}
+    },
+    {
+        "label": "setup_logger",
+        "kind": 2,
+        "importPath": "src.ssdr.utils.logging",
+        "description": "src.ssdr.utils.logging",
+        "peekOfCode": "def setup_logger(name, log_dir=\"logs\"):\n    \"\"\"\n    Set up a logger with file and console handlers\n    Args:\n        name (str): Name of the logger\n        log_dir (str): Directory to store log files\n    Returns:\n        logging.Logger: Configured logger instance\n    \"\"\"\n    # Create logs directory if it doesn't exist",
+        "detail": "src.ssdr.utils.logging",
+        "documentation": {}
+    },
+    {
+        "label": "log_command",
+        "kind": 2,
+        "importPath": "src.ssdr.utils.logging",
+        "description": "src.ssdr.utils.logging",
+        "peekOfCode": "def log_command(logger, command_type, command_values, result, node_id=\"controller\"):\n    \"\"\"\n    Log a robot command with standardized format\n    Args:\n        logger (logging.Logger): Logger instance\n        command_type (str): Type of command (e.g., \"move\", \"dock\")\n        command_values (dict): Dictionary of command parameters\n        result (bool): Whether the command was successful\n        node_id (str): Identifier for the node issuing the command\n    \"\"\"",
+        "detail": "src.ssdr.utils.logging",
+        "documentation": {}
+    },
+    {
+        "label": "log_security_event",
+        "kind": 2,
+        "importPath": "src.ssdr.utils.logging",
+        "description": "src.ssdr.utils.logging",
+        "peekOfCode": "def log_security_event(logger, event_type, details, severity=\"INFO\"):\n    \"\"\"\n    Log a security-related event\n    Args:\n        logger (logging.Logger): Logger instance\n        event_type (str): Type of security event\n        details (dict): Additional details about the event\n        severity (str): Severity level (INFO, WARNING, ERROR)\n    \"\"\"\n    timestamp = datetime.now().isoformat()",
+        "detail": "src.ssdr.utils.logging",
+        "documentation": {}
+    },
+    {
+        "label": "setup_ros2_environment",
+        "kind": 2,
+        "importPath": "src.ssdr.utils.ros_setup",
+        "description": "src.ssdr.utils.ros_setup",
+        "peekOfCode": "def setup_ros2_environment():\n    # Source the setup file and restart the script with the updated environment\n    ros_setup_file = \"/opt/ros/jazzy/setup.bash\"\n    if \"PYTHONPATH\" not in os.environ: # Check if the environment variable is set\n        if os.path.exists(ros_setup_file):\n            # Source the setup file and capture environment variables\n            command = f\"bash -c 'source {ros_setup_file} && env'\"\n            proc = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True, executable=\"/bin/bash\")\n            output, _ = proc.communicate()\n            # Parse the environment variables",
+        "detail": "src.ssdr.utils.ros_setup",
+        "documentation": {}
+    },
+    {
+        "label": "RobotActionManager",
+        "kind": 6,
+        "importPath": "src.ssdr.actions",
+        "description": "src.ssdr.actions",
+        "peekOfCode": "class RobotActionManager:\n    \"\"\"\n    Generic action manager for Turtlebot4 that handles various robot actions\n    \"\"\"\n    def __init__(self, node, update_button_callback = None):\n        \"\"\"\n        Initialize the action manager\n        Args:\n            node: The ROS2 node that will own the action clients\n        \"\"\"",
+        "detail": "src.ssdr.actions",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "src.ssdr.main",
+        "description": "src.ssdr.main",
+        "peekOfCode": "def main():\n    \"\"\"Main entry point of the application\"\"\"\n    print(f\"Starting {APP_NAME} v{APP_VERSION}.\")\n    # Initialize ROS2\n    rclpy.init()\n    temp_node = rclpy.create_node('temp_node')  \n    rclpy.spin_once(temp_node, timeout_sec=1.0)\n    # Check if the /public_key topic exists\n    public_key_topic_exists = False\n    for topic_name, _ in temp_node.get_topic_names_and_types():",
+        "detail": "src.ssdr.main",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "src.ssdr.main_security",
+        "description": "src.ssdr.main_security",
+        "peekOfCode": "def main(args=None):\n    rclpy.init(args=args)\n    security_node = RobotSecurityNode()\n    try:\n        # Wait for key exchange to complete\n        print(\"Waiting for key exchange to complete...\")\n        while security_node.aes_key is None:\n            rclpy.spin_once(security_node, timeout_sec=0.1)  # Spin the node to process callbacks\n        # Set up AES-GCM with the derived AES key\n        security_node.aesgcm = AESGCM(security_node.aes_key)",
+        "detail": "src.ssdr.main_security",
+        "documentation": {}
+    },
+    {
+        "label": "configure_remote_connection",
+        "kind": 2,
+        "importPath": "src.ssdr.remote",
+        "description": "src.ssdr.remote",
+        "peekOfCode": "def configure_remote_connection():\n    \"\"\"\n    Collect IP addresses for master and host, configure the environment, and display commands for the master PC.\n    \"\"\"\n    setup_ros2_environment()\n    # Create a Tkinter root window (hidden)\n    root = tk.Tk()\n    root.withdraw()  # Hide the root window\n    simulation = messagebox.askyesno(\"Simulation\", \"Is this the simulation PC?\")\n    # Prompt the user for the master and host IP addresses",
+        "detail": "src.ssdr.remote",
+        "documentation": {}
+    },
+    {
+        "label": "RobotSecurityNode",
+        "kind": 6,
+        "importPath": "src.ssdr.robot_security",
+        "description": "src.ssdr.robot_security",
+        "peekOfCode": "class RobotSecurityNode(SecurityNode):\n    def __init__(self, enable_security = True):\n        super().__init__('robot_security_node', enable_security)\n        self._init_publishers()\n        self._init_subscribers()\n        # Use reentrant callback group for actions\n        self.callback_group = ReentrantCallbackGroup()\n        # Initialize docking manager\n        self.action_manager = RobotActionManager(self)\n    def _init_publishers(self):",
+        "detail": "src.ssdr.robot_security",
+        "documentation": {}
+    },
+    {
+        "label": "SecurityNode",
+        "kind": 6,
+        "importPath": "src.ssdr.security_node",
+        "description": "src.ssdr.security_node",
+        "peekOfCode": "class SecurityNode(Node):\n    def __init__(self, name, enable_security = False, is_controller = False):\n        super().__init__(name)\n        self.get_logger().info(\"Initializing Security Node.\")\n        self.enable_security = enable_security\n        self.is_controller = is_controller\n        \"\"\"Security setup\"\"\"\n        if self.enable_security:\n            # Generate ECDH keys\n            self.private_key = ec.generate_private_key(ec.SECP256R1())",
+        "detail": "src.ssdr.security_node",
+        "documentation": {}
+    }
+]

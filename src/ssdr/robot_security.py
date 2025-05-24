@@ -40,18 +40,15 @@ class RobotSecurityNode(SecurityNode):
             self.create_subscription(
                 String, 
                 '/encrypted_msg', 
-                self.decrypt_and_forward_callback, 
+                self.topic_forward_callback, 
                 10
             )
 
-    def decrypt_and_forward_callback(self, msg):
+    def topic_forward_callback(self, encrypted_msg):
         """
         Callback to decrypt incoming messages and forward them to the cmd_vel topic.
         """
-        # Parse the encrypted message (assumes a specific format)
-        encrypted_data, nonce = self.parse_encrypted_message(msg.data)
-
-        decrypted_message = self.decrypt_and_verify(encrypted_data, nonce)
+        decrypted_message = self.decrypt_and_verify(encrypted_msg.data)
         if decrypted_message is None:
             self.get_logger().error("Failed to decrypt message or GMAC verification failed.")
             return

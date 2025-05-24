@@ -1,0 +1,11 @@
+# Goal
+string encrypted_goal  # The encrypted goal message
+string action_name     # The name of the action (e.g., "Dock", "Undock")
+
+---
+# Result
+string encrypted_result  # The encrypted result message
+
+---
+# Feedback
+string feedback_message  # Optional feedback message (encrypted)

@@ -6,6 +6,7 @@ find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/KeyExchange.srv"
+  "action/EncryptedAction.action"
 )
 
 ament_package()

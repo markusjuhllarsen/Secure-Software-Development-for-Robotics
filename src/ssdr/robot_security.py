@@ -3,11 +3,10 @@ from std_msgs.msg import String
 from geometry_msgs.msg import Twist
 from rclpy.callback_groups import ReentrantCallbackGroup
 
-from actions import RobotActionManager
-
 import base64
 
 from security_node import SecurityNode
+from actions import RobotActionManager
 
 class RobotSecurityNode(SecurityNode):
     def __init__(self, enable_security = True):
@@ -37,16 +36,21 @@ class RobotSecurityNode(SecurityNode):
         ))
     
     def _init_subscribers(self):
-            self.create_subscription(
-                String, 
-                '/encrypted_msg', 
-                self.topic_forward_callback, 
-                10
-            )
+        self.create_subscription(
+            String, 
+            '/encrypted_msg', 
+            self.topic_forward_callback, 
+            10
+        )
 
-    def topic_forward_callback(self, encrypted_msg):
+    def topic_forward_callback(
+            self, 
+            encrypted_msg: String
+            ) -> None:
         """
-        Callback to decrypt incoming messages and forward them to the cmd_vel topic.
+        Callback to decrypt incoming messages and forward them to the cmd_vel topics.
+        args:
+            encrypted_msg: The incoming encrypted message containing the nonce and encrypted data.
         """
         decrypted_message = self.decrypt_and_verify(encrypted_msg.data)
         if decrypted_message is None:
@@ -65,23 +69,15 @@ class RobotSecurityNode(SecurityNode):
             except Exception as e:
                 self.get_logger().error(f'Error sending to {publisher.topic_name} {str(e)}')
 
-    def parse_encrypted_message(self, data):
-        """
-        Parse the incoming encrypted message to extract the encrypted data and nonce.
-        Assumes the message is formatted as 'nonce|encrypted_data' (base64-encoded).
-        """
-        try:
-            nonce_b64, encrypted_data_b64 = data.split('|')
-            nonce = base64.b64decode(nonce_b64)
-            encrypted_data = base64.b64decode(encrypted_data_b64)
-            return encrypted_data, nonce
-        except Exception as e:
-            raise ValueError(f"Invalid message format: {e}")
-
-    def parse_twist_command(self, decrypted_message):
+    def parse_twist_command(
+            self, 
+            decrypted_message: str
+            ) -> Twist:
         """
         Parse the decrypted message into a Twist command.
-        Assumes the message is formatted as 'linear_x,linear_y,linear_z,angular_x,angular_y,angular_z'.
+        Assumes the message is formatted as 'linear_x,angular_z'.
+        args:
+            decrypted_message: The decrypted message containing the Twist command.
         """
         try:
             values = [float(v) for v in decrypted_message.split(',')]

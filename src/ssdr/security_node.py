@@ -1,19 +1,18 @@
 from rclpy.node import Node
 from ssdr_interfaces.srv import KeyExchange
+from rclpy.task import Future
 
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 from cryptography.hazmat.primitives.hashes import SHA256
 import secrets
-import hashlib
 import base64
+from threading import Condition
 
 class SecurityNode(Node):
     def __init__(self, name, enable_security = False, is_controller = False):
         super().__init__(name)
-        self.get_logger().info("Initializing Security Node.")
-
         self.enable_security = enable_security
         self.is_controller = is_controller
 
@@ -28,9 +27,9 @@ class SecurityNode(Node):
             )
 
             self.aes_key = None
+            self.key_exchange_condition = Condition()
             self.aesgcm = None
 
-            self.node_id = hashlib.sha256(self.public_key_bytes).hexdigest()
 
             if self.is_controller:
                 self.public_key_client = self.create_client(KeyExchange, 'security_node/exchange_public_key')
@@ -39,11 +38,9 @@ class SecurityNode(Node):
                 self.create_service(
                     KeyExchange, '/security_node/exchange_public_key', self.exchange_public_key_callback
                 )
-        else:
-            self.get_logger().info("Security is disabled. Running without encryption.")
 
     def initiate_key_exchange(self):
-        """Initiate the key exchange process with the security node."""
+        """Initiate the key exchange process with the security node from the controller side."""
         if not self.public_key_client.wait_for_service(timeout_sec=1.0):
             self.get_logger().warn("Public key exchange service not available.")
             return
@@ -54,20 +51,37 @@ class SecurityNode(Node):
         future = self.public_key_client.call_async(request)
         future.add_done_callback(self.handle_key_exchange_response)
 
-    def handle_key_exchange_response(self, future):
-        """Handle the response from the key exchange service. (Client-side)"""
+    def handle_key_exchange_response(
+            self, 
+            future: Future
+            ) -> None:
+        """Handle the response from the key exchange service. (Client-side)
+        args:
+            future: The future object containing the response.
+        """
         try:
             response = future.result()
             peer_public_key_bytes = response.responder_public_key.encode('utf-8')  # Convert string back to bytes
             self.aes_key = self.exchange_keys(peer_public_key_bytes)
-            self.get_logger().info("Shared AES key derived successfully.")
-            # Stop the timer after the key exchange is complete
+            print(type(self.aes_key))
+            with self.key_exchange_condition:
+                self.key_exchange_condition.notify_all()
             self.destroy_timer(self.key_exchange_timer)
         except Exception as e:
             self.get_logger().error(f"Failed to complete key exchange: {e}")
 
-    def exchange_public_key_callback(self, request, response):
-        """Handle incoming public key exchange requests. (Server-side)"""
+    def exchange_public_key_callback(
+            self, 
+            request: KeyExchange.Request, 
+            response: KeyExchange.Response
+            ) -> KeyExchange.Response:
+        """Handle incoming public key exchange requests. (Server-side)
+        args:
+            request: The incoming request containing the peer's public key.
+            response: The response object to fill with the responder's public key.
+        returns:
+            The response containing the responder's public key.
+        """
         try:
             peer_public_key_bytes = request.requester_public_key.encode('utf-8')  # Convert string back to bytes
             self.aes_key = self.exchange_keys(peer_public_key_bytes)
@@ -80,53 +94,55 @@ class SecurityNode(Node):
             response.responder_public_key = ""
         return response
 
-    def encrypt_and_gmac(self, message, timestamp):
+    def encrypt_and_gmac(
+            self, 
+            message: str, 
+            timestamp: str
+            ) -> str:
         """
         Encrypt a message and generate GMAC to ensure confidentiality and integrity
-        Args:
-            message (str): The command message to generate the MAC for.
-
-        Returns:
-            str: The GMAC as a hexadecimal string.
+        args:
+            message: The command message to generate the MAC for.
+            timestamp: The timestamp to include in the MAC.
+        returns:
+            The GMAC as a hexadecimal string.
         """
-        # DO WE NEED TIMESTAMP IF USING NONCE??????????????????
-        #
-        #
-        #
         data = f"{message}:{timestamp}".encode()
         nonce = secrets.token_bytes(12)
         encrypted_data = self.aesgcm.encrypt(nonce, data, None)
         combined = nonce + encrypted_data
         return base64.b64encode(combined).decode('utf-8')
         
-    def decrypt_and_verify(self, encrypted_message):
+    def decrypt_and_verify(
+            self, 
+            encrypted_message: str
+            ) -> str:
         """
         Decrypt the message and verify GMAC to ensure confidentiality and integrity
-        Args:
-            encrypted_data (bytes): The encrypted command message.
-            nonce (bytes): The nonce used for encryption.
-
-        Returns:
-            str: The decrypted message.
+        args:
+            encrypted_data: The encrypted command message.
+        returns:
+            The decrypted message.
         """
         try:
-            # Decrypt the data and verify GMAC
             # The GMAC is verified during decryption, so if it fails, an exception will be raised
             combined = base64.b64decode(encrypted_message)
-            nonce, encrypted_data = combined[:12], combined[12:]
+            nonce, encrypted_data = combined[:12], combined[12:] # 12 byte nonce
             decrypted_data = self.aesgcm.decrypt(nonce, encrypted_data, None).decode()
-            message, _ = decrypted_data.split(':', 1)  # Split by the first colon
+            message, _ = decrypted_data.split(':', 1)  # Split by the first colon, as remaining part is timestamp
             return message
         except Exception as e:
             self.get_logger().error(f"Decryption failed: {e}")
             return None
         
-    def exchange_keys(self, peer_public_key_bytes):
+    def exchange_keys(
+            self, 
+            peer_public_key_bytes: bytes
+            ) -> bytes:
         """
         Perform ECDH key exchange to derive a shared AES key.
-        Args:
-            private_key (PrivateKey): The private key of the local node.
-            peer_public_key_bytes (bytes): The public key of the peer in PEM format.
+        args:
+            peer_public_key_bytes: The public key of the peer in PEM format.
         """
         try:
             # Deserialize the peer's public key
@@ -147,22 +163,17 @@ class SecurityNode(Node):
         except Exception as e:
             return None
     
-    def publish_status(self, status_text):
+    def publish_status(
+            self, 
+            status_text: str
+            ) -> None:
         """
         Publish status message and update the GUI
+        args:
+            status_text: The status message to log and update in the GUI.
         """
         # Log the status
-        self.get_logger().info(status_text)
-        
-        # Try to publish to the topic if the publisher exists
-        #if hasattr(self, 'status_publisher'):
-        #    try:
-        #        msg = String()
-        #        msg.data = status_text
-        #        self.status_publisher.publish(msg)
-        #    except Exception as e:
-        #        self.get_logger().error(f"Error publishing status: {str(e)}")
-        
+        self.get_logger().info(status_text)        
         # Update the GUI status window
         if hasattr(self, 'gui'):
             self.gui.update_status(status_text)

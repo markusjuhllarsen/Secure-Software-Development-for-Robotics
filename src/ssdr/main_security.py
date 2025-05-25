@@ -9,7 +9,7 @@ def main(args=None):
 
     try:
         # Wait for key exchange to complete
-        print("Waiting for key exchange to complete...")
+        security_node.get_logger().info("Waiting for key exchange to complete...")
         while security_node.aes_key is None:
             rclpy.spin_once(security_node, timeout_sec=0.1)  # Spin the node to process callbacks
 

@@ -48,7 +48,8 @@ class Sanitizer:
         param_type: str, 
         min_value: Any, 
         max_value: Any, 
-        name: str
+        name: str,
+        allowed_values: list[int] = None
         ) -> Any:
         """
         Sanitize an action parameter based on its expected type
@@ -81,6 +82,12 @@ class Sanitizer:
                     return True
                 return False
             raise ValueError(f"{name} must be a boolean value (True/False, 1/0).")
+        elif param_type == 'enum':
+            if allowed_values is None:
+                raise ValueError(f"{name} must be one of the allowed values: {allowed_values}.")
+            if value not in allowed_values:
+                raise ValueError(f"{name} must be one of the allowed values: {allowed_values}.")
+            return value
         else:
             raise ValueError(f"Unsupported parameter type: {param_type}. Expected 'float', 'int', or 'bool'.")
         

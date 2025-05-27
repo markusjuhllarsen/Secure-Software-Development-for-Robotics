@@ -237,30 +237,30 @@ class ButtonControlGUI:
         # Define parameters for each action with their types and limits
         action_params = {
             "DriveArc": [
-                {"name": "Translate Direction (1/-1)", "default": "1", "type": "int", "min": -1, "max": 1},
-                {"name": "Angle (radians)", "default": "2.57", "type": "float", "min": -6.28, "max": 6.28},
-                {"name": "Radius (meters)", "default": "1.0", "type": "float", "min": 0.0, "max": 5.0},
-                {"name": "Max Translation Speed (m/s)", "default": "0.3", "type": "float", "min": 0.0, "max": MAX_LINEAR_VELOCITY}
+                {"name": "Translate Direction (1/-1)", "default": "1", "type": "enum", 'enum': [-1,1]},
+                {"name": "Angle (radians)", "default": "2.57", "type": "float", "min": None, "max": None},
+                {"name": "Radius (meters)", "default": "1.0", "type": "float", "min": None, "max": None},
+                {"name": "Max Translation Speed (m/s)", "default": DEFAULT_LINEAR_VELOCITY, "type": "float", "min": 0.0, "max": MAX_LINEAR_VELOCITY}
             ],
             "DriveDistance": [
-                {"name": "Distance (meters)", "default": "1.0", "type": "float", "min": -10.0, "max": 10.0},
-                {"name": "Max Translation Speed (m/s)", "default": "0.3", "type": "float", "min": 0.0, "max": MAX_LINEAR_VELOCITY}
+                {"name": "Distance (meters)", "default": "1.0", "type": "float", "min": None, "max": None},
+                {"name": "Max Translation Speed (m/s)", "default": DEFAULT_LINEAR_VELOCITY, "type": "float", "min": 0.0, "max": MAX_LINEAR_VELOCITY}
             ],
             "NavigateToPosition": [
-                {"name": "X (meters)", "default": "0.0", "type": "float", "min": -50.0, "max": 50.0},
-                {"name": "Y (meters)", "default": "0.0", "type": "float", "min": -50.0, "max": 50.0},
-                {"name": "Theta (radians)", "default": "0.0", "type": "float", "min": -6.28, "max": 6.28},
+                {"name": "X (meters)", "default": "0.0", "type": "float", "min": None, "max": None},
+                {"name": "Y (meters)", "default": "0.0", "type": "float", "min": None, "max": None},
+                {"name": "Theta (radians)", "default": "0.0", "type": "float", "min": None, "max": None},
                 {"name": "Achieve Goal Heading (1/0)", "default": "1", "type": "bool"},
-                {"name": "Max Translation Speed (m/s)", "default": "0.3", "type": "float", "min": 0.0, "max": MAX_LINEAR_VELOCITY},
-                {"name": "Max Rotation Speed (rad/s)", "default": "1.9", "type": "float", "min": 0.0, "max": MAX_ANGULAR_VELOCITY}
+                {"name": "Max Translation Speed (m/s)", "default": DEFAULT_LINEAR_VELOCITY, "type": "float", "min": 0.0, "max": MAX_LINEAR_VELOCITY},
+                {"name": "Max Rotation Speed (rad/s)", "default": DEFAULT_ANGULAR_VELOCITY, "type": "float", "min": 0.0, "max": MAX_ANGULAR_VELOCITY}
             ],
             "RotateAngle": [
-                {"name": "Angle (radians)", "default": "1.57", "type": "float", "min": -6.28, "max": 6.28},
-                {"name": "Max Rotation Speed (rad/s)", "default": "1.9", "type": "float", "min": 0.0, "max": MAX_ANGULAR_VELOCITY}
+                {"name": "Angle (radians)", "default": "1.57", "type": "float", "min": None, "max": None},
+                {"name": "Max Rotation Speed (rad/s)", "default": DEFAULT_ANGULAR_VELOCITY, "type": "float", "min": 0.0, "max": MAX_ANGULAR_VELOCITY}
             ],
             "WallFollow": [
-                {"name": "Follow Side (1/-1)", "default": "1", "type": "int", "min": -1, "max": 1},
-                {"name": "Max Runtime (seconds)", "default": "60", "type": "int", "min": 1, "max": 300}
+                {"name": "Follow Side (1/-1)", "default": "1", "type": "enum", "enum": [-1,1]},
+                {"name": "Max Runtime (seconds)", "default": "60", "type": "int", "min": None, "max": None}
             ]
         }
 
@@ -290,13 +290,18 @@ class ButtonControlGUI:
                     value = entry.get()
                     param_name = param_info["name"]
                     param_type = param_info["type"]
-                    min_val = param_info.get("min")
-                    max_val = param_info.get("max")
-                    
-                    # Sanitize the parameter
-                    sanitized_value = Sanitizer.sanitize_action_param(
-                        value, param_type, min_val, max_val, param_name
+                    if param_type == "enum":
+                        allowed_values = param_info["enum"]
+                        sanitized_value = Sanitizer.sanitize_action_param(
+                        value, param_type, None, None, param_name, allowed_values
                     )
+                    else:
+                        min_val = param_info.get("min")
+                        max_val = param_info.get("max")
+                        # Sanitize the parameter
+                        sanitized_value = Sanitizer.sanitize_action_param(
+                            value, param_type, min_val, max_val, param_name
+                        )
                     sanitized_params.append(sanitized_value)
                 
                 # After validation, call the appropriate action

@@ -11,8 +11,8 @@ APP_VERSION = "1.0.0"
 # Robot movement parameters
 DEFAULT_LINEAR_VELOCITY = 0.2  # m/s
 DEFAULT_ANGULAR_VELOCITY = 0.5  # rad/s
-MAX_LINEAR_VELOCITY = 5  # m/s
-MAX_ANGULAR_VELOCITY = 1.0  # rad/s
+MAX_LINEAR_VELOCITY = 1000  # m/s
+MAX_ANGULAR_VELOCITY = 1000  # rad/s
 
 # Security parameters
 MAX_COMMANDS_PER_MINUTE = 30

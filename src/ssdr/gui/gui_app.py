@@ -13,15 +13,17 @@ from controller.sanitizer_manager import Sanitizer
 class ButtonControlGUI:
     """Main GUI class for the Turtlebot4 controller"""
     
-    def __init__(self, controller_node):
+    def __init__(
+            self, 
+            controller_node: rclpy.node
+            ) -> None:
         """
         Initialize the GUI
-        
-        Args:
+        args:
             controller_node: The ROS2 node that controls the robot
         """
         self.controller = controller_node
-        self.running_action = False
+
         # Create main window
         self.root = tk.Tk()
         self.root.title("Secure Turtlebot4 Controller")
@@ -42,7 +44,9 @@ class ButtonControlGUI:
         self.spin_thread.daemon = True
         self.spin_thread.start()
     
-    def create_widgets(self):
+    def create_widgets(
+            self
+            ) -> None:
         """Create and configure all GUI widgets"""
         # Main frame
         main_frame = ttk.Frame(self.root, padding="20")
@@ -73,14 +77,8 @@ class ButtonControlGUI:
         # Create docking controls
         self._create_action_controls(main_frame)
         
-        # Create custom velocity controls
-        self._create_velocity_controls(main_frame)
-        
         # Create status display
         self._create_status_display(main_frame)
-        
-        # Add keyboard shortcuts
-        self._setup_keyboard_shortcuts()
         
         # Make all the frames resize properly with window resizing
         for i in range(2):
@@ -88,42 +86,67 @@ class ButtonControlGUI:
         for i in range(3):
             main_frame.rowconfigure(i, weight=1)
     
-    def _create_movement_controls(self, parent):
-        """Create the movement control buttons"""
+    def _create_movement_controls(
+            self, 
+            parent: ttk.Frame
+            ) -> None:
+        """
+        Create the movement control buttons
+        args:
+            parent: The parent frame to place the controls in.
+        """
         control_frame = ttk.LabelFrame(parent, text="Movement Controls", padding="15")
         control_frame.grid(row=1, column=0, padx=15, pady=15, sticky="nsew")
         
+        self.movement_buttons = {}
+
         # Movement buttons - increased size and padding
         btn_forward = ttk.Button(control_frame, text="Forward", 
                                 command=lambda: self.controller.start_repeating_command(DEFAULT_LINEAR_VELOCITY, 0.0))
         btn_forward.grid(row=0, column=1, padx=10, pady=10, sticky="ew")
         
+        self.movement_buttons['forward'] = btn_forward
+
         btn_left = ttk.Button(control_frame, text="Turn Left", 
                              command=lambda: self.controller.start_repeating_command(0.0, DEFAULT_ANGULAR_VELOCITY))
         btn_left.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
         
+        self.movement_buttons['left'] = btn_left
+
         btn_stop = ttk.Button(control_frame, text="STOP", 
                              command=lambda: self.controller.stop_repeating_command(),
                              style='Stop.TButton')
         self.style.configure('Stop.TButton', background='red', foreground='white', font=('Arial', 12, 'bold'))
         btn_stop.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
         
+        self.movement_buttons['stop'] = btn_stop
+
         btn_right = ttk.Button(control_frame, text="Turn Right", 
                               command=lambda: self.controller.start_repeating_command(0.0, -DEFAULT_ANGULAR_VELOCITY))
         btn_right.grid(row=1, column=2, padx=10, pady=10, sticky="ew")
         
+        self.movement_buttons['right'] = btn_right
+
         btn_backward = ttk.Button(control_frame, text="Backward", 
                                  command=lambda: self.controller.start_repeating_command(-DEFAULT_LINEAR_VELOCITY, 0.0))
         btn_backward.grid(row=2, column=1, padx=10, pady=10, sticky="ew")
         
+        self.movement_buttons['backward'] = btn_backward
         # Configure the grid to expand
         for i in range(3):
             control_frame.columnconfigure(i, weight=1)
         for i in range(3):
             control_frame.rowconfigure(i, weight=1)
 
-    def _create_action_controls(self, parent):
-        """Create the docking control buttons"""
+    def _create_action_controls(
+            self, 
+            parent: ttk.Frame
+            ) -> None:
+        """
+        Create the docking control buttons
+        args:
+            parent: The parent frame to place the controls in.
+        """
         dock_frame = ttk.LabelFrame(parent, text="Actions", padding="15")
         dock_frame.grid(row=1, column=1, padx=15, pady=15, sticky="nsew")
         
@@ -142,37 +165,66 @@ class ButtonControlGUI:
         for i in range(len(self.action_buttons)):
             dock_frame.rowconfigure(i, weight=1)
     
-    def update_button(self, action_name, state):
+    def update_button(
+            self, 
+            action_name: str, 
+            state: str
+            ) -> None:
         """
-        Update the button state in the GUI.
-        Args:
+        Update the button state in the GUI and make other buttons non-responsive.
+        args:
             action_name: The name of the action.
             state: The new state of the button ("Action" or "Cancel").
         """
         button = self.action_buttons[action_name]
         if state == "Cancel":
-            self.running_action = True
             button.config(text=f"Cancel {action_name}", style='Cancel.TButton')
+            # Disable all buttons
+            for other_action, other_button in self.action_buttons.items():
+                if other_action != action_name:
+                    other_button.config(state=tk.DISABLED)
+            for movement_button in self.movement_buttons.values():
+                movement_button.config(state=tk.DISABLED)
         else:
-            self.running_action = False
             button.config(text=action_name, style='TButton')
+            # Re-enable all buttons
+            for button in self.action_buttons.values():
+                button.config(state=tk.NORMAL)
+            for movement_button in self.movement_buttons.values():
+                movement_button.config(state=tk.NORMAL)
 
-    def _toggle_action(self, action):
+    def _toggle_action(
+            self, 
+            action: str
+            ) -> None:
+        """
+        Toggle the action button state and execute the action.
+        args:
+            action: The name of the action to toggle.
+        """
         if action in self.controller.action_manager.active_goals:
             # Cancel action and change button
             self.controller.action_manager.cancel_action(action)
         else:
             # Actions without parameters
             if action in ["Dock", "Undock"]:
+                if not Sanitizer.check_rate_limit('action'):
+                    messagebox.showerror("Rate Limit Exceeded", 
+                                        "Please wait before sending another action command.")
+                    return
                 getattr(self.controller.action_manager, f"{action.lower()}_robot")()
             elif action in ["DriveArc", "DriveDistance", "NavigateToPosition", "RotateAngle", "WallFollow"]:
                 # Actions with parameters
                 self._show_parameter_popup(action)
-    def _show_parameter_popup(self, action):
+
+    def _show_parameter_popup(
+            self, 
+            action: str
+            ) -> None:
         """
         Show a popup window to enter parameters for the selected action.
-        Args:
-            action (str): The name of the action.
+        args:
+            action: The name of the action.
         """
         popup = tk.Toplevel(self.root)
         popup.title(f"Enter Parameters for {action}")
@@ -294,97 +346,40 @@ class ButtonControlGUI:
         for i in range(len(action_params[action]) + 1):
             popup.rowconfigure(i, weight=1)
         popup.columnconfigure(1, weight=1)
-        
     
-    def _create_velocity_controls(self, parent):
-        """Create controls for custom velocity input"""
-        velocity_frame = ttk.LabelFrame(parent, text="Custom Velocity", padding="15")
-        velocity_frame.grid(row=2, column=0, padx=15, pady=15, sticky="nsew")
-        
-        ttk.Label(velocity_frame, text="Linear (m/s):").grid(row=0, column=0, padx=10, pady=10, sticky="w")
-        self.linear_entry = ttk.Entry(velocity_frame, width=12)  # Wider entry field
-        self.linear_entry.grid(row=0, column=1, padx=10, pady=10)
-        self.linear_entry.insert(0, "0.0")
-        
-        ttk.Label(velocity_frame, text="Angular (rad/s):").grid(row=1, column=0, padx=10, pady=10, sticky="w")
-        self.angular_entry = ttk.Entry(velocity_frame, width=12)  # Wider entry field
-        self.angular_entry.grid(row=1, column=1, padx=10, pady=10)
-        self.angular_entry.insert(0, "0.0")
-        
-        btn_send = ttk.Button(velocity_frame, text="Send Command", 
-                             command=self.send_custom_velocity)
-        btn_send.grid(row=2, column=0, columnspan=2, padx=10, pady=10, sticky="ew")
-        
-        # Configure the grid to expand
-        for i in range(2):
-            velocity_frame.columnconfigure(i, weight=1)
-        for i in range(3):
-            velocity_frame.rowconfigure(i, weight=1)
-    
-    def _create_status_display(self, parent):
-        """Create the status display area"""
+    def _create_status_display(
+            self, 
+            parent: ttk.Frame
+            ) -> None:
+        """
+        Create the status display area
+        args:
+            parent: The parent frame to place the status display in.
+        """
         status_frame = ttk.LabelFrame(parent, text="Status", padding="15")
-        status_frame.grid(row=2, column=1, columnspan=1, padx=15, pady=15, sticky="nsew")
+        status_frame.grid(row=2, column=0, columnspan=2, padx=15, pady=15, sticky="nsew")
         
         self.status_text = tk.Text(status_frame, height=8, width=35, wrap=tk.WORD)  # Increased height and width
         self.status_text.pack(fill=tk.BOTH, expand=True)
-        self.status_text.config(state=tk.DISABLED)
+        self.status_text.config(state=tk.DISABLED)            
     
-    def _setup_keyboard_shortcuts(self):
-        """Set up keyboard shortcuts for robot control"""
-        def handle_move_command(linear, angular):
-            try:
-                # Apply rate limiting via the sanitizer
-                linear_x = Sanitizer.sanitize_velocity(linear, name="Keyboard linear velocity")
-                angular_z = Sanitizer.sanitize_velocity(angular, name="Keyboard angular velocity")
-                self.controller.move_robot(linear_x, angular_z)
-            except ValueError as e:
-                self.update_status(f"Command rejected: {str(e)}")
-                messagebox.showerror("Invalid Input", f"Error: {e}")
-                
-        def handle_action_command(action_func):
-            try:
-                if Sanitizer.check_rate_limit('action'):
-                    action_func()
-                else:
-                    self.update_status("Action rate limit exceeded. Please wait.")
-            except ValueError as e:
-                self.update_status(f"Command rejected: {str(e)}")
-                
-        # Bind keyboard events with rate limiting
-        self.root.bind('<Up>', lambda event: handle_move_command(DEFAULT_LINEAR_VELOCITY, 0.0))
-        self.root.bind('<Down>', lambda event: handle_move_command(-DEFAULT_LINEAR_VELOCITY, 0.0))
-        self.root.bind('<Left>', lambda event: handle_move_command(0.0, DEFAULT_ANGULAR_VELOCITY))
-        self.root.bind('<Right>', lambda event: handle_move_command(0.0, -DEFAULT_ANGULAR_VELOCITY))
-        self.root.bind('<space>', lambda event: handle_move_command(0.0, 0.0))
-        self.root.bind('d', lambda event: handle_action_command(self.controller.action_manager.dock_robot))
-        self.root.bind('u', lambda event: handle_action_command(self.controller.action_manager.undock_robot))
-        
-    def send_custom_velocity(self):
-        """Handle custom velocity input and send to robot"""
-        linear = float()
-        angular = float()
-        
-        try:
-            # Using more descriptive names for potential error messages
-            linear_x = Sanitizer.sanitize_velocity(self.linear_entry.get(), min_value=-1.0, max_value=1.0, name="Linear velocity input")
-            angular_z = Sanitizer.sanitize_velocity(self.angular_entry.get(), min_value=-1.0, max_value=1.0, name="Angular velocity input")
-        except ValueError as e:
-            error_message = f"Invalid input: {str(e)}"
-            messagebox.showerror("Invalid Input", error_message)
-            return False
-
-        self.controller.move_robot(linear_x, angular_z)
-            
-    
-    def update_status(self, status_msg):
-        """Update the status display with a new message"""
+    def update_status(
+            self, 
+            status_msg: str
+            ) -> None:
+        """
+        Update the status display with a new message
+        args:
+            status_msg: The message to display in the status area.
+        """
         self.status_text.config(state=tk.NORMAL)
         self.status_text.insert(tk.END, f"[{datetime.now().strftime('%H:%M:%S')}] {status_msg}\n")
         self.status_text.see(tk.END)
         self.status_text.config(state=tk.DISABLED)
     
-    def ros_spin(self):
+    def ros_spin(
+            self
+            ) -> None:
         """Spin the ROS2 node in a separate thread"""
         while True:
             try:
@@ -394,6 +389,8 @@ class ButtonControlGUI:
                 print(f"Error in ROS2 spin: {e}")
                 time.sleep(0.1)
     
-    def run(self):
+    def run(
+            self
+            ) -> None:
         """Start the GUI main loop"""
         self.root.mainloop()

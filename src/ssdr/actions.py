@@ -241,8 +241,13 @@ class RobotActionManager:
         elif goal_handle.status == 5:
             self.node.publish_status(f"{action_name} action canceled.")     
         else:
-            self.node.publish_status(f"{action_name} action completed.")
-        
+            if not self.node.enable_security:
+                self.node.publish_status(f"{action_name} action completed with result: {goal_handle.result}")
+            else:
+                result = goal_handle.result.encrypted_result
+                decrypted_result  = self.node.decrypt_and_verify(result)
+                self.node.publish_status(f"{action_name} action completed with result: {decrypted_result}")
+
         del self.active_goals[action_name]
         
         if self.update_button_callback:
@@ -284,8 +289,10 @@ class RobotActionManager:
 
         if len(cancel_response.goals_canceling) > 0:
             self.node.get_logger().info(f"{action_name} action successfully canceled.")
+            return CancelResponse.ACCEPT
         else:
             self.node.get_logger().info(f"No active goals to cancel for {action_name}.")
+            return CancelResponse.REJECT
 
     def dock_robot(self):
         """Send dock action to robot."""
@@ -299,10 +306,13 @@ class RobotActionManager:
         self._send_goal("Dock", goal_msg)
     
     def parse_dock_goal(
-            self
+            self,
+            goal_str: str
             ) -> Dock.Goal:
         """
         Parse the goal string for the Dock action.
+        args:
+            goal_str: To make it work with parse_goal()
         returns:
             The constructed goal message.
         """
@@ -320,12 +330,15 @@ class RobotActionManager:
         self._send_goal("Undock", goal_msg)
     
     def parse_undock_goal(
-            self
+            self,
+            goal_str: str
             ) -> Undock.Goal:
         """
         Parse the goal string for the Undock action.
+        args:
+            goal_str: To make it work with parse_goal()
         returns:
-            Undock.Goal: The constructed goal message.
+            The constructed goal message.
         """
         return Undock.Goal()  # Undock action does not require additional parameters
 
@@ -478,7 +491,7 @@ class RobotActionManager:
         goal_msg.goal_pose.pose.position.y = float(y)
         goal_msg.goal_pose.pose.orientation.z = math.sin(float(theta) / 2.0)
         goal_msg.goal_pose.pose.orientation.w = math.cos(float(theta) / 2.0)
-        goal_msg.achieve_goal_heading = bool(int(achieve_goal_heading))
+        goal_msg.achieve_goal_heading = bool(achieve_goal_heading)
         goal_msg.max_translation_speed = float(max_translation_speed)
         goal_msg.max_rotation_speed = float(max_rotation_speed)
         return goal_msg
@@ -584,7 +597,7 @@ class RobotActionManager:
             "DriveDistance": self.parse_drive_distance_goal,
             "DriveArc": self.parse_drive_arc_goal,
             "RotateAngle": self.parse_rotate_angle_goal,
-            "NavigateToPose": self.parse_navigate_to_position_goal,
+            "NavigateToPosition": self.parse_navigate_to_position_goal,
             "WallFollow": self.parse_wall_follow_goal,
         }
 

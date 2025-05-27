@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
 
 from datetime import datetime
-import base64
+import tkinter as tk
 
 from geometry_msgs.msg import Twist
 from std_msgs.msg import String
 from rclpy.callback_groups import ReentrantCallbackGroup
-from controller.sanitizer_manager import Sanitizer
-
 
 from actions import RobotActionManager
 from security_node import SecurityNode
+from controller.sanitizer_manager import Sanitizer
 
 class SecureTurtlebot4Controller(SecurityNode):
     """Main controller class for the Turtlebot4 with security features"""
     
-    def __init__(self, enable_security = False):
+    def __init__(
+            self, 
+            enable_security: bool = False
+            ) -> None:
         super().__init__('secure_turtlebot4_controller', enable_security, is_controller = True)
         
         # Reference to GUI (will be set in main.py)
@@ -30,17 +32,16 @@ class SecureTurtlebot4Controller(SecurityNode):
         # Initialize non-encrypted publishers
         self._init_publishers()
 
-        # Initialize docking manager
+        # Initialize action manager
         self.action_manager = RobotActionManager(self)
         
-        self.get_logger().info('Secure Turtlebot4 Controller initialized.')
-    
-    def _init_publishers(self):
+    def _init_publishers(
+            self
+            ) -> None:
         """Initialize all publishers"""
         self.publisher_list = []
 
         if not self.enable_security:
-
             # Command publisher for movement - using multiple topics for reliability
             self.publisher_list.append(self.create_publisher(
                 Twist,
@@ -54,14 +55,6 @@ class SecureTurtlebot4Controller(SecurityNode):
                 '/diffdrive_controller/cmd_vel',
                 10
             ))
-            
-            # Status publisher/subscriber for monitoring
-            self.status_publisher = self.create_publisher(
-                String,
-                '/turtlebot4/status_msg',  # Status topic
-                10
-            )
-        
         else:
             # If security is enabled, use the security node's publisher
             self.publisher_list.append(self.create_publisher(
@@ -69,29 +62,23 @@ class SecureTurtlebot4Controller(SecurityNode):
                 '/encrypted_msg',  # Encrypted message topic
                 10
             ))
-    
-        #self.status_subscriber = self.create_subscription(
-        #    String,
-        #    '/turtlebot4/status_msg', 
-        #    self.status_callback,
-        #    10
-        #)
-    
-    def status_callback(self, msg):
-        """
-        Callback for status messages from the robot
-        """
-        # Log status messages from the robot
-        self.get_logger().info(msg.data)
-        
-        # Update GUI with the status messagestart
-        if hasattr(self, 'gui') and self.gui:
-            self.gui.update_status("msg.data")
 
-    def start_repeating_command(self, linear_x, angular_z):
+    def start_repeating_command(
+            self, 
+            linear_x: float, 
+            angular_z: float
+            ) -> None:
         """
         Start repeating the movement command at a fixed interval.
+        All other buttons (except stop) are disabled while this is active.
+        args:
+            linear_x: Linear velocity in the x direction.
+            angular_z: Angular velocity around the z axis.
         """
+        if not Sanitizer.check_rate_limit('movement'):  # Check rate limit before proceeding
+            self.publish_status("Rate limit exceeded. Please wait before sending another command.")
+            return
+
         self.current_command = (linear_x, angular_z)
         if self.movement_timer is None:
             self.movement_timer = self.create_timer(0.7, self._repeat_command)  # Publish every 0.1 seconds
@@ -106,10 +93,15 @@ class SecureTurtlebot4Controller(SecurityNode):
         
         self.publish_status(status)
 
-
-    def stop_repeating_command(self):
+        for button in self.gui.action_buttons.values():
+            button.config(state=tk.DISABLED)
+        
+    def stop_repeating_command(
+            self
+            ) -> None:
         """
         Stop repeating the movement command.
+        Enable all buttons again.
         """
         if self.movement_timer is not None:
             self.movement_timer.cancel()
@@ -117,7 +109,12 @@ class SecureTurtlebot4Controller(SecurityNode):
             self.publish_status("Stopped")
             self.move_robot(0, 0) # Stop the robot
 
-    def _repeat_command(self):
+            for button in self.gui.action_buttons.values():
+                button.config(state=tk.NORMAL)
+
+    def _repeat_command(
+            self
+            ) -> None:
         """
         Publish the current movement command repeatedly.
         """
@@ -125,25 +122,28 @@ class SecureTurtlebot4Controller(SecurityNode):
             linear_x, angular_z = self.current_command
             self.move_robot(linear_x, angular_z)
 
-    def move_robot(self, linear_x, angular_z):
+    def move_robot(
+            self, 
+            linear_x: float, 
+            angular_z: float
+            ) -> None:
         """
         Send movement command with specified linear and angular velocities
         Publishing to all cmd_vel topics to ensure it works
+        args:
+            linear_x: Linear velocity in the x direction.
+            angular_z: Angular velocity around the z axis.
         """
-       
-           # If sanitization returns None or False, do not proceed
+        # If sanitization returns None or False, do not proceed
         if linear_x is False and angular_z is False:
-            self.get_logger().error("Rate limit exceeded or invalid input.")
-            if hasattr(self, 'gui') and self.gui:
-                self.gui.update_status(linear_x)
-                self.gui.update_status(angular_z)
-                self.gui.update_status("Rate limit exceeded or invalid input.")
-            return False
-
+            self.publish_status(linear_x)
+            self.publish_status(angular_z)
+            self.publish_status("Rate limit exceeded or invalid input.")
+            return
+        
         # Ensure values are floats
         linear_x = float(linear_x)
         angular_z = float(angular_z)
-
 
         if self.enable_security:
             timestamp = datetime.now().isoformat()
@@ -156,16 +156,10 @@ class SecureTurtlebot4Controller(SecurityNode):
             message = Twist()
             message.linear.x = linear_x
             message.angular.z = angular_z
+            
         for publisher in self.publisher_list:
             try:
                 publisher.publish(message)
                 self.get_logger().info(f"Published to {publisher.topic_name} linear={linear_x}, angular={angular_z}")
             except Exception as e:
                 self.get_logger().error(f'Error sending to {publisher.topic_name} {str(e)}')
-        
-        # Log the command and update status
-        self.get_logger().info(f"Movement command sent to all topics: linear={linear_x}, angular={angular_z}")
-        #else:
-        #    status = f"Moving: linear={linear_x}, angular={angular_z}" 
-
-        return True

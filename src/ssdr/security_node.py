@@ -63,7 +63,6 @@ class SecurityNode(Node):
             response = future.result()
             peer_public_key_bytes = response.responder_public_key.encode('utf-8')  # Convert string back to bytes
             self.aes_key = self.exchange_keys(peer_public_key_bytes)
-            print(type(self.aes_key))
             with self.key_exchange_condition:
                 self.key_exchange_condition.notify_all()
             self.destroy_timer(self.key_exchange_timer)

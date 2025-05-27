@@ -59,8 +59,6 @@ def main():
     controller_node.publish_status("Controller fully initialized. Ready for commands.")
     
     try:
-        # Add a message to check topics if nothing is happening
-        controller_node.publish_status("Use 'D' key for docking and 'U' key for undocking.") 
         app.run()
     except KeyboardInterrupt:
         pass

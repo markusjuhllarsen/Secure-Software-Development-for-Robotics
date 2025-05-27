@@ -1,6 +1,8 @@
-from utils.config import MAX_LINEAR_VELOCITY, MAX_ANGULAR_VELOCITY
+from typing import Any
 import time
 from threading import Lock
+
+from utils.config import MAX_LINEAR_VELOCITY, MAX_ANGULAR_VELOCITY
 
 class Sanitizer:
     """
@@ -9,27 +11,25 @@ class Sanitizer:
     # Rate limiting settings
     _last_command_time = {}  # Dict to track last command time for each command type
     _command_intervals = {
-        'movement': 5,     # Minimum seconds between movement commands in seconds
-        'action': 3.0,       # Minimum seconds between action commands
-        'default': 2       # Default minimum interval
+        'movement': 2.0,     # Minimum seconds between movement commands in seconds
+        'action': 5.0,     # Minimum seconds between action commands
     }
     _rate_limit_lock = Lock()  # Thread safety for rate limiting
 
     @staticmethod
-    def check_rate_limit(command_type='default'):
+    def check_rate_limit(
+        command_type: str
+        )-> bool:
         """
         Check if a command passes rate limiting requirements
-        
-        Args:
-            command_type (str): Type of command for rate limiting ('movement', 'action', etc.)
-            
-        Returns:
-            bool: True if command is allowed, False if it should be rate limited
+        args:
+            command_type: Type of command for rate limiting ('movement', 'action', etc.)  
+        returns:
+            If command is allowed
         """
         with Sanitizer._rate_limit_lock:
             current_time = time.time()
-            min_interval = Sanitizer._command_intervals.get(command_type, 
-                                                         Sanitizer._command_intervals['default'])
+            min_interval = Sanitizer._command_intervals[command_type]
             
             # Get last command time for this type, default to 0 if not set
             last_time = Sanitizer._last_command_time.get(command_type, 0)
@@ -43,57 +43,24 @@ class Sanitizer:
             return True
 
     @staticmethod
-    def sanitize_velocity(value, min_value=-1.0, max_value=1.0, name="velocity"):
-        """
-        Sanitize a velocity input (linear or angular) by ensuring it is within the specified range.
-
-        Args:
-            value (float): The velocity to sanitize.
-            min_value (float): The minimum allowed velocity.
-            max_value (float): The maximum allowed velocity.
-            name (str): The name of the parameter (for error messages).
-
-        Returns:
-            float: The sanitized velocity.
-
-        Raises:
-            ValueError: If the value is not within the specified range.
-        """
-        # Apply rate limiting for velocity commands
-        if not Sanitizer.check_rate_limit('movement'):
-            return False
-            
-        if "linear" in name.lower():
-            default_max = MAX_LINEAR_VELOCITY
-        elif "angular" in name.lower():
-            default_max = MAX_ANGULAR_VELOCITY
-        else:
-            # Fallback if name doesn't specify type, though ideally it should
-            default_max = MAX_LINEAR_VELOCITY # Or handle as an error/warning
-
-        if max_value is None:
-            max_value = default_max
-        if min_value is None:
-            min_value = -default_max
-
-        return Sanitizer.sanitize_float(value, min_value=min_value, max_value=max_value, name=name)
-
-    @staticmethod
-    def sanitize_action_param(value, param_type, min_value=None, max_value=None, name="parameter"):
+    def sanitize_action_param(
+        value: Any, 
+        param_type: str, 
+        min_value: Any, 
+        max_value: Any, 
+        name: str
+        ) -> Any:
         """
         Sanitize an action parameter based on its expected type
-        
-        Args:
+        args:
             value: The parameter value to sanitize
             param_type (str): The expected type ('float', 'int', 'bool')
             min_value: Minimum allowed value for numeric types
             max_value: Maximum allowed value for numeric types
-            name (str): Name of the parameter for error messages
-            
-        Returns:
-            The sanitized parameter value
-            
-        Raises:
+            name (str): Name of the parameter for error messages   
+        returns:
+            The sanitized parameter value   
+        raises:
             ValueError: If the value is invalid or out of range
         """
         if param_type == 'float':
@@ -115,41 +82,25 @@ class Sanitizer:
                 return False
             raise ValueError(f"{name} must be a boolean value (True/False, 1/0).")
         else:
-            return Sanitizer.sanitize_string(value, name)
-
-
+            raise ValueError(f"Unsupported parameter type: {param_type}. Expected 'float', 'int', or 'bool'.")
+        
     @staticmethod
-    def sanitize_status_text(value, name="status_text"):
+    def sanitize_float(
+        value: float, 
+        min_value: float, 
+        max_value: float, 
+        name: str
+        ) -> float:
         """
-        Sanitize a status text input by ensuring it is a valid string.
-
-        Args:
-            value (str): The status text to sanitize.
-            name (str): The name of the parameter (for error messages).
-
-        Returns:
-            str: The sanitized status text.
-
-        Raises:
-            ValueError: If the value is not a valid string.
-        """
-        return Sanitizer.sanitize_string(value, name=name)
-
-    @staticmethod
-    def sanitize_float(value, min_value=None, max_value=None, name="value"):
-        """
-        Sanitize a float input by ensuring it is within the specified range.
-
-        Args:
-            value (float): The input value to sanitize.
-            min_value (float): The minimum allowed value (inclusive).
-            max_value (float): The maximum allowed value (inclusive).
-            name (str): The name of the parameter (for error messages).
-
-        Returns:
-            float: The sanitized value.
-
-        Raises:
+        Sanitize a float input by ensuring it is within the specified range
+        args:
+            value: The input value to sanitize.
+            min_value: The minimum allowed value (inclusive).
+            max_value: The maximum allowed value (inclusive).
+            name: The name of the parameter (for error messages).
+        returns:
+            The sanitized value.
+        raises:
             ValueError: If the value is not within the specified range.
         """
         try:
@@ -162,23 +113,4 @@ class Sanitizer:
         if max_value is not None and value > max_value:
             raise ValueError(f"{name} must be at most {max_value}.")
 
-        return value
-
-    @staticmethod
-    def sanitize_string(value, name="value"):
-        """
-        Sanitize a string input by ensuring it is a valid string.
-
-        Args:
-            value (str): The input value to sanitize.
-            name (str): The name of the parameter (for error messages).
-
-        Returns:
-            str: The sanitized value.
-
-        Raises:
-            ValueError: If the value is not a valid string.
-        """
-        if not isinstance(value, str):
-            raise ValueError(f"{name} must be a valid string.")
         return value

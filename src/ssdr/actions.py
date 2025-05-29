@@ -107,7 +107,7 @@ class RobotActionManager:
             self.node.get_logger().error(f"{action_name} action rejected.")
             goal_handle.abort()
             timestamp = time.time
-            encrypted_result = self.node.encrypt_and_gmac(str(result.result), timestamp)
+            encrypted_result = self.node.encrypt_and_gmac("Action rejected", timestamp)
             return_result = EncryptedAction.Result()
             return_result.encrypted_result = encrypted_result
             return return_result
@@ -237,16 +237,17 @@ class RobotActionManager:
             The result of the action."""
         goal_handle = future.result()
         if goal_handle.status == 6:
-            self.node.publish_status(f"{action_name} action rejected or aborted.")
+           status = "rejected or aborted"
         elif goal_handle.status == 5:
-            self.node.publish_status(f"{action_name} action canceled.")     
+            status = "canceled"
         else:
-            if not self.node.enable_security:
-                self.node.publish_status(f"{action_name} action completed with result: {goal_handle.result}")
-            else:
-                result = goal_handle.result.encrypted_result
-                decrypted_result  = self.node.decrypt_and_verify(result)
-                self.node.publish_status(f"{action_name} action completed with result: {decrypted_result}")
+            status = "succeeded"
+        if not self.node.enable_security:
+                self.node.publish_status(f"{action_name} action {status} with result: {goal_handle.result}")
+        else:
+            result = goal_handle.result.encrypted_result
+            decrypted_result  = self.node.decrypt_and_verify(result)
+            self.node.publish_status(f"{action_name} action {status} with result: {decrypted_result}")
 
         del self.active_goals[action_name]
         

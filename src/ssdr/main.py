@@ -5,8 +5,8 @@ from rclpy.executors import MultiThreadedExecutor
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from controller.robot_controller import SecureTurtlebot4Controller
-from gui.gui_app import ButtonControlGUI
-from utils.config import APP_NAME, APP_VERSION
+from controller.gui_app import ButtonControlGUI
+from config import APP_NAME, APP_VERSION
 
 def main():
     """Main entry point of the application"""

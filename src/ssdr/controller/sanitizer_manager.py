@@ -2,7 +2,7 @@ from typing import Any
 import time
 from threading import Lock
 
-from utils.config import MAX_LINEAR_VELOCITY, MAX_ANGULAR_VELOCITY
+from config import MAX_LINEAR_VELOCITY, MAX_ANGULAR_VELOCITY
 
 class Sanitizer:
     """
@@ -68,34 +68,90 @@ class Sanitizer:
         if param_type == 'float':
             return Sanitizer.sanitize_float(value, min_value, max_value, name)
         elif param_type == 'int':
-            try:
-                int_value = int(float(value))  # Convert through float for robustness
-                if min_value is not None and int_value < min_value:
-                    raise ValueError(f"{name} must be at least {min_value}.")
-                if max_value is not None and int_value > max_value:
-                    raise ValueError(f"{name} must be at most {max_value}.")
-                return int_value
-            except ValueError:
-                raise ValueError(f"{name} must be a valid integer.")
+            Sanitizer.sanitize_int(value, allowed_values, name)
         elif param_type == 'bool':
-            if value in (True, False, 1, 0, '1', '0', 'True', 'False', 'true', 'false'):
-                if value in (1, '1', 'True', 'true'):
-                    return True
-                return False
-            raise ValueError(f"{name} must be a boolean value (True/False, 1/0).")
+            Sanitizer.sanitize_bool(value, name)
         elif param_type == 'enum':
-            try:
-                value = int(float(value))  # Ensure value is an integer
-                if allowed_values is None:
-                    raise ValueError(f"{name} must be one of the allowed values: {allowed_values}.")
-                if int(value) not in allowed_values:
-                    raise ValueError(f"{name} must be one of the allowed values: {allowed_values}.")
-                return value
-            except ValueError:
-                raise ValueError(f"{name} must be a valid integer for enum type.")
+            Sanitizer.sanitize_enum(value, allowed_values, name)
         else:
             raise ValueError(f"Unsupported parameter type: {param_type}. Expected 'float', 'int', or 'bool'.")
-        
+    
+    def sanitize_bool(
+            value: Any, 
+            name: str
+        ) -> bool:
+        """
+        Sanitize a boolean input by converting to boolean type
+        args:
+            value: The input value to sanitize.
+            name: The name of the parameter (for error messages).
+        returns:
+            The sanitized boolean value.
+        raises:
+            ValueError: If the value cannot be converted to a boolean.
+        """
+        if value in (True, False, 1, 0, '1', '0', 'True', 'False', 'true', 'false'):
+            if value in (1, '1', 'True', 'true'):
+                return True
+            return False
+        raise ValueError(f"{name} must be a boolean value (True/False, 1/0).")
+
+    @staticmethod
+    def sanitize_enum(
+            value: Any, 
+            allowed_values: list[int], 
+            name: str
+        ) -> int:
+        """
+        Sanitize an enum input by checking against allowed values
+        args:
+            value: The input value to sanitize.
+            allowed_values: List of allowed integer values for the enum.
+            name: The name of the parameter (for error messages).
+        returns:
+            The sanitized value.
+        raises:
+            ValueError: If the value is not in the allowed values.
+        """
+        try:
+            value = int(float(value))  # Ensure value is an integer
+        except ValueError:
+            raise ValueError(f"{name} must be a valid integer for enum type.")
+        if allowed_values is None:
+            raise ValueError(f"{name} must be one of the allowed values: {allowed_values}.")
+        if int(value) not in allowed_values:
+            raise ValueError(f"{name} must be one of the allowed values: {allowed_values}.")
+        return value
+    
+    @staticmethod
+    def sanitize_int(
+            value: Any, 
+            min_value: int, 
+            max_value: int, 
+            name: str
+        ) -> int:
+        """
+        Sanitize an integer input by checking against allowed values
+        args:
+            value: The input value to sanitize.
+            min_value: Minimum allowed value
+            max_value: Maximum allowed value
+            name: The name of the parameter (for error messages).
+        returns:
+            The sanitized value.
+        raises:
+            ValueError: If the value is not in the allowed values.
+        """
+        try:
+            int_value = int(float(value))  # Convert through float for robustness
+        except ValueError:
+            raise ValueError(f"{name} must be a valid integer.")
+        if min_value is not None and int_value < min_value:
+            raise ValueError(f"{name} must be at least {min_value}.")
+        if max_value is not None and int_value > max_value:
+            raise ValueError(f"{name} must be at most {max_value}.")
+        return int_value
+
     @staticmethod
     def sanitize_float(
         value: float, 

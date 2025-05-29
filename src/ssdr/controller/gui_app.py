@@ -7,7 +7,7 @@ import threading
 import time
 import rclpy
 
-from utils.config import DEFAULT_LINEAR_VELOCITY, DEFAULT_ANGULAR_VELOCITY, MAX_LINEAR_VELOCITY, MAX_ANGULAR_VELOCITY
+from config import DEFAULT_LINEAR_VELOCITY, DEFAULT_ANGULAR_VELOCITY, MAX_LINEAR_VELOCITY, MAX_ANGULAR_VELOCITY
 from controller.sanitizer_manager import Sanitizer
 
 class ButtonControlGUI:

@@ -68,6 +68,7 @@ class SecurityNode(Node):
             self.destroy_timer(self.key_exchange_timer)
         except Exception as e:
             self.get_logger().error(f"Failed to complete key exchange: {e}")
+            raise RuntimeError("Key exchange failed") from e
 
     def exchange_public_key_callback(
             self, 
@@ -132,7 +133,7 @@ class SecurityNode(Node):
             return message
         except Exception as e:
             self.get_logger().error(f"Decryption failed: {e}")
-            return None
+            raise RuntimeError("Decryption failed") from e
         
     def exchange_keys(
             self, 
@@ -160,7 +161,8 @@ class SecurityNode(Node):
 
             return aes_key
         except Exception as e:
-            return None
+            self.get_logger().error(f"Key exchange failed: {e}")
+            raise RuntimeError("Key exchange failed") from e
     
     def publish_status(
             self, 

@@ -76,6 +76,7 @@ class Sanitizer:
         else:
             raise ValueError(f"Unsupported parameter type: {param_type}. Expected 'float', 'int', or 'bool'.")
     
+    @staticmethod
     def sanitize_bool(
             value: Any, 
             name: str

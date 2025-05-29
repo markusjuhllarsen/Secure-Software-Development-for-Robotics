@@ -55,10 +55,11 @@ class Sanitizer:
         Sanitize an action parameter based on its expected type
         args:
             value: The parameter value to sanitize
-            param_type (str): The expected type ('float', 'int', 'bool')
+            param_type: The expected type ('float', 'int', 'bool', 'enum')
             min_value: Minimum allowed value for numeric types
             max_value: Maximum allowed value for numeric types
-            name (str): Name of the parameter for error messages   
+            name: Name of the parameter for error messages   
+            allowed_values: List of allowed values for enum types
         returns:
             The sanitized parameter value   
         raises:
@@ -83,11 +84,15 @@ class Sanitizer:
                 return False
             raise ValueError(f"{name} must be a boolean value (True/False, 1/0).")
         elif param_type == 'enum':
-            if allowed_values is None:
-                raise ValueError(f"{name} must be one of the allowed values: {allowed_values}.")
-            if value not in allowed_values:
-                raise ValueError(f"{name} must be one of the allowed values: {allowed_values}.")
-            return value
+            try:
+                value = int(float(value))  # Ensure value is an integer
+                if allowed_values is None:
+                    raise ValueError(f"{name} must be one of the allowed values: {allowed_values}.")
+                if int(value) not in allowed_values:
+                    raise ValueError(f"{name} must be one of the allowed values: {allowed_values}.")
+                return value
+            except ValueError:
+                raise ValueError(f"{name} must be a valid integer for enum type.")
         else:
             raise ValueError(f"Unsupported parameter type: {param_type}. Expected 'float', 'int', or 'bool'.")
         

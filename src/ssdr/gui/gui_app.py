@@ -237,30 +237,30 @@ class ButtonControlGUI:
         # Define parameters for each action with their types and limits
         action_params = {
             "DriveArc": [
-                {"name": "Translate Direction (1/-1)", "default": "1", "type": "enum", 'enum': [-1,1]},
-                {"name": "Angle (radians)", "default": "2.57", "type": "float", "min": None, "max": None},
-                {"name": "Radius (meters)", "default": "1.0", "type": "float", "min": None, "max": None},
+                {"name": "Translate Direction (1/-1)", "default": 1, "type": "enum", 'enum': [-1,1]},
+                {"name": "Angle (radians)", "default": 2.57, "type": "float", "min": None, "max": None},
+                {"name": "Radius (meters)", "default": 1.0, "type": "float", "min": 0.0, "max": None},
                 {"name": "Max Translation Speed (m/s)", "default": DEFAULT_LINEAR_VELOCITY, "type": "float", "min": 0.0, "max": MAX_LINEAR_VELOCITY}
             ],
             "DriveDistance": [
-                {"name": "Distance (meters)", "default": "1.0", "type": "float", "min": None, "max": None},
+                {"name": "Distance (meters)", "default": 1.0, "type": "float", "min": None, "max": None},
                 {"name": "Max Translation Speed (m/s)", "default": DEFAULT_LINEAR_VELOCITY, "type": "float", "min": 0.0, "max": MAX_LINEAR_VELOCITY}
             ],
             "NavigateToPosition": [
-                {"name": "X (meters)", "default": "0.0", "type": "float", "min": None, "max": None},
-                {"name": "Y (meters)", "default": "0.0", "type": "float", "min": None, "max": None},
-                {"name": "Theta (radians)", "default": "0.0", "type": "float", "min": None, "max": None},
-                {"name": "Achieve Goal Heading (1/0)", "default": "1", "type": "bool"},
+                {"name": "X (meters)", "default": 0.0, "type": "float", "min": None, "max": None},
+                {"name": "Y (meters)", "default": 0.0, "type": "float", "min": None, "max": None},
+                {"name": "Theta (radians)", "default": 0.0, "type": "float", "min": None, "max": None},
+                {"name": "Achieve Goal Heading (1/0)", "default": 1, "type": "bool"},
                 {"name": "Max Translation Speed (m/s)", "default": DEFAULT_LINEAR_VELOCITY, "type": "float", "min": 0.0, "max": MAX_LINEAR_VELOCITY},
                 {"name": "Max Rotation Speed (rad/s)", "default": DEFAULT_ANGULAR_VELOCITY, "type": "float", "min": 0.0, "max": MAX_ANGULAR_VELOCITY}
             ],
             "RotateAngle": [
-                {"name": "Angle (radians)", "default": "1.57", "type": "float", "min": None, "max": None},
+                {"name": "Angle (radians)", "default": 1.57, "type": "float", "min": None, "max": None},
                 {"name": "Max Rotation Speed (rad/s)", "default": DEFAULT_ANGULAR_VELOCITY, "type": "float", "min": 0.0, "max": MAX_ANGULAR_VELOCITY}
             ],
             "WallFollow": [
-                {"name": "Follow Side (1/-1)", "default": "1", "type": "enum", "enum": [-1,1]},
-                {"name": "Max Runtime (seconds)", "default": "60", "type": "int", "min": None, "max": None}
+                {"name": "Follow Side (1/-1)", "default": 1, "type": "enum", "enum": [-1,1]},
+                {"name": "Max Runtime (seconds)", "default": 60, "type": "int", "min": 0.0, "max": None}
             ]
         }
 

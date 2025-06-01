@@ -32,7 +32,7 @@ class SecurityNode(Node):
 
 
             if self.is_controller:
-                self.public_key_client = self.create_client(KeyExchange, 'srobot_ecurity_node/exchange_public_key')
+                self.public_key_client = self.create_client(KeyExchange, '/robot_security_node/exchange_public_key')
                 self.key_exchange_timer = self.create_timer(1, self.initiate_key_exchange)
             else:
                 self.create_service(

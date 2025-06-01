@@ -22,7 +22,7 @@ def main():
     rclpy.spin_once(temp_node, timeout_sec=1.0)
 
     for service_name, _ in temp_node.get_service_names_and_types():
-        if service_name == '/security_node/exchange_public_key':
+        if service_name == '/robot_security_node/exchange_public_key':
             enable_security = True
             break
 
